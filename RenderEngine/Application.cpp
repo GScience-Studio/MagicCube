@@ -1,17 +1,17 @@
 
 #include "Application.h"
-#include "RenderManager.h"
+#include "GLManager.h"
 
 application* applicationInstance;
 
 void application::run()
 {
 	//call init
-	init();
+	_init();
 
-	//init renderManagerInstance
-	render_manager();
+	//init glManagerInstance
+	gl_manager();
 
 	//load window
-	render_manager::getInstance()._loadWindow();
+	gl_manager::getInstance()._loadWindow();
 }

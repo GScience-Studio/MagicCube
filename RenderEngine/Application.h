@@ -9,23 +9,26 @@ extern	application* applicationInstance;
 //applicaion
 class application
 {
-	friend class render_manager;
+	friend class gl_manager;
 
+public:
 	//application base info
-	const char* _appName;
-	const char* _version;
+	const char*		_appName;
+	const char*		_version;
 	
-	const size	_windowSize;
+	const size_vec	_windowSize;
+
+protected:
 
 	//init
-	virtual void init() = 0;
+	virtual void _init() = 0;
 
 	//call when each tick
-	virtual void tickCall() = 0;
+	virtual void _tickCall() = 0;
 
 public:
 
-	application(const char* appName, const char* version,const size& windowSize) :_appName(appName), _version(version), _windowSize(windowSize)
+	application(const char* appName, const char* version,const size_vec& windowSize) :_appName(appName), _version(version), _windowSize(windowSize)
 	{
 		applicationInstance = this;
 	}

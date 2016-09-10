@@ -8,11 +8,11 @@
     <ClInclude Include="Application.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="RenderManager.h">
-      <Filter>RengerEngine</Filter>
-    </ClInclude>
     <ClInclude Include="Vec.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="GLManager.h">
+      <Filter>RengerEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -27,7 +27,7 @@
     <ClCompile Include="Application.cpp">
       <Filter>RengerEngine</Filter>
     </ClCompile>
-    <ClCompile Include="RenderManager.cpp">
+    <ClCompile Include="GLManager.cpp">
       <Filter>RengerEngine</Filter>
     </ClCompile>
   </ItemGroup>

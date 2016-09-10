@@ -20,13 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="RenderManager.cpp" />
+    <ClCompile Include="GLManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\GSRenderEngine.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="RenderEngine.h" />
-    <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="GLManager.h" />
     <ClInclude Include="Vec.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
