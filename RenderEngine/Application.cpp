@@ -10,8 +10,8 @@ void application::run()
 	//load window
 	gl_manager::getInstance()._loadWindow();
 
-	//init spiritmanager
-	initSpiritManager();
+	//init spritemanager
+	initspriteManager();
 
 	//call init
 	_init();

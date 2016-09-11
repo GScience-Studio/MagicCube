@@ -20,10 +20,10 @@
     <ClInclude Include="renderNode.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="SpiritManager.h">
+    <ClInclude Include="SpriteManager.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Spirit.h">
+    <ClInclude Include="Sprite.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
   </ItemGroup>

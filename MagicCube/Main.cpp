@@ -8,7 +8,7 @@ public:
 
 	void _init()
 	{
-		addSpirit(location<float>(0.0, 0.0, 0.0));
+		addsprite(location<float>(0.0, 0.0, 0.0));
 	}
 	void _tickCall()
 	{

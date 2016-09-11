@@ -30,8 +30,8 @@
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="GLManager.h" />
     <ClInclude Include="renderNode.h" />
-    <ClInclude Include="Spirit.h" />
-    <ClInclude Include="SpiritManager.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="Vec.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

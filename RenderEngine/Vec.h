@@ -23,9 +23,7 @@ public:
 
 		for (int i = 1; i<vecSize; i++)
 		{
-			j = __crt_va_arg(arg_ptr, T);
-
-			data[i] = j;
+			data[i] = __crt_va_arg(arg_ptr, T);
 		}
 		__crt_va_end(arg_ptr);
 	}
