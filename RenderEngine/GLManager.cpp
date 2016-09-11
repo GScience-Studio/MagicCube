@@ -1,8 +1,10 @@
 
 #include "GLManager.h"
 
-gl_manager* glManagerInstance;
+//instance
+gl_manager gl_manager::_glInstance;
 
+//create window
 void gl_manager::_loadWindow()
 {
 	//get app instance
@@ -13,4 +15,14 @@ void gl_manager::_loadWindow()
 
 	//load window
 	_window = glfwCreateWindow(appInstance._windowSize.getHeight(), appInstance._windowSize.getWidth(), appInstance._appName, NULL, NULL);
+
+	if (!_window)
+	{
+		glfwTerminate();
+		
+		message("Couldn't load the window", msgError,true);
+	}
+
+	//set context
+	glfwMakeContextCurrent(_window);
 }

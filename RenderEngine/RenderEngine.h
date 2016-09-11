@@ -6,3 +6,6 @@
 
 //math
 #include "Vec.h"
+
+//message
+#include "message.h"

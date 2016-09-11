@@ -1,17 +1,18 @@
 #pragma once
 
 #include "RenderEngine.h"
+#include "SpiritManager.h"
 
 //app instance
 class	application;
 extern	application* applicationInstance;
 
 //applicaion
-class application
+class application:public spirit_manager
 {
 	friend class gl_manager;
 
-public:
+private:
 	//application base info
 	const char*		_appName;
 	const char*		_version;
@@ -19,12 +20,14 @@ public:
 	const size_vec	_windowSize;
 
 protected:
-
 	//init
 	virtual void _init() = 0;
 
 	//call when each tick
 	virtual void _tickCall() = 0;
+
+	//main loop
+	void _mainLoop();
 
 public:
 

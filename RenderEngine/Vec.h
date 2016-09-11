@@ -6,6 +6,10 @@ protected:
 	T data[vecSize];
 
 public:
+	T operator [](unsigned int pos)
+	{
+		return data[pos];
+	}
 	vec(T firstData, T...)
 	{
 		T j = 0;
@@ -32,7 +36,7 @@ public:
 			data[i] = firstData[i];
 		}
 	}
-	T _get(unsigned char id) const
+	T get(unsigned char id) const
 	{
 		return data[id];
 	}
@@ -46,10 +50,34 @@ public:
 
 	unsigned int getHeight() const
 	{
-		return _get(0);
+		return get(0);
 	}
 	unsigned int getWidth() const
 	{
-		return _get(1);
+		return get(1);
+	}
+};
+
+//location
+template<class T> class location :private vec<T, 3>
+{
+public:
+	location operator +(location loc)
+	{
+		return location<T>(get(0) + loc[0], get(1) + loc[1], get(2) + loc[2]);
+	}
+	location(T x, T y, T z) :vec(x, y, z) {}
+
+	unsigned int getX() const
+	{
+		return get(0);
+	}
+	unsigned int getY() const
+	{
+		return get(1);
+	}
+	unsigned int getZ() const
+	{
+		return get(2);
 	}
 };

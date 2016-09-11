@@ -6,11 +6,11 @@ class test_app :public application
 public:
 	test_app() :application(u8"Test", "1.0.0", size_vec(100,10)) {}
 
-	void init()
+	void _init()
 	{
-
+		addSpirit(location<float>(0.0, 0.0, 0.0));
 	}
-	void tickCall()
+	void _tickCall()
 	{
 
 	}
