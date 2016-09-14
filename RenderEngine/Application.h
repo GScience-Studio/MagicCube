@@ -1,14 +1,14 @@
 #pragma once
 
 #include "RenderEngine.h"
-#include "spriteManager.h"
+#include "ScreenManager.h"
 
 //app instance
 class	application;
 extern	application* applicationInstance;
 
 //applicaion
-class application:public sprite_manager
+class application:public screen_manager
 {
 	friend class gl_manager;
 

@@ -10,9 +10,6 @@ void application::run()
 	//load window
 	gl_manager::getInstance()._loadWindow();
 
-	//init spritemanager
-	initspriteManager();
-
 	//call init
 	_init();
 

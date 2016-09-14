@@ -8,7 +8,9 @@ public:
 
 	void _init()
 	{
-		addsprite(location<float>(0.0, 0.0, 0.0));
+		screen initScreen = addScreen();
+
+		addCanvas(initScreen);
 	}
 	void _tickCall()
 	{

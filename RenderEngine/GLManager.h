@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RenderEngine.h"
+#include <vector>
 
 class application;
 
@@ -12,6 +13,11 @@ struct buffer
 	buffer() {}
 
 	buffer(GLuint vaoID, GLuint vboID) :vao(vaoID), vbo(vboID) {}
+
+	bool operator ==(buffer buffer)
+	{
+		return vao == buffer.vao && vbo == buffer.vbo;
+	}
 };
 /*
 rendermanager
@@ -25,8 +31,7 @@ class gl_manager
 	friend class application;
 
 	//save the vao and vbo id that now use
-	GLuint enableVAO = 0;
-	GLuint enableVBO = 0;
+	buffer enableBuffer;
 
 protected:
 	//start an window,only can be use in application::run()
@@ -70,6 +75,20 @@ public:
 	{
 		return glfwWindowShouldClose(_window) == 1;
 	}
+	//set buffer data
+	void bufferData(buffer buffer, GLsizeiptr size, void* data)
+	{
+		useBuffer(buffer);
+
+		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	}
+	//set part of buffer data
+	void bufferSubData(buffer buffer, GLintptr offset, GLsizeiptr size, void* data)
+	{
+		useBuffer(buffer);
+
+		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+	}
 	//genVAO
 	GLuint genVAO() const
 	{
@@ -88,24 +107,29 @@ public:
 
 		return vbo;
 	}
+	//draw buffer
+	void draw(GLint fitst,GLsizei count)
+	{
+		glDrawArrays(GL_TRIANGLES, fitst, count);
+	}
 	//if return false it mean it is in use
 	bool useBuffer(buffer bufferInfo)
 	{
-		if (bufferInfo.vao != enableVAO)
+		if (bufferInfo.vao != enableBuffer.vao)
 		{
 			glBindVertexArray(bufferInfo.vao);
 			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo.vbo);
 
-			enableVAO = bufferInfo.vao;
-			enableVBO = bufferInfo.vbo;
+			enableBuffer.vao = bufferInfo.vao;
+			enableBuffer.vbo = bufferInfo.vbo;
 
 			return true;
 		}
-		else if (bufferInfo.vbo != enableVBO)
+		else if (bufferInfo.vbo != enableBuffer.vbo)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo.vbo);
 
-			enableVBO = bufferInfo.vbo;
+			enableBuffer.vbo = bufferInfo.vbo;
 		}
 		return false;
 	}

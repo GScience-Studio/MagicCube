@@ -17,13 +17,16 @@
     <ClInclude Include="Message.h">
       <Filter>Message</Filter>
     </ClInclude>
-    <ClInclude Include="renderNode.h">
+    <ClInclude Include="RenderManager.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteManager.h">
+    <ClInclude Include="Canvas.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="ScreenManager.h">
+      <Filter>RengerEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderNode.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
   </ItemGroup>

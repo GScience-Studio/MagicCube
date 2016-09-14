@@ -29,9 +29,10 @@
     <ClInclude Include="Message.h" />
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="GLManager.h" />
-    <ClInclude Include="renderNode.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="SpriteManager.h" />
+    <ClInclude Include="RenderNode.h" />
+    <ClInclude Include="Canvas.h" />
+    <ClInclude Include="RenderManager.h" />
+    <ClInclude Include="ScreenManager.h" />
     <ClInclude Include="Vec.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
