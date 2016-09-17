@@ -31,7 +31,7 @@ class gl_manager
 	friend class application;
 
 	//save the vao and vbo id that now use
-	buffer enableBuffer;
+	buffer enableBuffer = buffer(-1, -1);
 
 protected:
 	//start an window,only can be use in application::run()
@@ -106,6 +106,25 @@ public:
 		glGenBuffers(1, &vbo);
 
 		return vbo;
+	}
+	//gen buffer
+	buffer genBuffer() const
+	{
+		GLuint vao = 0;
+		GLuint vbo = 0;
+
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+		glGenBuffers(1, &vbo);
+
+		//change back
+		if (enableBuffer.vao != -1)
+		{
+			glBindVertexArray(enableBuffer.vao);
+			glBindVertexArray(enableBuffer.vbo);
+		}
+
+		return buffer(vao, vbo);
 	}
 	//draw buffer
 	void draw(GLint fitst,GLsizei count)

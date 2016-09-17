@@ -18,7 +18,11 @@ public:
 		if (_isEnable)
 			_glInstance.useBuffer(_nodeBuffer);
 	}
-
 	//init
 	render_node(buffer buffer) :_nodeBuffer(buffer) {}
+
+	render_node()
+	{
+		_nodeBuffer = _glInstance.genBuffer();
+	}
 };

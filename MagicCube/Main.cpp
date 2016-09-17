@@ -8,9 +8,14 @@ public:
 
 	void _init()
 	{
-		screen initScreen = addScreen();
+		scene* initScene = addScene();
+		initScene->addRenderNode(canvas());
+		scene* initScene2 = addScene();
 
-		addCanvas(initScreen);
+		initScene2->addRenderNode(canvas());
+		canvas testcanvas = initScene2->addCanvas();
+
+		showScene(initScene2);
 	}
 	void _tickCall()
 	{

@@ -6,5 +6,5 @@
 
 struct canvas:public render_node
 {
-	canvas(buffer buffer) :render_node(buffer) {}
+	canvas() :render_node() {}
 };

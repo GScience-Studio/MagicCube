@@ -12,7 +12,7 @@ void gl_manager::_loadWindow()
 	application& appInstance = application::getInstance();
 
 	//load window
-	_window = glfwCreateWindow(appInstance._windowSize.getHeight(), appInstance._windowSize.getWidth(), appInstance._appName, NULL, NULL);
+	_window = glfwCreateWindow(appInstance._windowSize.getHeight(), appInstance._windowSize.getWidth(), appInstance._appName, nullptr, nullptr);
 
 	if (!_window)
 	{

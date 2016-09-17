@@ -31,8 +31,8 @@
     <ClInclude Include="GLManager.h" />
     <ClInclude Include="RenderNode.h" />
     <ClInclude Include="Canvas.h" />
-    <ClInclude Include="RenderManager.h" />
-    <ClInclude Include="ScreenManager.h" />
+    <ClInclude Include="RenderNodeManager.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Vec.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -27,6 +27,9 @@ void application::_mainLoop()
 		glInstance.poolEvent();
 
 		glInstance.swapBuffers();
+
+		//tick call
+		_tickRefresh();
 	}
 	glInstance.terminate();
 }
