@@ -4,18 +4,16 @@
 class test_app :public application
 {
 public:
-	test_app() :application(u8"Test", "1.0.0", size_vec(100,10)) {}
+	test_app() :application(u8"Test", "1.0.0", size_vec(500,600)) {}
 
 	void _init()
 	{
-		scene* initScene = addScene();
-		initScene->addRenderNode(canvas());
-		scene* initScene2 = addScene();
+		scene* testScene = addScene();
 
-		initScene2->addRenderNode(canvas());
-		canvas testcanvas = initScene2->addCanvas();
+		testScene->addRenderNode(canvas());
+		canvas testcanvas = testScene->addCanvas();
 
-		showScene(initScene2);
+		showScene(testScene);
 	}
 	void _tickCall()
 	{

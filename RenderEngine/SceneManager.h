@@ -17,13 +17,26 @@ class scene :public render_node_manager
 	void _draw()
 	{
 		//check all render node
+		for (auto& renderNode : _renderNodeList)
+		{
+			((canvas*)renderNode)->draw();
+		}
 	}
 
 public:
+	~scene()
+	{
+		//free
+		for (auto& renderNode : _renderNodeList)
+		{
+			if (renderNode != nullptr)
+				delete(&renderNode);
+		}
+	}
 	//add an render node by user
 	void addRenderNode(const render_node& renderNode)
 	{
-		_renderNodeList.push_front(renderNode);
+		_renderNodeList.push_front(new render_node(renderNode));
 	}
 	//add canvas
 	canvas addCanvas()

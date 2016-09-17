@@ -10,6 +10,9 @@ void application::run()
 	//load window
 	gl_manager::getInstance()._loadWindow();
 
+	//load shader
+	gl_manager::getInstance()._initShaders();
+
 	//call init
 	_init();
 
@@ -24,12 +27,12 @@ void application::_mainLoop()
 	{
 		glInstance.clear(GL_COLOR_BUFFER_BIT);
 
+		//tick call
+		_tickRefresh();
+
 		glInstance.poolEvent();
 
 		glInstance.swapBuffers();
-
-		//tick call
-		_tickRefresh();
 	}
 	glInstance.terminate();
 }

@@ -33,7 +33,7 @@ class gl_manager
 	//save the vao and vbo id that now use
 	buffer enableBuffer = buffer(-1, -1);
 
-protected:
+private:
 	//start an window,only can be use in application::run()
 	void _loadWindow();
 
@@ -43,6 +43,9 @@ protected:
 	//gl instance
 	static gl_manager _glInstance;
 
+	//load all shader
+	void _initShaders();
+
 	//init rendermanager
 	gl_manager()
 	{
@@ -50,6 +53,8 @@ protected:
 		glfwInit();
 	}
 public:
+	GLuint testProgramID;
+
 	//treate event
 	void poolEvent() const
 	{

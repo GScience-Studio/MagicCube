@@ -5,6 +5,131 @@
 //instance
 gl_manager gl_manager::_glInstance;
 
+//shader info
+typedef struct
+{
+	GLenum       Type;
+	const char*  FileName;
+	GLuint       Shader;
+} shader_info;
+
+//读取Shader程序
+const char* readShader(const char* FileName)
+{
+	//读取文件
+	FILE* infile = fopen(FileName, "rb");
+
+	//是否读取
+	if (!infile)
+	{
+		return NULL;
+	}
+
+	//设置读取位置
+	fseek(infile, 0, SEEK_END);
+	int len = ftell(infile);
+	fseek(infile, 0, SEEK_SET);
+
+	//读取数据
+	GLchar* source = new GLchar[len + 1];
+
+	//读取并关闭
+	fread(source, 1, len, infile);
+	fclose(infile);
+
+	//最后处理
+	source[len] = 0;
+
+	//返回
+	return const_cast<const GLchar*>(source);
+}
+
+//加载一个shader
+GLuint loadShader(shader_info* Shaders)
+{
+	//检测是否为空
+	if (Shaders == NULL)
+	{
+		return 0;
+	}
+
+	//创建着色器程序
+	GLuint Program = glCreateProgram();
+
+	shader_info* Entry = Shaders;
+
+	//循环编译着色器
+	while (Entry->Type != GL_NONE)
+	{
+		//创建Shader
+		GLuint Shader = glCreateShader(Entry->Type);
+
+		//读取Shader代码
+		const GLchar* Source = readShader(Entry->FileName);
+
+		//检测代码是否为空
+		if (Source == NULL)
+		{
+			//删除Shader
+			for (Entry = Shaders; Entry->Type != GL_NONE; ++Entry)
+			{
+				glDeleteShader(Shader);
+			}
+			return 0;
+		}
+
+		//绑定源码
+		glShaderSource(Shader, 1, &Source, NULL);
+		delete[] Source;
+
+		//编译源码
+		glCompileShader(Shader);
+
+		//获取编译状态
+		GLint compiled;
+		glGetShaderiv(Shader, GL_COMPILE_STATUS, &compiled);
+
+		//如果编译出错
+		if (!compiled)
+		{
+			//获取错误并输出
+			GLsizei len;
+			glGetShaderiv(Shader, GL_INFO_LOG_LENGTH, &len);
+
+			GLchar* log = new GLchar[len + 1];
+			glGetShaderInfoLog(Shader, len, &len, log);
+			std::cerr << "[ERROR]Shader compilation failed: " << log << std::endl;
+			delete[] log;
+
+			return 0;
+		}
+
+		//绑定Shader到着色器程序
+		glAttachShader(Program, Shader);
+
+		++Entry;
+	}
+	glLinkProgram(Program);
+
+	GLint linked;
+	glGetProgramiv(Program, GL_LINK_STATUS, &linked);
+
+	if (!linked)
+	{
+		GLsizei len;
+		glGetProgramiv(Program, GL_INFO_LOG_LENGTH, &len);
+
+		GLchar* log = new GLchar[len + 1];
+		glGetProgramInfoLog(Program, len, &len, log);
+		std::cerr << "[ERROR]Shader linking failed: " << log << std::endl;
+		delete[] log;
+		return 0;
+	}
+	glUseProgram(Program);
+
+	return Program;
+}
+
 //create window
 void gl_manager::_loadWindow()
 {
@@ -24,6 +149,19 @@ void gl_manager::_loadWindow()
 	//set context
 	glfwMakeContextCurrent(_window);
 
+	//set view port
+	glViewport(0, 0, appInstance._windowSize.getHeight(), appInstance._windowSize.getWidth());
+
 	//init glew
 	glewInit();
+}
+//init all shaders
+void gl_manager::_initShaders()
+{
+	shader_info NormalShaderInfo[] = {
+		{ GL_VERTEX_SHADER, "Normail3D.vert" },
+		{ GL_FRAGMENT_SHADER, "Normail3D.frag" },
+		{ GL_NONE, NULL } };
+
+	testProgramID = loadShader(NormalShaderInfo);
 }

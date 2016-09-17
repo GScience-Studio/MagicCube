@@ -5,6 +5,7 @@
 
 class render_node
 {
+protected:
 	buffer _nodeBuffer;
 	
 	gl_manager& _glInstance = gl_manager::getInstance();
