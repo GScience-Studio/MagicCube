@@ -19,7 +19,7 @@ class scene :public render_node_manager
 		//check all render node
 		for (auto& renderNode : _renderNodeList)
 		{
-			((canvas*)renderNode)->draw();
+			(renderNode)->draw();
 		}
 	}
 
@@ -27,10 +27,9 @@ public:
 	~scene()
 	{
 		//free
-		for (auto& renderNode : _renderNodeList)
+		for (auto* renderNode : _renderNodeList)
 		{
-			if (renderNode != nullptr)
-				delete(&renderNode);
+			delete(renderNode);
 		}
 	}
 	//add an render node by user

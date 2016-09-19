@@ -1,7 +1,8 @@
 #pragma once
 
 #include "RenderEngine.h"
-#include <vector>
+
+#include <forward_list>
 
 class application;
 
@@ -19,6 +20,22 @@ struct buffer
 		return vao == buffer.vao && vbo == buffer.vbo;
 	}
 };
+//please use new
+class shader_program
+{
+	friend class gl_manager;
+
+protected:
+
+	//only can use new
+	~shader_program() {}
+	shader_program() {}
+public:
+	GLuint programID = 0;
+
+	virtual void createBuffer(void* bufferData, const GLsizeiptr size, const buffer& buffer) const = 0;
+	virtual void draw(GLint start, GLsizei end) = 0;
+};
 /*
 rendermanager
 it is used to do the basic thing
@@ -33,6 +50,35 @@ class gl_manager
 	//save the vao and vbo id that now use
 	buffer enableBuffer = buffer(-1, -1);
 
+	//save the shader program list
+	std::forward_list<shader_program*> _shaderProgramList;
+
+	//save the shader programid that is in use
+	GLuint shaderProgramID = 0;
+
+	//basic shader program
+	class normail3DShader :public shader_program
+	{
+	private:
+		gl_manager& glInstance = gl_manager::getInstance();
+
+	public:
+		void createBuffer(void* bufferData, const GLsizeiptr size, const buffer& buffer) const
+		{
+			glInstance.useBuffer(buffer);
+
+			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(0);
+			
+			glInstance.bufferData(buffer, size, bufferData);
+		}
+
+		void draw(GLint start, GLsizei end)
+		{
+			glInstance.useShaderProgram(this);
+			glInstance.draw(start, end);
+		}
+	};
 private:
 	//start an window,only can be use in application::run()
 	void _loadWindow();
@@ -43,17 +89,21 @@ private:
 	//gl instance
 	static gl_manager _glInstance;
 
-	//load all shader
-	void _initShaders();
-
 	//init rendermanager
 	gl_manager()
 	{
+		//init shader pointer
+		appNormail3DShader = new normail3DShader();
+
 		//init glfw
 		glfwInit();
 	}
 public:
-	GLuint testProgramID;
+	//save shader pointer
+	normail3DShader* appNormail3DShader;
+
+	//add shader
+	shader_program* addShader(char* vert, char* frag, shader_program* newShaderProgramClass);
 
 	//treate event
 	void poolEvent() const
@@ -157,9 +207,28 @@ public:
 		}
 		return false;
 	}
+	//use program
+	void useShaderProgram(shader_program* shaderProgram)
+	{
+		if (shaderProgramID != shaderProgram->programID)
+		{
+			shaderProgramID = shaderProgram->programID;
+
+			glUseProgram(shaderProgram->programID);
+		}
+	}
 	//get rendermanager instance
 	static gl_manager& getInstance()
 	{
 		return _glInstance;
+	}
+
+	//free program list
+	~gl_manager()
+	{
+		for (auto* shaderProgram : _shaderProgramList)
+		{
+			delete(shaderProgram);
+		}
 	}
 };

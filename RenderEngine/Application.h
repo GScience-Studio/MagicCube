@@ -20,11 +20,8 @@ protected:
 	const size_vec	_windowSize;
 
 private:
-	//init
-	virtual void _init()		= 0;
-
-	//call when each tick
-	virtual void _tickCall()	= 0;
+	//gl instance
+	gl_manager _glInstance = gl_manager::getInstance();
 
 	//main loop
 	void _mainLoop();
@@ -33,16 +30,22 @@ private:
 	void _tickRefresh()
 	{
 		//user call
-		_tickCall();
+		tickCall();
 
 		//scene refresh
 		_sceneRefreshAndDraw();
 	}
 public:
-	application(const char* appName, const char* version,const size_vec& windowSize) :_appName(appName), _version(version), _windowSize(windowSize)
+	application(const char* appName, const char* version, const size_vec& windowSize) :_appName(appName), _version(version), _windowSize(windowSize)
 	{
 		applicationInstance = this;
 	}
+
+	//init
+	virtual void init() = 0;
+
+	//call when each tick
+	virtual void tickCall() = 0;
 
 	//get instance
 	static application& getInstance()

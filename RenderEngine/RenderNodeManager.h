@@ -2,6 +2,7 @@
 
 #include "GLManager.h"
 #include "Canvas.h"
+#include "RenderNode.h"
 
 #include <forward_list>
 

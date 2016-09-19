@@ -6,9 +6,10 @@
 class render_node
 {
 protected:
-	buffer _nodeBuffer;
-	
 	gl_manager& _glInstance = gl_manager::getInstance();
+
+	shader_program* _shaderProgram;
+	buffer			_nodeBuffer;
 
 	bool _isEnable = false;
 
@@ -20,10 +21,14 @@ public:
 			_glInstance.useBuffer(_nodeBuffer);
 	}
 	//init
-	render_node(buffer buffer) :_nodeBuffer(buffer) {}
+	render_node(buffer buffer) :_nodeBuffer(buffer)
+	{
+		_shaderProgram = gl_manager::getInstance().appNormail3DShader;
+	}
 
 	render_node()
 	{
-		_nodeBuffer = _glInstance.genBuffer();
+		_nodeBuffer		= _glInstance.genBuffer();
+		_shaderProgram	= gl_manager::getInstance().appNormail3DShader;
 	}
 };

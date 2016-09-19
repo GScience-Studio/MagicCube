@@ -155,13 +155,18 @@ void gl_manager::_loadWindow()
 	//init glew
 	glewInit();
 }
-//init all shaders
-void gl_manager::_initShaders()
+//load shaders
+shader_program* gl_manager::addShader(char* vert, char* frag, shader_program* newShaderProgramClass)
 {
-	shader_info NormalShaderInfo[] = {
-		{ GL_VERTEX_SHADER, "Normail3D.vert" },
-		{ GL_FRAGMENT_SHADER, "Normail3D.frag" },
+	shader_info shaderInfo[] = {
+		{ GL_VERTEX_SHADER, vert },
+		{ GL_FRAGMENT_SHADER, frag },
 		{ GL_NONE, NULL } };
 
-	testProgramID = loadShader(NormalShaderInfo);
+	//load shader
+	newShaderProgramClass->programID = loadShader(shaderInfo);
+
+	_shaderProgramList.push_front(newShaderProgramClass);
+
+	return nullptr;
 }

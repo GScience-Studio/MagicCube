@@ -8,31 +8,29 @@ application* applicationInstance;
 void application::run()
 {
 	//load window
-	gl_manager::getInstance()._loadWindow();
+	_glInstance._loadWindow();
 
-	//load shader
-	gl_manager::getInstance()._initShaders();
+	//load normal shader
+	_glInstance.addShader("Normail3d.vert", "Normail3d.frag", _glInstance.appNormail3DShader);
 
 	//call init
-	_init();
+	init();
 
 	//main loop
 	_mainLoop();
 }
 void application::_mainLoop()
 {
-	gl_manager glInstance = gl_manager::getInstance();
-
-	while (!glInstance.windowShouldClose())
+	while (!_glInstance.windowShouldClose())
 	{
-		glInstance.clear(GL_COLOR_BUFFER_BIT);
+		_glInstance.clear(GL_COLOR_BUFFER_BIT);
 
 		//tick call
 		_tickRefresh();
 
-		glInstance.poolEvent();
+		_glInstance.poolEvent();
 
-		glInstance.swapBuffers();
+		_glInstance.swapBuffers();
 	}
-	glInstance.terminate();
+	_glInstance.terminate();
 }

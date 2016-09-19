@@ -20,13 +20,13 @@
     <ClInclude Include="Canvas.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="RenderNode.h">
-      <Filter>RengerEngine</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
     <ClInclude Include="RenderNodeManager.h">
+      <Filter>RengerEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderNode.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
   </ItemGroup>
