@@ -1,8 +1,8 @@
 #pragma once
 
-#include "RenderEngine.h"
-
 #include <forward_list>
+
+#include "RenderEngine.h"
 
 class application;
 
@@ -34,7 +34,7 @@ public:
 	GLuint programID = 0;
 
 	virtual void createBuffer(void* bufferData, const GLsizeiptr size, const buffer& buffer) const = 0;
-	virtual void draw(GLint start, GLsizei end) = 0;
+	virtual void draw(GLint start, GLsizei end) const = 0;
 };
 /*
 rendermanager
@@ -73,7 +73,7 @@ class gl_manager
 			glInstance.bufferData(buffer, size, bufferData);
 		}
 
-		void draw(GLint start, GLsizei end)
+		void draw(GLint start, GLsizei end) const
 		{
 			glInstance.useShaderProgram(this);
 			glInstance.draw(start, end);
@@ -208,7 +208,7 @@ public:
 		return false;
 	}
 	//use program
-	void useShaderProgram(shader_program* shaderProgram)
+	void useShaderProgram(const shader_program* shaderProgram)
 	{
 		if (shaderProgramID != shaderProgram->programID)
 		{

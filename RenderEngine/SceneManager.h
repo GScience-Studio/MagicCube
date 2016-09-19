@@ -1,10 +1,10 @@
 #pragma once
 
+#include <vector>
+
 #include "RenderEngine.h"
 #include "RenderNodeManager.h"
 #include "RenderNode.h"
-
-#include <vector>
 
 class scene :public render_node_manager
 {

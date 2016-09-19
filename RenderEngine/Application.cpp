@@ -1,4 +1,6 @@
 
+#include <windows.h>
+
 #include "Application.h"
 #include "GLManager.h"
 
@@ -23,14 +25,29 @@ void application::_mainLoop()
 {
 	while (!_glInstance.windowShouldClose())
 	{
-		_glInstance.clear(GL_COLOR_BUFFER_BIT);
+		double startTime = glfwGetTime();
+
+		//clear screen
+		_glInstance.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//tick call
 		_tickRefresh();
 
+		//pool event
 		_glInstance.poolEvent();
 
+		//swap buffer
 		_glInstance.swapBuffers();
+
+		//wait
+		while (glfwGetTime() - startTime <= 0.0166666666666667)
+		{
+			double nowTime = glfwGetTime();
+
+			if (nowTime - startTime <= 0.001010101010101)
+				Sleep((int)((0.0166666666666667 - nowTime + startTime) * 990));
+		}
+		
 	}
 	_glInstance.terminate();
 }

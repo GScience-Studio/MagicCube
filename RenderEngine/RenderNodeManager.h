@@ -1,10 +1,10 @@
 #pragma once
 
+#include <forward_list>
+
 #include "GLManager.h"
 #include "Canvas.h"
 #include "RenderNode.h"
-
-#include <forward_list>
 
 typedef std::forward_list<render_node*> render_node_list;
 
