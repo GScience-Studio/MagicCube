@@ -56,22 +56,19 @@ class gl_manager
 	//save the shader programid that is in use
 	GLuint shaderProgramID = 0;
 
-	//basic shader program
+	/*
+	basic shader program
+	data format:
+	x,y,z,r,g,b,texture x,texture y
+	*/
 	class normail3DShader :public shader_program
 	{
 	private:
 		gl_manager& glInstance = gl_manager::getInstance();
 
 	public:
-		void createBuffer(void* bufferData, const GLsizeiptr size, const buffer& buffer) const
-		{
-			glInstance.useBuffer(buffer);
-
-			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-			glEnableVertexAttribArray(0);
-			
-			glInstance.bufferData(buffer, size, bufferData);
-		}
+		//create buffer by daat
+		void createBuffer(void* bufferData, const GLsizeiptr size, const buffer& buffer) const;
 
 		void draw(GLint start, GLsizei end) const
 		{

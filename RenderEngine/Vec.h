@@ -66,15 +66,15 @@ public:
 	}
 	location(T x, T y, T z) :vec(x, y, z) {}
 
-	unsigned int getX() const
+	T getX() const
 	{
 		return get(0);
 	}
-	unsigned int getY() const
+	T getY() const
 	{
 		return get(1);
 	}
-	unsigned int getZ() const
+	T getZ() const
 	{
 		return get(2);
 	}

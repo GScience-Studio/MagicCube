@@ -14,7 +14,14 @@ public:
 		scene* testScene = addScene();
 
 		testScene->addRenderNode(canvas());
-		canvas testcanvas = testScene->addCanvas();
+		canvas* testcanvas = testScene->addCanvas();
+
+		canvas_shape canvasShape = testcanvas->addShape(canvas_shape_info
+		(
+			canvas_point_info(color(0.0f, 1.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, 0.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, -0.9f, 0.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, 0.0f), texture_pos(0.0f, 0.0f))
+		));
 
 		showScene(testScene);
 	}
@@ -22,8 +29,8 @@ public:
 	{
 		count++;
 
-		if (count / 60 == count / 60.0f)
-			std::cout << (count / 60) + 1 << std::endl;
+		if (count % 100 == 0)
+			std::cout << count / 100 << std::endl;
 	}
 };
 int main()

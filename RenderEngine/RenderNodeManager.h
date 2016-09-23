@@ -14,10 +14,10 @@ private:
 	gl_manager&	_glInstance = gl_manager::getInstance();
 
 protected:
-	canvas& _addCanvas(render_node_list& renderNodeList)
+	canvas* _addCanvas(render_node_list& renderNodeList)
 	{
 		renderNodeList.push_front(new canvas());
 
-		return (canvas&)renderNodeList.front();
+		return (canvas*)renderNodeList.front();
 	}
 };

@@ -1,9 +1,14 @@
 
-#include <windows.h>
-
 #include "Application.h"
 #include "GLManager.h"
 
+//tick call time
+#define TICK_TIME 0.01
+
+//program start time
+double	startTime = glfwGetTime();
+
+//application instance
 application* applicationInstance;
 
 //run program
@@ -23,31 +28,27 @@ void application::run()
 }
 void application::_mainLoop()
 {
+	unsigned long long int	refreshCallTime = 0;
+
 	while (!_glInstance.windowShouldClose())
 	{
-		double startTime = glfwGetTime();
-
 		//clear screen
 		_glInstance.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//tick call
-		_tickRefresh();
+		//check time to call tick refresh
+		while (glfwGetTime() - startTime - refreshCallTime * TICK_TIME >= TICK_TIME)
+		{
+			++refreshCallTime;
+
+			//tick call
+			_tickRefresh();
+		}
 
 		//pool event
 		_glInstance.poolEvent();
 
 		//swap buffer
 		_glInstance.swapBuffers();
-
-		//wait
-		while (glfwGetTime() - startTime <= 0.0166666666666667)
-		{
-			double nowTime = glfwGetTime();
-
-			if (nowTime - startTime <= 0.001010101010101)
-				Sleep((int)((0.0166666666666667 - nowTime + startTime) * 990));
-		}
-		
 	}
 	_glInstance.terminate();
 }

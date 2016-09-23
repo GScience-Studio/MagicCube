@@ -170,3 +170,23 @@ shader_program* gl_manager::addShader(char* vert, char* frag, shader_program* ne
 
 	return nullptr;
 }
+
+//create buffer of normail 3d
+void gl_manager::normail3DShader::createBuffer(void* bufferData, const GLsizeiptr size, const buffer& buffer) const
+{
+	glInstance.useBuffer(buffer);
+
+	//location data
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(0);
+
+	//color data
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	//texture pos
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+
+	glInstance.bufferData(buffer, size, bufferData);
+}

@@ -51,5 +51,8 @@
     <ClCompile Include="Message.cpp">
       <Filter>Message</Filter>
     </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>RengerEngine</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

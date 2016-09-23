@@ -26,7 +26,7 @@ private:
 	//main loop
 	void _mainLoop();
 
-	//refresh
+	//refresh(a tick is 0.01s)
 	void _tickRefresh()
 	{
 		//user call

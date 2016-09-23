@@ -19,7 +19,7 @@ class scene :public render_node_manager
 		//check all render node
 		for (auto& renderNode : _renderNodeList)
 		{
-			(renderNode)->draw();
+			(renderNode)->_draw();
 		}
 	}
 
@@ -38,7 +38,7 @@ public:
 		_renderNodeList.push_front(new render_node(renderNode));
 	}
 	//add canvas
-	canvas addCanvas()
+	canvas* addCanvas()
 	{
 		return _addCanvas(_renderNodeList);
 	}
