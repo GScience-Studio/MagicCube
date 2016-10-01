@@ -11,6 +11,10 @@ struct buffer
 	GLuint vao = 0;
 	GLuint vbo = 0;
 
+	GLsizeiptr	size = 0;
+	
+	bool		hasInit = false;
+
 	buffer() {}
 
 	buffer(GLuint vaoID, GLuint vboID) :vao(vaoID), vbo(vboID) {}
@@ -33,7 +37,7 @@ protected:
 public:
 	GLuint programID = 0;
 
-	virtual void createBuffer(void* bufferData, const GLsizeiptr size, const buffer& buffer) const = 0;
+	virtual void createBuffer(const void* bufferData, const GLsizeiptr size, buffer& buffer) const = 0;
 	virtual void draw(GLint start, GLsizei end) const = 0;
 };
 /*
@@ -68,7 +72,7 @@ class gl_manager
 
 	public:
 		//create buffer by daat
-		void createBuffer(void* bufferData, const GLsizeiptr size, const buffer& buffer) const;
+		void createBuffer(const void* bufferData, const GLsizeiptr size, buffer& buffer) const;
 
 		void draw(GLint start, GLsizei end) const
 		{
@@ -128,18 +132,32 @@ public:
 		return glfwWindowShouldClose(_window) == 1;
 	}
 	//set buffer data
-	void bufferData(buffer buffer, GLsizeiptr size, void* data)
+	void bufferData(buffer& buffer, GLsizeiptr size, const void* data)
 	{
 		useBuffer(buffer);
+
+		buffer.size = size;
 
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
 	//set part of buffer data
-	void bufferSubData(buffer buffer, GLintptr offset, GLsizeiptr size, void* data)
+	void bufferSubData(const buffer& buffer, GLintptr offset, GLsizeiptr size, const void* data)
 	{
 		useBuffer(buffer);
 
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+	}
+	//set buffer size
+	void bufferResize(buffer& buffer, GLsizeiptr size)
+	{
+		if (buffer.size == size)
+			return;
+
+		useBuffer(buffer);
+
+		buffer.size = size;
+
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
 	}
 	//genVAO
 	GLuint genVAO() const

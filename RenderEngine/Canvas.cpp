@@ -1,12 +1,7 @@
 
 #include "Canvas.h"
 
-const void canvas::_refreshShape(GLfloat* shapeData,GLsizeiptr size)
-{
-	_shaderProgram->createBuffer(shapeData, size, _nodeBuffer);
-}
-
-const canvas_shape canvas::addShape(const canvas_shape_info& shapeInfo)
+void canvas::addShape(const canvas_shape& shapeInfo)
 {
 	//set data
 	for (unsigned char i = 0; i < 3; i++)
@@ -24,6 +19,9 @@ const canvas_shape canvas::addShape(const canvas_shape_info& shapeInfo)
 	}
 
 	hasChange = true;
-
-	return canvas_shape(_nodeBuffer, &_renderData.at(_renderData.size() - 24));
+}
+void canvas::clear()
+{
+	_renderData.clear();
+	hasChange = true;
 }

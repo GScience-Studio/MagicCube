@@ -152,6 +152,9 @@ void gl_manager::_loadWindow()
 	//set view port
 	glViewport(0, 0, appInstance._windowSize.getHeight(), appInstance._windowSize.getWidth());
 
+	//set vertical retrace
+	glfwSwapInterval(1);
+
 	//init glew
 	glewInit();
 }
@@ -172,21 +175,32 @@ shader_program* gl_manager::addShader(char* vert, char* frag, shader_program* ne
 }
 
 //create buffer of normail 3d
-void gl_manager::normail3DShader::createBuffer(void* bufferData, const GLsizeiptr size, const buffer& buffer) const
+void gl_manager::normail3DShader::createBuffer(const void* bufferData, const GLsizeiptr size, buffer& buffer) const
 {
 	glInstance.useBuffer(buffer);
 
-	//location data
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
-	glEnableVertexAttribArray(0);
+	if (buffer.size >= size)
+	{
+		glInstance.bufferSubData(buffer, 0, size, bufferData);
+	}
+	else
+	{
+		glInstance.bufferData(buffer, size, bufferData);
+	}
+	if (!buffer.hasInit)
+	{
+		buffer.hasInit = true;
 
-	//color data
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
+		//location data
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
+		glEnableVertexAttribArray(0);
 
-	//texture pos
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(2);
+		//color data
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(1);
 
-	glInstance.bufferData(buffer, size, bufferData);
+		//texture pos
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(2);
+	}
 }

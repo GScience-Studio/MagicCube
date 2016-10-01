@@ -23,20 +23,12 @@ struct canvas_point_info
 
 	canvas_point_info(const color& color, const location<GLfloat>& location, const texture_pos& texturePos) :colorData(color), locationData(location), texturePosData(texturePos) {}
 };
-struct canvas_shape_info
+struct canvas_shape
 {
 	const canvas_point_info points[3];
 
-	canvas_shape_info(const canvas_point_info& point1, const canvas_point_info& point2, const canvas_point_info& point3) :points{ point1,point2,point3 } {}
-};
-
-class canvas_shape
-{
-	buffer		_canvasBuffer;
-	void*		_shapeLocation;
-
-public:
-	canvas_shape(const buffer& buffer, void* location) :_canvasBuffer(buffer), _shapeLocation(location) {}
+	//create shape with point data
+	canvas_shape(const canvas_point_info& point1, const canvas_point_info& point2, const canvas_point_info& point3) :points{ point1,point2,point3 } {}
 };
 
 class canvas:public render_node
@@ -56,7 +48,7 @@ class canvas:public render_node
 		{
 			hasChange = false;
 
-			_shaderProgram->createBuffer(&_renderData.at(0), _renderData.size() * sizeof(GLfloat), _nodeBuffer);
+			_refreshShape();
 		}
 
 		if (_renderData.size() == 0)
@@ -66,11 +58,17 @@ class canvas:public render_node
 	}
 
 	//refresh shape
-	const void canvas::_refreshShape(GLfloat* shapeData, GLsizeiptr size);
+	void canvas::_refreshShape()
+	{
+		glInstance.bufferResize(_nodeBuffer, _renderData.capacity() * sizeof(GLfloat));
+
+		_shaderProgram->createBuffer(&_renderData.at(0), _renderData.size() * sizeof(GLfloat), _nodeBuffer);
+	}
 	
 public:
 	canvas() :render_node() {}
 	canvas(shader_program* shaderProgram) :render_node(shaderProgram) {}
 
-	const canvas_shape addShape(const canvas_shape_info& shapeInfo);
+	void addShape(const canvas_shape& shapeInfo);
+	void clear();
 };
