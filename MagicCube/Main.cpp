@@ -9,13 +9,31 @@ private:
 public:
 	test_app() :application(u8"Test", "1.0.0", size_vec(500,600)) {}
 
-	canvas* testcanvas;
+	canvas* testcanvas1;
+	canvas* testcanvas2;
 
 	void init()
 	{
 		scene* testScene = addScene();
 
-		testcanvas = testScene->addCanvas();
+		testcanvas1 = testScene->addCanvas();
+		testcanvas2 = testScene->addCanvas();
+
+		testcanvas1->clear();
+		testcanvas2->clear();
+
+		testcanvas1->addShape(canvas_shape
+		(
+			canvas_point_info(color(count / 100 % 2 == 0 ? 1.0f : 0.0f, 0.0f, 0.0f), location<GLfloat>(-0.90f, -0.90f, 0.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(count / 100 % 2 == 0 ? 1.0f : 0.0f, 0.0f, 0.0f), location<GLfloat>(0.90f, -0.90f, 0.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(count / 100 % 2 == 0 ? 1.0f : 0.0f, 0.0f, 0.0f), location<GLfloat>(0.90f, 0.90f, 0.0f), texture_pos(0.0f, 0.0f))
+		));
+		testcanvas2->addShape(canvas_shape
+		(
+			canvas_point_info(color(count / 100 % 2 == 0 ? 1.0f : 0.0f, 0.0f, 0.0f), location<GLfloat>(0.90f, 0.90f, 0.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(count / 100 % 2 == 0 ? 1.0f : 0.0f, 0.0f, 0.0f), location<GLfloat>(-0.90f, 0.90f, 0.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(count / 100 % 2 == 0 ? 1.0f : 0.0f, 0.0f, 0.0f), location<GLfloat>(-0.90f, -0.90f, 0.0f), texture_pos(0.0f, 0.0f))
+		));
 
 		showScene(testScene);
 	}
@@ -25,17 +43,7 @@ public:
 
 		if (count % 100 == 0 && count < 5000)
 		{
-			testcanvas->clear();
 
-			for (int i = -50; i<50; i++)
-				for (int j = -50; j<50; j++)
-					for (int k = -50; k<50; k++)
-						testcanvas->addShape(canvas_shape
-						(
-							canvas_point_info(color(count / 100 % 2 == 0 ? 1.0f : 0.0f, 0.0f, 0.0f), location<GLfloat>(i * 0.01f + 0.01f, j * 0.01f + 0.01f, k * 0.01f), texture_pos(0.0f, 0.0f)),
-							canvas_point_info(color(count / 100 % 2 == 0 ? 1.0f : 0.0f, 0.0f, 0.0f), location<GLfloat>(i * 0.01f, j * 0.01f + 0.01f, k * 0.01f), texture_pos(0.0f, 0.0f)),
-							canvas_point_info(color(count / 100 % 2 == 0 ? 1.0f : 0.0f, 0.0f, 0.0f), location<GLfloat>(i * 0.01f + 0.01f, j * 0.01f, k * 0.01f), texture_pos(0.0f, 0.0f))
-						));
 		}
 		if (count % 100 == 0)
 		{

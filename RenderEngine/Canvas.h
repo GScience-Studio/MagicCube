@@ -56,7 +56,7 @@ private:
 		if (_renderData.size() == 0)
 			return;
 
-		_shaderProgram->draw(0, _renderData.size() / 8);
+		_shaderProgram->draw(0, _renderData.size() / 8, _nodeBuffer);
 	}
 
 	//refresh shape

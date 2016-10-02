@@ -40,7 +40,7 @@ public:
 	GLuint programID = 0;
 
 	virtual void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const = 0;
-	virtual void draw(GLint start, GLsizei end) const = 0;
+	virtual void draw(GLint start, GLsizei end, buffer buffer) const = 0;
 };
 /*
 rendermanager
@@ -76,8 +76,10 @@ class gl_manager
 		//create buffer by daat
 		void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const;
 
-		void draw(GLint start, GLsizei end) const
+		void draw(GLint start, GLsizei end, buffer buffer) const
 		{
+			glInstance.useBuffer(buffer);
+
 			glInstance.useShaderProgram(this);
 			glInstance.draw(start, end);
 		}
