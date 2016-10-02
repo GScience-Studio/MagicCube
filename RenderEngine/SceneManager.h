@@ -64,7 +64,7 @@ class scene_manager
 	}
 protected:
 	//scene refresh and draw
-	void _sceneRefreshAndDraw()
+	void _sceneRefreshAndDraw(bool draw)
 	{
 		//is there has a scene?
 		if (_nowScene == nullptr)
@@ -80,7 +80,9 @@ protected:
 
 			_nextScene = nullptr;
 		}
-		_nowScene->_draw();
+
+		if (draw)
+			_nowScene->_draw();
 	}
 public:
 	//add an scene

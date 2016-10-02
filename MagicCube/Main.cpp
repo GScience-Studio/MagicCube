@@ -18,18 +18,17 @@ public:
 		testScene->addRenderNode(canvas());
 		testcanvas = testScene->addCanvas();
 
-		for (int i=0;i<1000000;i++)
-			testcanvas->addShape(canvas_shape
-			(
-				canvas_point_info(color(0.0f, 1.0f, 0.0f), location<GLfloat>(-0.1f, -0.1f, 0.0f), texture_pos(0.0f, 0.0f)),
-				canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.1f, -0.1f, 0.0f), texture_pos(0.0f, 0.0f)),
-				canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.1f, 0.1f, 0.0f), texture_pos(0.0f, 0.0f))
-			));
-
 		showScene(testScene);
 	}
 	void tickCall()
 	{
+		testcanvas->addShape(canvas_shape
+		(
+			canvas_point_info(color(0.0f, 1.0f, 0.0f), location<GLfloat>(-0.1f, -0.1f, 0.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.1f, -0.1f, 0.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.1f, 0.1f, 0.0f), texture_pos(0.0f, 0.0f))
+		));
+
 		count++;
 
 		if (count % 100 == 0)

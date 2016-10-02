@@ -27,13 +27,13 @@ private:
 	void _mainLoop();
 
 	//refresh(a tick is 0.01s)
-	void _tickRefresh()
+	void _tickRefresh(bool draw)
 	{
 		//user call
 		tickCall();
 
 		//scene refresh
-		_sceneRefreshAndDraw();
+		_sceneRefreshAndDraw(draw);
 	}
 public:
 	application(const char* appName, const char* version, const size_vec& windowSize) :_appName(appName), _version(version), _windowSize(windowSize)

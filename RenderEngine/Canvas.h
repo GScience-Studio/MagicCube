@@ -66,7 +66,7 @@ class canvas:public render_node
 		if (glInstance.bufferResize(_nodeBuffer, _renderData.capacity() * sizeof(GLfloat)))
 			lastVectorSize = 0;
 
-		_shaderProgram->setBufferData(&_renderData.at(0), lastVectorSize, _renderData.size() * sizeof(GLfloat), _nodeBuffer);
+		_shaderProgram->setBufferData(&_renderData.at(0), lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), _nodeBuffer);
 
 		lastVectorSize = _renderData.size();
 	}
