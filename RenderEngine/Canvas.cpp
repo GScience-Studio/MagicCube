@@ -18,10 +18,13 @@ void canvas::addShape(const canvas_shape& shapeInfo)
 		_renderData.push_back(shapeInfo.points[i].texturePosData.get(1));
 	}
 
-	hasChange = true;
+	_hasChange = true;
 }
 void canvas::clear()
 {
 	_renderData.clear();
-	hasChange = true;
+
+	_lastVectorSize = 0;
+
+	_hasChange = true;
 }

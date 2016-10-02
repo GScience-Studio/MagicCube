@@ -1,24 +1,26 @@
 #pragma once
 
-#include <forward_list>
-
 #include "RenderEngine.h"
 
 class application;
 
 struct buffer
 {
+	//save buffer ID
 	GLuint vao = 0;
 	GLuint vbo = 0;
 
+	//buffer size
 	GLsizeiptr	size = 0;
 	
-	bool		hasInit = false;
+	//has init
+	bool	hasInit = false;
 
 	buffer() {}
 
 	buffer(GLuint vaoID, GLuint vboID) :vao(vaoID), vbo(vboID) {}
 
+	//is equal
 	bool operator ==(buffer buffer)
 	{
 		return vao == buffer.vao && vbo == buffer.vbo;

@@ -26,12 +26,16 @@ void application::run()
 	//main loop
 	_mainLoop();
 }
+//game main loop
 void application::_mainLoop()
 {
+	//save the efresh call time
 	unsigned long long int	refreshCallTime = 0;
 
+	//loop
 	while (!_glInstance.windowShouldClose())
 	{
+		//has draw
 		bool hasDraw = true;
 
 		//clear screen
@@ -54,5 +58,6 @@ void application::_mainLoop()
 		//swap buffer
 		_glInstance.swapBuffers();
 	}
+	//end
 	_glInstance.terminate();
 }

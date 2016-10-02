@@ -1,23 +1,22 @@
 #pragma once
 
-#include <forward_list>
-
-#include "GLManager.h"
+#include "RenderEngine.h"
 #include "Canvas.h"
 #include "RenderNode.h"
 
 typedef std::forward_list<render_node*> render_node_list;
 
+//render node manager
 class render_node_manager
 {
-private:
-	gl_manager&	_glInstance = gl_manager::getInstance();
-
 protected:
-	canvas* _addCanvas(render_node_list& renderNodeList)
-	{
-		renderNodeList.push_front(new canvas());
+	//save the list that gen in this scene
+	render_node_list _renderNodeList;
 
-		return (canvas*)renderNodeList.front();
+	canvas* _addCanvas()
+	{
+		_renderNodeList.push_front(new canvas());
+
+		return (canvas*)_renderNodeList.front();
 	}
 };

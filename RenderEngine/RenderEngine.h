@@ -4,6 +4,8 @@
 
 //std
 #include <iostream>
+#include <forward_list>
+#include <vector>
 
 //the thing about opengl
 #include "GL\glew.h"

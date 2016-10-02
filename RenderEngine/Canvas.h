@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 #include "RenderEngine.h"
 #include "GLManager.h"
 #include "RenderNode.h"
@@ -33,23 +31,24 @@ struct canvas_shape
 
 class canvas:public render_node
 {
-	gl_manager& glInstance = gl_manager::getInstance();
+private:
+	gl_manager& _glInstance = gl_manager::getInstance();
 
 	//save all shape data
 	std::vector<GLfloat> _renderData;
 
 	//weather has change
-	bool hasChange = false;
+	bool _hasChange = false;
 
 	//last vector size
-	unsigned int lastVectorSize = 0;
+	unsigned int _lastVectorSize = 0;
 
 	//draw canvas
 	void _draw()
 	{
-		if (hasChange)
+		if (_hasChange)
 		{
-			hasChange = false;
+			_hasChange = false;
 
 			_refreshShape();
 		}
@@ -63,18 +62,22 @@ class canvas:public render_node
 	//refresh shape
 	void canvas::_refreshShape()
 	{
-		if (glInstance.bufferResize(_nodeBuffer, _renderData.capacity() * sizeof(GLfloat)))
-			lastVectorSize = 0;
+		if (_glInstance.bufferResize(_nodeBuffer, _renderData.capacity() * sizeof(GLfloat)))
+			_lastVectorSize = 0;
 
-		_shaderProgram->setBufferData(&_renderData.at(0), lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), _nodeBuffer);
+		if (_renderData.size() != 0)
+			_shaderProgram->setBufferData(&_renderData.at(0), _lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), _nodeBuffer);
 
-		lastVectorSize = _renderData.size();
+		_lastVectorSize = _renderData.size();
 	}
 	
 public:
 	canvas() :render_node() {}
 	canvas(shader_program* shaderProgram) :render_node(shaderProgram) {}
 
+	//add shape
 	void addShape(const canvas_shape& shapeInfo);
+
+	//clean all
 	void clear();
 };

@@ -21,7 +21,7 @@ protected:
 
 private:
 	//gl instance
-	gl_manager _glInstance = gl_manager::getInstance();
+	gl_manager& _glInstance = gl_manager::getInstance();
 
 	//main loop
 	void _mainLoop();

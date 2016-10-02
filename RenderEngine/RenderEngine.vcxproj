@@ -33,6 +33,7 @@
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="RenderNode.h" />
     <ClInclude Include="RenderNodeManager.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Vec.h" />
   </ItemGroup>

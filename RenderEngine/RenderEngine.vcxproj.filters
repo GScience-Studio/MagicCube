@@ -29,6 +29,9 @@
     <ClInclude Include="RenderNode.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>RengerEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">

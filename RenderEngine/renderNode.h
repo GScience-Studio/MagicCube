@@ -7,11 +7,15 @@ class render_node
 {
 	friend class scene;
 
+private:
 	gl_manager& _glInstance = gl_manager::getInstance();
+
 protected:
+	//these are the thing that about opengl
 	shader_program* _shaderProgram;
 	buffer			_nodeBuffer;
 
+	//is the render_node can draw
 	bool _isEnable = false;
 
 	//each node must can be draw
@@ -20,6 +24,7 @@ protected:
 		if (_isEnable)
 			_glInstance.useBuffer(_nodeBuffer);
 	}
+
 public:
 	//init
 	render_node(buffer buffer) :_nodeBuffer(buffer)

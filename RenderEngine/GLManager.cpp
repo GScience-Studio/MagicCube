@@ -1,6 +1,6 @@
 
-#include "Application.h"
 #include "GLManager.h"
+#include "Application.h"
 
 //instance
 gl_manager gl_manager::_glInstance;
@@ -13,7 +13,7 @@ typedef struct
 	GLuint       Shader;
 } shader_info;
 
-//读取Shader程序
+//read Shader program
 const char* readShader(const char* FileName)
 {
 	//读取文件
