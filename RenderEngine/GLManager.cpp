@@ -157,6 +157,9 @@ void gl_manager::_loadWindow()
 
 	//init glew
 	glewInit();
+
+	//init opengl state
+	glEnable(GL_DEPTH_TEST);
 }
 //load shaders
 shader_program* gl_manager::addShader(char* vert, char* frag, shader_program* newShaderProgramClass)
@@ -175,13 +178,13 @@ shader_program* gl_manager::addShader(char* vert, char* frag, shader_program* ne
 }
 
 //create buffer of normail 3d
-void gl_manager::normail3DShader::createBuffer(const void* bufferData, const GLsizeiptr size, buffer& buffer) const
+void gl_manager::normail3DShader::setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
 {
 	glInstance.useBuffer(buffer);
 
 	if (buffer.size >= size)
 	{
-		glInstance.bufferSubData(buffer, 0, size, bufferData);
+		glInstance.bufferSubData(buffer, differentBufferDataPos, size, bufferData);
 	}
 	else
 	{

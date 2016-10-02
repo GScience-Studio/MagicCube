@@ -37,7 +37,7 @@ protected:
 public:
 	GLuint programID = 0;
 
-	virtual void createBuffer(const void* bufferData, const GLsizeiptr size, buffer& buffer) const = 0;
+	virtual void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const = 0;
 	virtual void draw(GLint start, GLsizei end) const = 0;
 };
 /*
@@ -72,7 +72,7 @@ class gl_manager
 
 	public:
 		//create buffer by daat
-		void createBuffer(const void* bufferData, const GLsizeiptr size, buffer& buffer) const;
+		void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const;
 
 		void draw(GLint start, GLsizei end) const
 		{
@@ -148,16 +148,18 @@ public:
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 	}
 	//set buffer size
-	void bufferResize(buffer& buffer, GLsizeiptr size)
+	bool bufferResize(buffer& buffer, GLsizeiptr size)
 	{
 		if (buffer.size == size)
-			return;
+			return false;
 
 		useBuffer(buffer);
 
 		buffer.size = size;
 
 		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
+
+		return true;
 	}
 	//genVAO
 	GLuint genVAO() const

@@ -32,12 +32,16 @@ void application::_mainLoop()
 
 	while (!_glInstance.windowShouldClose())
 	{
+		unsigned char waitTime = 0;
+
 		//clear screen
 		_glInstance.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//check time to call tick refresh
-		while (glfwGetTime() - startTime - refreshCallTime * TICK_TIME >= TICK_TIME)
+		while (glfwGetTime() - startTime - refreshCallTime * TICK_TIME >= TICK_TIME && waitTime < 5)
 		{
+			waitTime++;
+
 			++refreshCallTime;
 
 			//tick call

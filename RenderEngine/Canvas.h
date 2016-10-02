@@ -41,6 +41,9 @@ class canvas:public render_node
 	//weather has change
 	bool hasChange = false;
 
+	//last vector size
+	unsigned int lastVectorSize = 0;
+
 	//draw canvas
 	void _draw()
 	{
@@ -60,9 +63,12 @@ class canvas:public render_node
 	//refresh shape
 	void canvas::_refreshShape()
 	{
-		glInstance.bufferResize(_nodeBuffer, _renderData.capacity() * sizeof(GLfloat));
+		if (glInstance.bufferResize(_nodeBuffer, _renderData.capacity() * sizeof(GLfloat)))
+			lastVectorSize = 0;
 
-		_shaderProgram->createBuffer(&_renderData.at(0), _renderData.size() * sizeof(GLfloat), _nodeBuffer);
+		_shaderProgram->setBufferData(&_renderData.at(0), lastVectorSize, _renderData.size() * sizeof(GLfloat), _nodeBuffer);
+
+		lastVectorSize = _renderData.size();
 	}
 	
 public:

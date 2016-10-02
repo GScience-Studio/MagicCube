@@ -19,7 +19,7 @@ class scene :public render_node_manager
 		//check all render node
 		for (auto& renderNode : _renderNodeList)
 		{
-			(renderNode)->_draw();
+			renderNode->_draw();
 		}
 	}
 

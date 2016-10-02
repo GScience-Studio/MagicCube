@@ -18,12 +18,13 @@ public:
 		testScene->addRenderNode(canvas());
 		testcanvas = testScene->addCanvas();
 
-		testcanvas->addShape(canvas_shape
-		(
-			canvas_point_info(color(0.0f, 1.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, 0.0f), texture_pos(0.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, -0.9f, 0.0f), texture_pos(0.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, 0.0f), texture_pos(0.0f, 0.0f))
-		));
+		for (int i=0;i<1000000;i++)
+			testcanvas->addShape(canvas_shape
+			(
+				canvas_point_info(color(0.0f, 1.0f, 0.0f), location<GLfloat>(-0.1f, -0.1f, 0.0f), texture_pos(0.0f, 0.0f)),
+				canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.1f, -0.1f, 0.0f), texture_pos(0.0f, 0.0f)),
+				canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.1f, 0.1f, 0.0f), texture_pos(0.0f, 0.0f))
+			));
 
 		showScene(testScene);
 	}
