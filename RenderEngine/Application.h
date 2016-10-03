@@ -41,6 +41,10 @@ public:
 		applicationInstance = this;
 	}
 
+	texture genTexture(char* fileName[], GLuint count)
+	{
+		return _glInstance.genTexture(fileName, count);
+	}
 	//init
 	virtual void init() = 0;
 

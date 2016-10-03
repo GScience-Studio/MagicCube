@@ -2,6 +2,9 @@
 #include "GLManager.h"
 #include "Application.h"
 
+//libpng
+#include <libPNG/png.h>
+
 //instance
 gl_manager gl_manager::_glInstance;
 
@@ -12,6 +15,16 @@ typedef struct
 	const char*  FileName;
 	GLuint       Shader;
 } shader_info;
+
+typedef struct
+{
+	bool	hasAlpha;
+
+	GLuint height;
+	GLuint width;
+
+	unsigned char* imageData;
+} image_info;
 
 //read Shader program
 const char* readShader(const char* FileName)
@@ -160,6 +173,7 @@ void gl_manager::_loadWindow()
 
 	//init opengl state
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
 }
 //load shaders
 shader_program* gl_manager::addShader(char* vert, char* frag, shader_program* newShaderProgramClass)
@@ -206,4 +220,148 @@ void gl_manager::normail3DShader::setBufferData(const void* bufferData, const un
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
 		glEnableVertexAttribArray(2);
 	}
+}
+
+#define PNG_BYTES_TO_CHECK 4
+
+bool loadPNG(const char *filepath, image_info& image)
+{
+	FILE *fp;
+	png_structp png_ptr;
+	png_infop info_ptr;
+	png_bytep* row_pointers;
+
+	char buf[PNG_BYTES_TO_CHECK];
+	unsigned int x, y, temp, color_type;
+
+	fp = fopen(filepath, "rb");
+
+	if (fp == NULL) 
+	{
+		return false;
+	}
+
+	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
+	info_ptr = png_create_info_struct(png_ptr);
+
+	setjmp(png_jmpbuf(png_ptr));
+	/* 读取PNG_BYTES_TO_CHECK个字节的数据 */
+	temp = fread(buf, 1, PNG_BYTES_TO_CHECK, fp);
+	/* 若读到的数据并没有PNG_BYTES_TO_CHECK个字节 */
+	if (temp < PNG_BYTES_TO_CHECK) 
+	{
+		fclose(fp);
+		png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+		return false;
+	}
+	/* 检测数据是否为PNG的签名 */
+	temp = png_sig_cmp((png_bytep)buf, (png_size_t)0, PNG_BYTES_TO_CHECK);
+	/* 如果不是PNG的签名，则说明该文件不是PNG文件 */
+	if (temp != 0) 
+	{
+		fclose(fp);
+		png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+		return false;
+	}
+
+	/* 复位文件指针 */
+	rewind(fp);
+	/* 开始读文件 */
+	png_init_io(png_ptr, fp);
+	/* 读取PNG图片信息 */
+	png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, 0);
+	/* 获取图像的色彩类型 */
+	color_type = png_get_color_type(png_ptr, info_ptr);
+	/* 获取图像的宽高 */
+	image.width = png_get_image_width(png_ptr, info_ptr);
+	image.height = png_get_image_height(png_ptr, info_ptr);
+	/* 获取图像的所有行像素数据，row_pointers里边就是rgba数据 */
+	row_pointers = png_get_rows(png_ptr, info_ptr);
+	/* 根据不同的色彩类型进行相应处理 */
+
+	switch (color_type)
+	{
+	case PNG_COLOR_TYPE_RGB_ALPHA:
+	{
+		image.imageData = new unsigned char[image.width * image.height * 4];
+		image.hasAlpha = true;
+
+		for (y = 0; y < image.height; ++y)
+		{
+			for (x = 0; x < image.width * 4; )
+			{
+				image.imageData[y * image.width * 4 + x] = row_pointers[y][x++];
+				image.imageData[y * image.width * 4 + x] = row_pointers[y][x++];
+				image.imageData[y * image.width * 4 + x] = row_pointers[y][x++];
+				image.imageData[y * image.width * 4 + x] = row_pointers[y][x++];
+			}
+		}
+		break;
+	}
+	case PNG_COLOR_TYPE_RGB:
+	{
+		image.imageData = new unsigned char[image.width * image.height * 3];
+		image.hasAlpha = false;
+
+		for (y = 0; y < image.height; ++y)
+		{
+			for (x = 0; x < image.width * 3; )
+			{
+				image.imageData[y * image.width * 3 + x] = row_pointers[y][x++];
+				image.imageData[y * image.width * 3 + x] = row_pointers[y][x++];
+				image.imageData[y * image.width * 3 + x] = row_pointers[y][x++];
+			}
+		}
+		break;
+	}
+	default:
+		fclose(fp);
+		png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+		return false;
+	}
+	fclose(fp);
+
+	png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+
+	return true;
+}
+
+texture gl_manager::genTexture(char* fileName[], GLuint count)
+{
+	texture texture;
+
+	texture._textureCount	= count;
+	texture._textureIDList	= new GLuint[count];
+
+	glGenTextures(count, texture._textureIDList);
+
+	for (unsigned int i = 0; i < count; i++)
+	{
+		image_info image;
+
+		if (!loadPNG(fileName[i], image))
+		{
+			std::string errorMessage = "[Error]Can't load image call:";
+
+			message((errorMessage + fileName[i]).c_str(), msgError, false);
+		}
+		else
+		{
+			glBindTexture(GL_TEXTURE_2D, texture._textureIDList[i]);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+			if (image.hasAlpha)
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.imageData);
+			else
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.imageData);
+
+			delete[](image.imageData);
+		}
+
+	}
+	return texture;
 }

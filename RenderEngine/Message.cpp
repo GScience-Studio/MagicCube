@@ -4,7 +4,7 @@
 
 #include "message.h"
 
-message::message(char* message, message_type messageType,bool stop)
+message::message(const char* message, message_type messageType,bool stop)
 {
 	switch (messageType)
 	{

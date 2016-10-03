@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RenderEngine.h"
+#include "Texture.h"
 
 class application;
 
@@ -53,14 +54,24 @@ class gl_manager
 	//sone function only can be use when the app start run
 	friend class application;
 
+private:
+	//gl instance
+	static gl_manager _glInstance;
+
 	//save the vao and vbo id that now use
-	buffer enableBuffer = buffer(-1, -1);
+	buffer _enableBuffer = buffer(-1, -1);
 
 	//save the shader program list
 	std::forward_list<shader_program*> _shaderProgramList;
 
+	//save the texture list
+	std::forward_list<texture*> _textureList;
+
 	//save the shader programid that is in use
-	GLuint shaderProgramID = 0;
+	GLuint _shaderProgramID = 0;
+
+	//the texture that now is in use
+	texture _usingTexture;
 
 	/*
 	basic shader program
@@ -84,15 +95,11 @@ class gl_manager
 			glInstance.draw(start, end);
 		}
 	};
-private:
 	//start an window,only can be use in application::run()
 	void _loadWindow();
 
 	//save window
-	GLFWwindow* _window;	
-	
-	//gl instance
-	static gl_manager _glInstance;
+	GLFWwindow* _window;
 
 	//init rendermanager
 	gl_manager()
@@ -110,6 +117,9 @@ public:
 	//add shader
 	shader_program* addShader(char* vert, char* frag, shader_program* newShaderProgramClass);
 
+	//gen texture
+	texture genTexture(char* fileName[], GLuint count);
+
 	//treate event
 	void poolEvent() const
 	{
@@ -121,7 +131,7 @@ public:
 		glfwSwapBuffers(_window);
 	}
 	//clear
-	void clear(GLbitfield mask) const
+	void clear(const GLbitfield& mask) const
 	{
 		glClear(mask);
 	}
@@ -136,7 +146,7 @@ public:
 		return glfwWindowShouldClose(_window) == 1;
 	}
 	//set buffer data
-	void bufferData(buffer& buffer, GLsizeiptr size, const void* data)
+	void bufferData(buffer& buffer, const GLsizeiptr& size, const void* data)
 	{
 		useBuffer(buffer);
 
@@ -145,14 +155,14 @@ public:
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
 	//set part of buffer data
-	void bufferSubData(const buffer& buffer, GLintptr offset, GLsizeiptr size, const void* data)
+	void bufferSubData(buffer& buffer, const GLintptr offset, const GLsizeiptr size, const void* data)
 	{
 		useBuffer(buffer);
 
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 	}
 	//set buffer size
-	bool bufferResize(buffer& buffer, GLsizeiptr size)
+	bool bufferResize(buffer& buffer, const GLsizeiptr size)
 	{
 		if (buffer.size == size)
 			return false;
@@ -194,46 +204,46 @@ public:
 		glGenBuffers(1, &vbo);
 
 		//change back
-		if (enableBuffer.vao != -1)
+		if (_enableBuffer.vao != -1)
 		{
-			glBindVertexArray(enableBuffer.vao);
-			glBindVertexArray(enableBuffer.vbo);
+			glBindVertexArray(_enableBuffer.vao);
+			glBindVertexArray(_enableBuffer.vbo);
 		}
 
 		return buffer(vao, vbo);
 	}
 	//draw buffer
-	void draw(GLint fitst,GLsizei count)
+	void draw(const GLint& fitst,const GLsizei& count)
 	{
 		glDrawArrays(GL_TRIANGLES, fitst, count);
 	}
 	//if return false it mean it is in use
-	bool useBuffer(buffer bufferInfo)
+	bool useBuffer(buffer& bufferInfo)
 	{
-		if (bufferInfo.vao != enableBuffer.vao)
+		if (bufferInfo.vao != _enableBuffer.vao)
 		{
 			glBindVertexArray(bufferInfo.vao);
 			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo.vbo);
 
-			enableBuffer.vao = bufferInfo.vao;
-			enableBuffer.vbo = bufferInfo.vbo;
+			_enableBuffer.vao = bufferInfo.vao;
+			_enableBuffer.vbo = bufferInfo.vbo;
 
 			return true;
 		}
-		else if (bufferInfo.vbo != enableBuffer.vbo)
+		else if (bufferInfo.vbo != _enableBuffer.vbo)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo.vbo);
 
-			enableBuffer.vbo = bufferInfo.vbo;
+			_enableBuffer.vbo = bufferInfo.vbo;
 		}
 		return false;
 	}
 	//use program
 	void useShaderProgram(const shader_program* shaderProgram)
 	{
-		if (shaderProgramID != shaderProgram->programID)
+		if (_shaderProgramID != shaderProgram->programID)
 		{
-			shaderProgramID = shaderProgram->programID;
+			_shaderProgramID = shaderProgram->programID;
 
 			glUseProgram(shaderProgram->programID);
 		}
@@ -250,6 +260,10 @@ public:
 		for (auto* shaderProgram : _shaderProgramList)
 		{
 			delete(shaderProgram);
+		}
+		for (auto* texture : _textureList)
+		{
+			texture->deleteTexture();
 		}
 	}
 };

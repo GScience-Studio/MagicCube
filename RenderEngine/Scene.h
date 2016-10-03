@@ -28,14 +28,4 @@ public:
 			delete(renderNode);
 		}
 	}
-	//add an render node by user
-	void addRenderNode(const render_node& renderNode)
-	{
-		_renderNodeList.push_front(new render_node(renderNode));
-	}
-	//add canvas
-	canvas* addCanvas()
-	{
-		return _addCanvas();
-	}
 };

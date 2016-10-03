@@ -7,5 +7,5 @@ enum message_type
 class message
 {
 public:
-	message(char*, message_type, bool);
+	message(const char*, message_type, bool);
 };

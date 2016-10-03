@@ -1,0 +1,29 @@
+#pragma once
+
+#include "RenderEngine.h"
+
+class texture
+{
+	friend class gl_manager;
+
+private:
+	//save the info of texture
+	GLuint  _textureCount = 0;
+	GLuint* _textureIDList = nullptr;
+
+	//create an new texture
+	void createTexture(GLuint count, GLuint* idList)
+	{
+		_textureCount = count;
+
+		_textureIDList = idList;
+	}
+
+	//delete texture
+	void deleteTexture()
+	{
+		delete[](_textureIDList);
+	}
+public:
+	texture() {}
+};

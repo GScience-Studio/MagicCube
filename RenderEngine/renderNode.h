@@ -2,13 +2,15 @@
 
 #include "RenderEngine.h"
 #include "GLManager.h"
+#include "TextureNode.h"
 
 class render_node
 {
 	friend class scene;
 
 private:
-	gl_manager& _glInstance = gl_manager::getInstance();
+	gl_manager&		_glInstance = gl_manager::getInstance();
+	texture_node	_textureNode;
 
 protected:
 	//these are the thing that about opengl
@@ -45,5 +47,10 @@ public:
 	{
 		_nodeBuffer		= _glInstance.genBuffer();
 		_shaderProgram	= gl_manager::getInstance().appNormail3DShader;
+	}
+	//texture
+	void bindTexture(const texture& texture)
+	{
+		_textureNode.bindTexture(texture);
 	}
 };

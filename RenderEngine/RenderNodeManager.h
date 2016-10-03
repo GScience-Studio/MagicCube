@@ -13,10 +13,16 @@ protected:
 	//save the list that gen in this scene
 	render_node_list _renderNodeList;
 
-	canvas* _addCanvas()
+public:
+	canvas* addCanvas()
 	{
 		_renderNodeList.push_front(new canvas());
 
 		return (canvas*)_renderNodeList.front();
+	}
+	//add an render node by user
+	void addRenderNode(render_node* renderNode)
+	{
+		_renderNodeList.push_front(renderNode);
 	}
 };

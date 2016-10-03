@@ -46,6 +46,8 @@ private:
 	//draw canvas
 	void _draw()
 	{
+		_glInstance.useBuffer(_nodeBuffer);
+
 		if (_hasChange)
 		{
 			_hasChange = false;
