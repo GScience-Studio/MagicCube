@@ -37,11 +37,12 @@ protected:
 	//only can use new
 	~shader_program() {}
 	shader_program() {}
+
+	virtual void _draw(const GLint first, const GLsizei count) const = 0;
 public:
 	GLuint programID = 0;
 
 	virtual void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const = 0;
-	virtual void draw(GLint start, GLsizei end, buffer buffer) const = 0;
 };
 /*
 rendermanager
@@ -65,10 +66,10 @@ private:
 	std::forward_list<shader_program*> _shaderProgramList;
 
 	//save the texture list
-	std::forward_list<texture*> _textureList;
+	std::forward_list<texture> _textureList;
 
 	//save the shader programid that is in use
-	GLuint _shaderProgramID = 0;
+	const void* _shaderProgram = nullptr;
 
 	//the texture that now is in use
 	texture _usingTexture;
@@ -83,17 +84,14 @@ private:
 	private:
 		gl_manager& glInstance = gl_manager::getInstance();
 
+		//draw
+		void _draw(const GLint first, const GLsizei count) const
+		{
+			glDrawArrays(GL_TRIANGLES, first, count);
+		}
 	public:
 		//create buffer by daat
 		void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const;
-
-		void draw(GLint start, GLsizei end, buffer buffer) const
-		{
-			glInstance.useBuffer(buffer);
-
-			glInstance.useShaderProgram(this);
-			glInstance.draw(start, end);
-		}
 	};
 	//start an window,only can be use in application::run()
 	void _loadWindow();
@@ -115,7 +113,7 @@ public:
 	normail3DShader* appNormail3DShader;
 
 	//add shader
-	shader_program* addShader(char* vert, char* frag, shader_program* newShaderProgramClass);
+	shader_program* genShader(char* vert, char* frag, shader_program* newShaderProgramClass);
 
 	//gen texture
 	texture genTexture(char* fileName[], GLuint count);
@@ -155,7 +153,7 @@ public:
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
 	//set part of buffer data
-	void bufferSubData(buffer& buffer, const GLintptr offset, const GLsizeiptr size, const void* data)
+	void bufferSubData(const buffer& buffer, const GLintptr offset, const GLsizeiptr size, const void* data)
 	{
 		useBuffer(buffer);
 
@@ -213,12 +211,12 @@ public:
 		return buffer(vao, vbo);
 	}
 	//draw buffer
-	void draw(const GLint& fitst,const GLsizei& count)
+	void draw(const GLint& first,const GLsizei& count)
 	{
-		glDrawArrays(GL_TRIANGLES, fitst, count);
+		((shader_program*)_shaderProgram)->_draw(first, count);
 	}
 	//if return false it mean it is in use
-	bool useBuffer(buffer& bufferInfo)
+	bool useBuffer(const buffer& bufferInfo)
 	{
 		if (bufferInfo.vao != _enableBuffer.vao)
 		{
@@ -241,11 +239,25 @@ public:
 	//use program
 	void useShaderProgram(const shader_program* shaderProgram)
 	{
-		if (_shaderProgramID != shaderProgram->programID)
+		if (_shaderProgram == nullptr || ((shader_program*)_shaderProgram)->programID != shaderProgram->programID)
 		{
-			_shaderProgramID = shaderProgram->programID;
+			_shaderProgram = shaderProgram;
 
 			glUseProgram(shaderProgram->programID);
+		}
+	}
+	//use texture
+	void useTexture(const texture& texture)
+	{
+		if (_usingTexture == texture)
+			return;
+
+		_usingTexture = texture;
+
+		for (unsigned int i = 0; i < texture._textureCount; i++)
+		{
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, texture._textureIDList[i]);
 		}
 	}
 	//get rendermanager instance
@@ -261,9 +273,9 @@ public:
 		{
 			delete(shaderProgram);
 		}
-		for (auto* texture : _textureList)
+		for (auto texture : _textureList)
 		{
-			texture->deleteTexture();
+			texture.deleteTexture();
 		}
 	}
 };

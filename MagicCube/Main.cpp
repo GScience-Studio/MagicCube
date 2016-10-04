@@ -21,7 +21,7 @@ public:
 
 		char* textureFileName[]{ "Block.png"};
 
-		genTexture(textureFileName,1);
+		texture blockTexture = genTexture(textureFileName,1);
 
 		testcanvas1->addShape(canvas_shape
 		(
@@ -37,7 +37,7 @@ public:
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, 0.9f, 0.0f), texture_pos(0.0f, 1.0f))
 		));
 
-		testcanvas2->bindTexture(texture());
+		testcanvas2->bindTexture(blockTexture);
 		showScene(testScene);
 	}
 	void tickCall()

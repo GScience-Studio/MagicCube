@@ -24,6 +24,10 @@ private:
 	{
 		delete[](_textureIDList);
 	}
+	bool operator ==(const texture& texture)
+	{
+		return _textureIDList == texture._textureIDList;
+	}
 public:
 	texture() {}
 };

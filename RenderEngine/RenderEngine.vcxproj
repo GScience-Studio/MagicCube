@@ -36,7 +36,6 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureNode.h" />
     <ClInclude Include="Vec.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

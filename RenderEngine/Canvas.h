@@ -46,7 +46,9 @@ private:
 	//draw canvas
 	void _draw()
 	{
-		_glInstance.useBuffer(_nodeBuffer);
+		_glInstance.useBuffer(_buffer);
+		_glInstance.useShaderProgram(_shaderProgram);
+		_glInstance.useTexture(_texture);
 
 		if (_hasChange)
 		{
@@ -58,17 +60,17 @@ private:
 		if (_renderData.size() == 0)
 			return;
 
-		_shaderProgram->draw(0, _renderData.size() / 8, _nodeBuffer);
+		_glInstance.draw(0, _renderData.size() / 8);
 	}
 
 	//refresh shape
 	void canvas::_refreshShape()
 	{
-		if (_glInstance.bufferResize(_nodeBuffer, _renderData.capacity() * sizeof(GLfloat)))
+		if (_glInstance.bufferResize(_buffer, _renderData.capacity() * sizeof(GLfloat)))
 			_lastVectorSize = 0;
 
 		if (_renderData.size() != 0)
-			_shaderProgram->setBufferData(&_renderData.at(0), _lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), _nodeBuffer);
+			_shaderProgram->setBufferData(&_renderData.at(0), _lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), _buffer);
 
 		_lastVectorSize = _renderData.size();
 	}

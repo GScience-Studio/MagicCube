@@ -2,7 +2,6 @@
 
 #include "RenderEngine.h"
 #include "GLManager.h"
-#include "TextureNode.h"
 
 class render_node
 {
@@ -10,12 +9,12 @@ class render_node
 
 private:
 	gl_manager&		_glInstance = gl_manager::getInstance();
-	texture_node	_textureNode;
 
 protected:
 	//these are the thing that about opengl
 	shader_program* _shaderProgram;
-	buffer			_nodeBuffer;
+	buffer			_buffer;
+	texture			_texture;
 
 	//is the render_node can draw
 	bool _isEnable = false;
@@ -24,33 +23,37 @@ protected:
 	virtual void _draw()
 	{
 		if (_isEnable)
-			_glInstance.useBuffer(_nodeBuffer);
+		{
+			_glInstance.useBuffer(_buffer);
+			_glInstance.useTexture(_texture);
+			_glInstance.useShaderProgram(_shaderProgram);
+		}
 	}
 
 public:
 	//init
-	render_node(buffer buffer) :_nodeBuffer(buffer)
+	render_node(buffer buffer) :_buffer(buffer)
 	{
 		_shaderProgram = gl_manager::getInstance().appNormail3DShader;
 	}
 	render_node(shader_program* shaderProgram)
 	{
-		_nodeBuffer		= _glInstance.genBuffer();
+		_buffer			= _glInstance.genBuffer();
 		_shaderProgram	= shaderProgram;
 	}
-	render_node(buffer buffer, shader_program* shaderProgram) :_nodeBuffer(buffer)
+	render_node(buffer buffer, shader_program* shaderProgram) :_buffer(buffer)
 	{
 		_shaderProgram = shaderProgram;
 	}
 
 	render_node()
 	{
-		_nodeBuffer		= _glInstance.genBuffer();
+		_buffer			= _glInstance.genBuffer();
 		_shaderProgram	= gl_manager::getInstance().appNormail3DShader;
 	}
 	//texture
 	void bindTexture(const texture& texture)
 	{
-		_textureNode.bindTexture(texture);
+		_texture = texture;
 	}
 };

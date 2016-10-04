@@ -32,9 +32,6 @@
     <ClInclude Include="Scene.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="TextureNode.h">
-      <Filter>RengerEngine</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>

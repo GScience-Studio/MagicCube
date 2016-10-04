@@ -18,7 +18,7 @@ void application::run()
 	_glInstance._loadWindow();
 
 	//load normal shader
-	_glInstance.addShader("Normail3d.vert", "Normail3d.frag", _glInstance.appNormail3DShader);
+	_glInstance.genShader("Normail3d.vert", "Normail3d.frag", _glInstance.appNormail3DShader);
 
 	//call init
 	init();

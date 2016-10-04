@@ -176,7 +176,7 @@ void gl_manager::_loadWindow()
 	glEnable(GL_TEXTURE_2D);
 }
 //load shaders
-shader_program* gl_manager::addShader(char* vert, char* frag, shader_program* newShaderProgramClass)
+shader_program* gl_manager::genShader(char* vert, char* frag, shader_program* newShaderProgramClass)
 {
 	shader_info shaderInfo[] = {
 		{ GL_VERTEX_SHADER, vert },
@@ -359,9 +359,12 @@ texture gl_manager::genTexture(char* fileName[], GLuint count)
 			else
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.imageData);
 
+			glBindTexture(GL_TEXTURE_2D, 0);
+
 			delete[](image.imageData);
 		}
-
 	}
+	_textureList.push_front(texture);
+
 	return texture;
 }
