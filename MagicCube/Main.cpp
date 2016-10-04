@@ -19,9 +19,9 @@ public:
 		testcanvas1 = testScene->addCanvas();
 		testcanvas2 = testScene->addCanvas();
 
-		char* textureFileName[]{ "Block.png"};
+		char* textureFileName[]{ "block.png","normal.png"};
 
-		texture blockTexture = genTexture(textureFileName,1);
+		texture blockTexture = genTexture(textureFileName,2);
 
 		testcanvas1->addShape(canvas_shape
 		(

@@ -10,6 +10,5 @@ out vec4 fColor;
 
 void main()  
 {
-	fColor = vec4(texturePos,0.0,0.0);
-	fColor = texture2D(texture,texturePos);
+	fColor = texture2D(texture,texturePos) + texture2D(normal,texturePos) * 0.2;
 }
