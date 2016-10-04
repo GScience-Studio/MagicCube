@@ -184,15 +184,16 @@ shader_program* gl_manager::genShader(char* vert, char* frag, shader_program* ne
 		{ GL_NONE, NULL } };
 
 	//load shader
-	newShaderProgramClass->programID = loadShader(shaderInfo);
+	newShaderProgramClass->_programID = loadShader(shaderInfo);
+	newShaderProgramClass->_init();
 
 	_shaderProgramList.push_front(newShaderProgramClass);
 
 	return nullptr;
 }
 
-//create buffer of normail 3d
-void gl_manager::normail3DShader::setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
+//create buffer of normal 3d
+void gl_manager::normal3DShader::setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
 {
 	glInstance.useBuffer(buffer);
 

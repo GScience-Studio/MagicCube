@@ -34,7 +34,7 @@ public:
 	//init
 	render_node(buffer buffer) :_buffer(buffer)
 	{
-		_shaderProgram = gl_manager::getInstance().appNormail3DShader;
+		_shaderProgram = gl_manager::getInstance().appNormal3DShader;
 	}
 	render_node(shader_program* shaderProgram)
 	{
@@ -49,7 +49,7 @@ public:
 	render_node()
 	{
 		_buffer			= _glInstance.genBuffer();
-		_shaderProgram	= gl_manager::getInstance().appNormail3DShader;
+		_shaderProgram	= gl_manager::getInstance().appNormal3DShader;
 	}
 	//texture
 	void bindTexture(const texture& texture)

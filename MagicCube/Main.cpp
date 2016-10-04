@@ -30,14 +30,16 @@ public:
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, 0.0f), texture_pos(0.0f, 0.0f))
 		));
 
-		testcanvas1->addShape(canvas_shape
+		testcanvas2->addShape(canvas_shape
 		(
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, 0.0f), texture_pos(1.0f, 1.0f)),
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, 0.0f), texture_pos(0.0f, 0.0f)), 
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, 0.9f, 0.0f), texture_pos(0.0f, 1.0f))
 		));
 
+		testcanvas1->bindTexture(blockTexture);
 		testcanvas2->bindTexture(blockTexture);
+
 		showScene(testScene);
 	}
 	void tickCall()

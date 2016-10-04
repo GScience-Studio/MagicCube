@@ -32,16 +32,18 @@ class shader_program
 {
 	friend class gl_manager;
 
-protected:
+private:
+	virtual void _draw(const GLint first, const GLsizei count) const = 0;
+	virtual void _init() = 0;
 
+	GLuint _programID = 0;
+
+protected:
 	//only can use new
 	~shader_program() {}
 	shader_program() {}
 
-	virtual void _draw(const GLint first, const GLsizei count) const = 0;
 public:
-	GLuint programID = 0;
-
 	virtual void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const = 0;
 };
 /*
@@ -79,7 +81,7 @@ private:
 	data format:
 	x,y,z,r,g,b,texture x,texture y
 	*/
-	class normail3DShader :public shader_program
+	class normal3DShader :public shader_program
 	{
 	private:
 		gl_manager& glInstance = gl_manager::getInstance();
@@ -88,6 +90,11 @@ private:
 		void _draw(const GLint first, const GLsizei count) const
 		{
 			glDrawArrays(GL_TRIANGLES, first, count);
+		}
+		void _init()
+		{
+			glUniform1i(glGetUniformLocation(_programID, "texture"), 0);
+			glUniform1i(glGetUniformLocation(_programID, "normal"), 1);
 		}
 	public:
 		//create buffer by daat
@@ -103,14 +110,14 @@ private:
 	gl_manager()
 	{
 		//init shader pointer
-		appNormail3DShader = new normail3DShader();
+		appNormal3DShader = new normal3DShader();
 
 		//init glfw
 		glfwInit();
 	}
 public:
 	//save shader pointer
-	normail3DShader* appNormail3DShader;
+	normal3DShader* appNormal3DShader;
 
 	//add shader
 	shader_program* genShader(char* vert, char* frag, shader_program* newShaderProgramClass);
@@ -239,11 +246,11 @@ public:
 	//use program
 	void useShaderProgram(const shader_program* shaderProgram)
 	{
-		if (_shaderProgram == nullptr || ((shader_program*)_shaderProgram)->programID != shaderProgram->programID)
+		if (_shaderProgram == nullptr || ((shader_program*)_shaderProgram)->_programID != shaderProgram->_programID)
 		{
 			_shaderProgram = shaderProgram;
 
-			glUseProgram(shaderProgram->programID);
+			glUseProgram(shaderProgram->_programID);
 		}
 	}
 	//use texture
@@ -254,11 +261,19 @@ public:
 
 		_usingTexture = texture;
 
-		for (unsigned int i = 0; i < texture._textureCount; i++)
+		//no texture
+		if (texture._textureCount == 0)
 		{
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, texture._textureIDList[i]);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+		else
+			//has texture
+			for (unsigned int i = 0; i < texture._textureCount; i++)
+			{
+				glActiveTexture(GL_TEXTURE0 + i);
+				glBindTexture(GL_TEXTURE_2D, texture._textureIDList[i]);
+			}
 	}
 	//get rendermanager instance
 	static gl_manager& getInstance()
