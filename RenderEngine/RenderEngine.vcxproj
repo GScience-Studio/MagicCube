@@ -27,6 +27,7 @@
   <ItemGroup>
     <ClInclude Include="..\GSRenderEngine.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="GLManager.h" />

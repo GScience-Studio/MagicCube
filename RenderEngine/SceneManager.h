@@ -2,6 +2,7 @@
 
 #include "RenderEngine.h"
 #include "Scene.h"
+#include "Camera.h"
 
 class scene_manager
 {
@@ -25,6 +26,9 @@ private:
 	}
 
 protected:
+	//gobal screen camera
+	camera _camera;
+
 	//scene refresh and draw
 	void _sceneRefreshAndDraw(bool draw)
 	{

@@ -78,4 +78,22 @@ public:
 	{
 		return get(2);
 	}
+	void setX(T x)
+	{
+		data[0] = x;
+	}
+	void setY(T y)
+	{
+		data[1] = y;
+	}
+	void setZ(T z)
+	{
+		data[2] = z;
+	}
+	void moveTo(T x, T y, T z)
+	{
+		data[0] = x;
+		data[1] = y;
+		data[2] = z;
+	}
 };

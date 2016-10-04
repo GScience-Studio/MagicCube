@@ -35,6 +35,9 @@
     <ClInclude Include="Texture.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>RengerEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">

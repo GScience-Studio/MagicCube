@@ -1,9 +1,15 @@
 
+#define PNG_BYTES_TO_CHECK 4
+
 #include "GLManager.h"
 #include "Application.h"
 
 //libpng
-#include <libPNG/png.h>
+#include <libPNG\png.h>
+
+//glm
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
 
 //instance
 gl_manager gl_manager::_glInstance;
@@ -185,6 +191,8 @@ shader_program* gl_manager::genShader(char* vert, char* frag, shader_program* ne
 
 	//load shader
 	newShaderProgramClass->_programID = loadShader(shaderInfo);
+	newShaderProgramClass->_projection = glGetUniformLocation(newShaderProgramClass->_programID, "projection");
+
 	newShaderProgramClass->_init();
 
 	_shaderProgramList.push_front(newShaderProgramClass);
@@ -223,7 +231,13 @@ void gl_manager::normal3DShader::setBufferData(const void* bufferData, const uns
 	}
 }
 
-#define PNG_BYTES_TO_CHECK 4
+void shader_program::setCamera(camera camera)
+{
+	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)640 / (GLfloat)480, 0.1f, 500.0f);
+	glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(camera.getLocation().getX(), camera.getLocation().getY(), camera.getLocation().getZ()));
+
+	glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(projection * cameraTranslate));
+}
 
 bool loadPNG(const char *filepath, image_info& image)
 {

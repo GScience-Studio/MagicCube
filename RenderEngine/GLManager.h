@@ -2,6 +2,7 @@
 
 #include "RenderEngine.h"
 #include "Texture.h"
+#include "Camera.h"
 
 class application;
 
@@ -36,6 +37,7 @@ private:
 	virtual void _draw(const GLint first, const GLsizei count) const = 0;
 	virtual void _init() = 0;
 
+	GLuint _projection = 0;
 	GLuint _programID = 0;
 
 protected:
@@ -44,6 +46,8 @@ protected:
 	shader_program() {}
 
 public:
+	void setCamera(camera camera);
+
 	virtual void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const = 0;
 };
 /*

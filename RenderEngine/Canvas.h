@@ -60,6 +60,8 @@ private:
 		if (_renderData.size() == 0)
 			return;
 
+		_shaderProgram->setCamera(camera(1.0, 0.0, -5.0, 0.0f, 0.0f));
+
 		_glInstance.draw(0, _renderData.size() / 8);
 	}
 
