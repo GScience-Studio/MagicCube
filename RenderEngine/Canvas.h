@@ -3,9 +3,18 @@
 #include "RenderEngine.h"
 #include "GLManager.h"
 #include "RenderNode.h"
+#include "Camera.h"
 
-typedef vec<GLfloat, 3>		color;
-typedef vec<GLfloat, 2>		texture_pos;
+class color :public vec<GLfloat, 3>
+{
+public:
+	color(float r, float g, float b) :vec<GLfloat, 3>({ r,g,b }) {}
+};
+class texture_pos :public vec<GLfloat, 2>
+{
+public:
+	texture_pos(float x, float y) :vec<GLfloat, 2>({ x,y }) {}
+};
 
 //shape info
 struct canvas_point_info
@@ -44,7 +53,7 @@ private:
 	unsigned int _lastVectorSize = 0;
 
 	//draw canvas
-	void _draw()
+	void _draw(camera _golbalCamera)
 	{
 		_glInstance.useBuffer(_buffer);
 		_glInstance.useShaderProgram(_shaderProgram);
@@ -60,7 +69,7 @@ private:
 		if (_renderData.size() == 0)
 			return;
 
-		_shaderProgram->setCamera(camera(1.0, 0.0, -5.0, 0.0f, 0.0f));
+		_shaderProgram->setCamera(_golbalCamera + _nodeGolbalCamera,_modelCamera);
 
 		_glInstance.draw(0, _renderData.size() / 8);
 	}

@@ -231,12 +231,17 @@ void gl_manager::normal3DShader::setBufferData(const void* bufferData, const uns
 	}
 }
 
-void shader_program::setCamera(camera camera)
+void shader_program::setCamera(camera& globalCamera,camera& modelCamera) const
 {
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)640 / (GLfloat)480, 0.1f, 500.0f);
-	glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(camera.getLocation().getX(), camera.getLocation().getY(), camera.getLocation().getZ()));
+	glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(globalCamera.getLocation()->getX(), globalCamera.getLocation()->getY(), globalCamera.getLocation()->getZ()));
+	glm::mat4 cameraRotate = glm::rotate(glm::mat4(), globalCamera.getRotate()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), globalCamera.getRotate()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
 
-	glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(projection * cameraTranslate));
+	glm::mat4 cameraModelTranslate = glm::translate(glm::mat4(), glm::vec3(modelCamera.getLocation()->getX(), modelCamera.getLocation()->getY(), modelCamera.getLocation()->getZ()));
+	glm::mat4 cameraModelRotate = glm::rotate(glm::mat4(), modelCamera.getRotate()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), modelCamera.getRotate()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
+
+
+	glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(projection * cameraRotate * cameraTranslate * cameraModelTranslate * cameraModelRotate));
 }
 
 bool loadPNG(const char *filepath, image_info& image)

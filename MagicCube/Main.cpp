@@ -25,17 +25,33 @@ public:
 
 		testcanvas1->addShape(canvas_shape
 		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, 0.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, -0.9f, 0.0f), texture_pos(1.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, 0.0f), texture_pos(0.0f, 0.0f))
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -2.0f), texture_pos(1.0f, 1.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, -0.9f, -2.0f), texture_pos(1.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -2.0f), texture_pos(0.0f, 0.0f))
+		));
+
+		testcanvas1->addShape(canvas_shape
+		(
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -2.0f), texture_pos(1.0f, 1.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -2.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, 0.9f, -2.0f), texture_pos(0.0f, 1.0f))
 		));
 
 		testcanvas2->addShape(canvas_shape
 		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, 0.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, 0.0f), texture_pos(0.0f, 0.0f)), 
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, 0.9f, 0.0f), texture_pos(0.0f, 1.0f))
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -5.0f), texture_pos(1.0f, 1.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, -0.9f, -5.0f), texture_pos(1.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -5.0f), texture_pos(0.0f, 0.0f))
 		));
+
+		testcanvas2->addShape(canvas_shape
+		(
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -5.0f), texture_pos(1.0f, 1.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -5.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, 0.9f, -5.0f), texture_pos(0.0f, 1.0f))
+		));
+
+		testcanvas1->getGolbalCamera()->getLocation()->setZ(-5.0f);
 
 		testcanvas1->bindTexture(blockTexture);
 		testcanvas2->bindTexture(blockTexture);
@@ -45,6 +61,14 @@ public:
 	void tickCall()
 	{
 		count++;
+
+		camera* nodeGolbalCamera = testcanvas1->getGolbalCamera();
+		camera* nodeModelCamera = testcanvas1->getModelCamera();
+
+		camera* globalCamera = getGlobalCamera();
+
+		nodeModelCamera->getRotate()->setPosX(nodeModelCamera->getRotate()->getPosX() + 0.01f);
+		nodeModelCamera->getRotate()->setPosY(nodeModelCamera->getRotate()->getPosY() + 0.01f);
 
 		if (count % 100 == 0)
 		{

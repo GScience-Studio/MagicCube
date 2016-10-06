@@ -46,7 +46,7 @@ protected:
 	shader_program() {}
 
 public:
-	void setCamera(camera camera);
+	void setCamera(camera& globalCamera, camera& modelCamera) const;
 
 	virtual void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const = 0;
 };

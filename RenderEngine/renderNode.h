@@ -16,11 +16,15 @@ protected:
 	buffer			_buffer;
 	texture			_texture;
 
+	//node camera
+	camera			_nodeGolbalCamera;
+	camera			_modelCamera;
+
 	//is the render_node can draw
 	bool _isEnable = false;
 
 	//each node must can be draw
-	virtual void _draw()
+	virtual void _draw(camera _golbalCamera)
 	{
 		if (_isEnable)
 		{
@@ -55,5 +59,15 @@ public:
 	void bindTexture(const texture& texture)
 	{
 		_texture = texture;
+	}
+	//golbal Camera
+	camera* getGolbalCamera()
+	{
+		return &_nodeGolbalCamera;
+	}
+	//model camera
+	camera* getModelCamera()
+	{
+		return &_modelCamera;
 	}
 };

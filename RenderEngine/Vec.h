@@ -1,5 +1,7 @@
 #pragma once
 
+#include <initializer_list>
+
 template<class T,unsigned char vecSize> class vec
 {
 protected:
@@ -10,22 +12,17 @@ public:
 	{
 		return data[pos];
 	}
-	vec(T firstData, T...)
+	vec(std::initializer_list<T> dataList)
 	{
-		T j = 0;
+		unsigned int i = 0;
 
-		va_list arg_ptr;
-		__crt_va_start(arg_ptr, firstData);
-
-		unsigned char count = 0;
-
-		data[0] = firstData;
-
-		for (int i = 1; i<vecSize; i++)
+		for (auto getData: dataList)
 		{
-			data[i] = __crt_va_arg(arg_ptr, T);
+			data[i] = getData;
+
+			if (++i == vecSize)
+				return;
 		}
-		__crt_va_end(arg_ptr);
 	}
 	vec(T firstData[vecSize])
 	{
@@ -44,7 +41,7 @@ public:
 class size_vec :private vec<unsigned int, 2>
 {
 public:
-	size_vec(unsigned int height, unsigned int width) :vec(height,width) {}
+	size_vec(unsigned int height, unsigned int width) :vec( {height,width} ) {}
 
 	unsigned int getHeight() const
 	{
@@ -64,7 +61,7 @@ public:
 	{
 		return location<T>(get(0) + loc[0], get(1) + loc[1], get(2) + loc[2]);
 	}
-	location(T x, T y, T z) :vec(x, y, z) {}
+	location(T x, T y, T z) :vec<T, 3>({ x, y, z }) {}
 
 	T getX() const
 	{

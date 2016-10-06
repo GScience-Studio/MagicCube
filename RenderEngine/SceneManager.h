@@ -27,7 +27,7 @@ private:
 
 protected:
 	//gobal screen camera
-	camera _camera;
+	camera _globalCamera;
 
 	//scene refresh and draw
 	void _sceneRefreshAndDraw(bool draw)
@@ -48,7 +48,9 @@ protected:
 		}
 
 		if (draw)
-			_nowScene->_draw();
+		{
+			_nowScene->_draw(_globalCamera);
+		}
 	}
 
 public:
@@ -59,7 +61,11 @@ public:
 
 		return &_sceneList.back();
 	}
-
+	//get camera
+	camera* getGlobalCamera()
+	{
+		return &_globalCamera;
+	}
 	//show an scene
 	void showScene(scene* scene)
 	{
