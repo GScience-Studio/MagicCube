@@ -24,11 +24,13 @@
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="GLManager.cpp" />
     <ClCompile Include="NormalShader.cpp" />
+    <ClCompile Include="ShapeCube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\GSRenderEngine.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CanvasTexture.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="NormalShader.h" />
     <ClInclude Include="RenderEngine.h" />
@@ -38,6 +40,7 @@
     <ClInclude Include="RenderNodeManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ShapeCube.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vec.h" />
   </ItemGroup>

@@ -41,6 +41,12 @@
     <ClInclude Include="NormalShader.h">
       <Filter>Extension\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="ShapeCube.h">
+      <Filter>Extension\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasTexture.h">
+      <Filter>Extension\Canvas</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">
@@ -58,6 +64,9 @@
     <Filter Include="Extension\Shader">
       <UniqueIdentifier>{f5c455a2-5ccf-458c-834d-f0814c882783}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Extension\Canvas">
+      <UniqueIdentifier>{b108fca7-6a20-4393-a900-e4042f0999af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -74,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="NormalShader.cpp">
       <Filter>Extension\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="ShapeCube.cpp">
+      <Filter>Extension\Canvas</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

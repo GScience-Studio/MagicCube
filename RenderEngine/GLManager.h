@@ -4,8 +4,6 @@
 #include "Texture.h"
 #include "Camera.h"
 
-class application;
-
 struct buffer
 {
 	//save buffer ID

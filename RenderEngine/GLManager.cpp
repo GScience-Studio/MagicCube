@@ -180,6 +180,7 @@ void gl_manager::_loadWindow()
 	//init opengl state
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_CULL_FACE);
 }
 //load shaders
 shader_program* gl_manager::genShader(char* vert, char* frag, shader_program* newShaderProgramClass)
