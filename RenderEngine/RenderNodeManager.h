@@ -20,9 +20,23 @@ public:
 
 		return (canvas*)_renderNodeList.front();
 	}
+	canvas* addCanvas(shader_program* shaderProgram)
+	{
+		_renderNodeList.push_front(new canvas(shaderProgram));
+
+		return (canvas*)_renderNodeList.front();
+	}
 	//add an render node by user
 	void addRenderNode(render_node* renderNode)
 	{
 		_renderNodeList.push_front(renderNode);
+	}
+	~render_node_manager()
+	{
+		//free
+		for (auto* renderNode : _renderNodeList)
+		{
+			delete(renderNode);
+		}
 	}
 };

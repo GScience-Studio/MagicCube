@@ -200,37 +200,6 @@ shader_program* gl_manager::genShader(char* vert, char* frag, shader_program* ne
 	return nullptr;
 }
 
-//create buffer of normal 3d
-void gl_manager::normal3DShader::setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
-{
-	glInstance.useBuffer(buffer);
-
-	if (buffer.size >= size)
-	{
-		glInstance.bufferSubData(buffer, differentBufferDataPos, size, bufferData);
-	}
-	else
-	{
-		glInstance.bufferData(buffer, size, bufferData);
-	}
-	if (!buffer.hasInit)
-	{
-		buffer.hasInit = true;
-
-		//location data
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
-		glEnableVertexAttribArray(0);
-
-		//color data
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-		glEnableVertexAttribArray(1);
-
-		//texture pos
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
-		glEnableVertexAttribArray(2);
-	}
-}
-
 void shader_program::setCamera(camera& globalCamera,camera& modelCamera) const
 {
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)640 / (GLfloat)480, 0.1f, 500.0f);
@@ -320,18 +289,22 @@ bool loadPNG(const char *filepath, image_info& image)
 	}
 	case PNG_COLOR_TYPE_RGB:
 	{
-		image.imageData = new unsigned char[image.width * image.height * 3];
+		image.imageData = new unsigned char[image.width * image.height * 4];
 		image.hasAlpha = false;
+
+		unsigned int total = 0;
 
 		for (y = 0; y < image.height; ++y)
 		{
 			for (x = 0; x < image.width * 3; )
 			{
-				image.imageData[y * image.width * 3 + x] = row_pointers[y][x++];
-				image.imageData[y * image.width * 3 + x] = row_pointers[y][x++];
-				image.imageData[y * image.width * 3 + x] = row_pointers[y][x++];
+				image.imageData[total++] = row_pointers[y][x++];
+				image.imageData[total++] = row_pointers[y][x++];
+				image.imageData[total++] = row_pointers[y][x++];
+				image.imageData[total++] = 0;
 			}
 		}
+	
 		break;
 	}
 	default:
@@ -377,7 +350,7 @@ texture gl_manager::genTexture(char* fileName[], GLuint count)
 			if (image.hasAlpha)
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.imageData);
 			else
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB, GL_UNSIGNED_BYTE, image.imageData);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.imageData);
 
 			glBindTexture(GL_TEXTURE_2D, 0);
 

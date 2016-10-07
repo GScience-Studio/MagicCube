@@ -38,6 +38,9 @@
     <ClInclude Include="Camera.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
+    <ClInclude Include="NormalShader.h">
+      <Filter>Extension\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">
@@ -48,6 +51,12 @@
     </Filter>
     <Filter Include="Message">
       <UniqueIdentifier>{adbfa5eb-0c3f-4e33-baa2-644c1b813243}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extension">
+      <UniqueIdentifier>{b9002205-0c51-4445-b578-ff2fd4421ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extension\Shader">
+      <UniqueIdentifier>{f5c455a2-5ccf-458c-834d-f0814c882783}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="Canvas.cpp">
       <Filter>RengerEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalShader.cpp">
+      <Filter>Extension\Shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

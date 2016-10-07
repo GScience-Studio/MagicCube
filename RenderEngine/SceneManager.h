@@ -8,7 +8,7 @@ class scene_manager
 {
 private:
 	//scene list
-	std::vector<scene> _sceneList;
+	std::vector<scene*> _sceneList;
 
 	scene* _nowScene	= nullptr;
 	scene* _nextScene	= nullptr;
@@ -57,9 +57,9 @@ public:
 	//add an scene
 	scene* addScene()
 	{
-		_sceneList.push_back(scene());
+		_sceneList.push_back(new scene());
 
-		return &_sceneList.back();
+		return _sceneList.back();
 	}
 	//get camera
 	camera* getGlobalCamera()
@@ -70,5 +70,12 @@ public:
 	void showScene(scene* scene)
 	{
 		_nextScene = scene;
+	}
+	~scene_manager()
+	{
+		for (auto screen : _sceneList)
+		{
+			delete(screen);
+		}
 	}
 };

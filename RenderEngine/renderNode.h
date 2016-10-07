@@ -2,6 +2,7 @@
 
 #include "RenderEngine.h"
 #include "GLManager.h"
+#include "NormalShader.h"
 
 class render_node
 {
@@ -38,7 +39,7 @@ public:
 	//init
 	render_node(buffer buffer) :_buffer(buffer)
 	{
-		_shaderProgram = gl_manager::getInstance().appNormal3DShader;
+		_shaderProgram = normal3DShader;
 	}
 	render_node(shader_program* shaderProgram)
 	{
@@ -53,7 +54,7 @@ public:
 	render_node()
 	{
 		_buffer			= _glInstance.genBuffer();
-		_shaderProgram	= gl_manager::getInstance().appNormal3DShader;
+		_shaderProgram	= normal3DShader;
 	}
 	//texture
 	void bindTexture(const texture& texture)

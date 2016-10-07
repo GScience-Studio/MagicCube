@@ -1,74 +1,65 @@
 
 #include "../GSRenderEngine.h"
 
+enum scene_name
+{
+	SCENE_INIT, SCENE_CHOOSE_GAME, SCENE_NULL
+};
+enum texture_name
+{
+	TEXTURE_BLOCK, TEXTURE_INIT, TEXTURE_NULL
+};
 class test_app :public application
 {
 private:
 	unsigned long int count = 0;
 
 public:
-	test_app() :application(u8"Test", "1.0.0", size_vec(600,600)) {}
+	test_app() :application(u8"Test", "1.0.0", size_vec(880,495)) {}
 
-	canvas* testcanvas1;
-	canvas* testcanvas2;
+	scene* scenes[SCENE_NULL];
+
+	texture textures[TEXTURE_NULL];
 
 	void init()
 	{
-		scene* testScene = addScene();
+		//init screen
+		for (unsigned int i = 0; i < SCENE_NULL; i++)
+		{
+			scenes[i] = addScene();
+		}
+		//init texture
+		char* blockTextureFileName[]{ "block.png","normal.png" };
+		char* initTextureFileName[]{ "logo.png" };
 
-		testcanvas1 = testScene->addCanvas();
-		testcanvas2 = testScene->addCanvas();
+		textures[TEXTURE_INIT] = genTexture(initTextureFileName, 1);
+		textures[TEXTURE_BLOCK] = genTexture(blockTextureFileName,2);
 
-		char* textureFileName[]{ "block.png","normal.png"};
+		scene* initScreen = scenes[SCENE_INIT];
 
-		texture blockTexture = genTexture(textureFileName,2);
+		canvas* logoCanvas = scenes[SCENE_INIT]->addCanvas(gl_manager::getInstance().normal2DShader);
 
-		testcanvas1->addShape(canvas_shape
+		logoCanvas->addShape(canvas_shape
 		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -2.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, -0.9f, -2.0f), texture_pos(1.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -2.0f), texture_pos(0.0f, 0.0f))
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(1.0f, 1.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(1.0f, -1.0f, 0.0f), texture_pos(1.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(0.0f, 0.0f))
 		));
 
-		testcanvas1->addShape(canvas_shape
+		logoCanvas->addShape(canvas_shape
 		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -2.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -2.0f), texture_pos(0.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, 0.9f, -2.0f), texture_pos(0.0f, 1.0f))
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(1.0f, 1.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-1.0f, 1.0f, 0.0f), texture_pos(0.0f, 1.0f))
 		));
 
-		testcanvas2->addShape(canvas_shape
-		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -5.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, -0.9f, -5.0f), texture_pos(1.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -5.0f), texture_pos(0.0f, 0.0f))
-		));
+		logoCanvas->bindTexture(textures[TEXTURE_INIT]);
 
-		testcanvas2->addShape(canvas_shape
-		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -5.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -5.0f), texture_pos(0.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, 0.9f, -5.0f), texture_pos(0.0f, 1.0f))
-		));
-
-		testcanvas1->getGolbalCamera()->getLocation()->setZ(-5.0f);
-
-		testcanvas1->bindTexture(blockTexture);
-		testcanvas2->bindTexture(blockTexture);
-
-		showScene(testScene);
+		showScene(initScreen);
 	}
 	void tickCall()
 	{
 		count++;
-
-		camera* nodeGolbalCamera = testcanvas1->getGolbalCamera();
-		camera* nodeModelCamera = testcanvas1->getModelCamera();
-
-		camera* globalCamera = getGlobalCamera();
-
-		nodeModelCamera->getRotate()->setPosX(nodeModelCamera->getRotate()->getPosX() + 0.01f);
-		nodeModelCamera->getRotate()->setPosY(nodeModelCamera->getRotate()->getPosY() + 0.01f);
 
 		if (count % 100 == 0)
 		{

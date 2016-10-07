@@ -37,16 +37,16 @@ private:
 	virtual void _draw(const GLint first, const GLsizei count) const = 0;
 	virtual void _init() = 0;
 
-	GLuint _projection = 0;
-	GLuint _programID = 0;
-
 protected:
 	//only can use new
 	~shader_program() {}
 	shader_program() {}
 
+	GLuint _projection = 0;
+	GLuint _programID = 0;
+
 public:
-	void setCamera(camera& globalCamera, camera& modelCamera) const;
+	virtual void setCamera(camera& globalCamera, camera& modelCamera) const;
 
 	virtual void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const = 0;
 };
@@ -80,30 +80,6 @@ private:
 	//the texture that now is in use
 	texture _usingTexture;
 
-	/*
-	basic shader program
-	data format:
-	x,y,z,r,g,b,texture x,texture y
-	*/
-	class normal3DShader :public shader_program
-	{
-	private:
-		gl_manager& glInstance = gl_manager::getInstance();
-
-		//draw
-		void _draw(const GLint first, const GLsizei count) const
-		{
-			glDrawArrays(GL_TRIANGLES, first, count);
-		}
-		void _init()
-		{
-			glUniform1i(glGetUniformLocation(_programID, "texture"), 0);
-			glUniform1i(glGetUniformLocation(_programID, "normal"), 1);
-		}
-	public:
-		//create buffer by daat
-		void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const;
-	};
 	//start an window,only can be use in application::run()
 	void _loadWindow();
 
@@ -113,16 +89,10 @@ private:
 	//init rendermanager
 	gl_manager()
 	{
-		//init shader pointer
-		appNormal3DShader = new normal3DShader();
-
 		//init glfw
 		glfwInit();
 	}
 public:
-	//save shader pointer
-	normal3DShader* appNormal3DShader;
-
 	//add shader
 	shader_program* genShader(char* vert, char* frag, shader_program* newShaderProgramClass);
 

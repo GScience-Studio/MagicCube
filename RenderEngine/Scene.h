@@ -19,14 +19,4 @@ private:
 			renderNode->_draw(globalCamera);
 		}
 	}
-
-public:
-	~scene()
-	{
-		//free
-		for (auto* renderNode : _renderNodeList)
-		{
-			delete(renderNode);
-		}
-	}
 };

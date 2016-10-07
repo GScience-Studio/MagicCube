@@ -1,6 +1,7 @@
 
 #include "Application.h"
 #include "GLManager.h"
+#include "NormalShader.h"
 
 //tick call time
 #define TICK_TIME 0.01
@@ -17,8 +18,11 @@ void application::run()
 	//load window
 	_glInstance._loadWindow();
 
-	//load normal shader
-	_glInstance.genShader("Normal3d.vert", "Normal3d.frag", _glInstance.appNormal3DShader);
+	//load normal 3d shader
+	_glInstance.genShader("Normal3d.vert", "Normal3d.frag", normal3DShader);
+
+	//load normal 2d shader
+	_glInstance.genShader("Normal3d.vert", "Normal3d.frag", normal2DShader);
 
 	//call init
 	init();
@@ -49,14 +53,17 @@ void application::_mainLoop()
 			//tick call
 			_tickRefresh(hasDraw);
 
-			hasDraw = false;
+			if (hasDraw)
+			{
+				hasDraw = false;
+
+				//swap buffer
+				_glInstance.swapBuffers();
+			}
 		}
 
 		//pool event
 		_glInstance.poolEvent();
-
-		//swap buffer
-		_glInstance.swapBuffers();
 	}
 	//end
 	_glInstance.terminate();

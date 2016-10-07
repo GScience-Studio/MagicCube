@@ -28,3 +28,33 @@ void canvas::clear()
 
 	_hasChange = true;
 }
+void canvas::_draw(camera _golbalCamera)
+{
+	_glInstance.useBuffer(_buffer);
+	_glInstance.useShaderProgram(_shaderProgram);
+	_glInstance.useTexture(_texture);
+
+	if (_hasChange)
+	{
+		_hasChange = false;
+
+		_refreshShape();
+	}
+
+	if (_renderData.size() == 0)
+		return;
+
+	_shaderProgram->setCamera(_golbalCamera + _nodeGolbalCamera, _modelCamera);
+
+	_glInstance.draw(0, _renderData.size() / 8);
+}
+void canvas::_refreshShape()
+{
+	if (_glInstance.bufferResize(_buffer, _renderData.capacity() * sizeof(GLfloat)))
+		_lastVectorSize = 0;
+
+	if (_renderData.size() != 0)
+		_shaderProgram->setBufferData(&_renderData.at(0), _lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), _buffer);
+
+	_lastVectorSize = _renderData.size();
+}
