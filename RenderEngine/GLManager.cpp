@@ -35,8 +35,10 @@ typedef struct
 //read Shader program
 const char* readShader(const char* FileName)
 {
+	std::string fullFileName = std::string("res\\shader\\") + FileName;
+
 	//读取文件
-	FILE* infile = fopen(FileName, "rb");
+	FILE* infile = fopen(fullFileName.c_str(), "rb");
 
 	//是否读取
 	if (!infile)
@@ -224,7 +226,9 @@ bool loadPNG(const char *filepath, image_info& image)
 	char buf[PNG_BYTES_TO_CHECK];
 	unsigned int x, y, temp, color_type;
 
-	fp = fopen(filepath, "rb");
+	std::string fullFileName = std::string("res\\texture\\") + filepath;
+
+	fp = fopen(fullFileName.c_str(), "rb");
 
 	if (fp == NULL) 
 	{
