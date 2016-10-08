@@ -8,7 +8,7 @@ private:
 	unsigned long int count = 0;
 
 public:
-	test_app() :application(u8"Test", "1.0.0", size_vec(880, 495)) {}
+	test_app() :application(u8"MagicCube", "beta-1.0.0", size_vec(880, 495)) {}
 
 	void init()
 	{
