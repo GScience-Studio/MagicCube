@@ -39,19 +39,19 @@ public:
 
 		canvas* logoCanvas = scenes[SCENE_INIT]->addCanvas(normal2DShader);
 
-		logoCanvas->addShape(canvas_shape
+		logoCanvas->addShapes(&canvas_shape
 		(
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f)),
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(1.0f, -1.0f, 0.0f), texture_pos(1.0f, 1.0f)),
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f))
-		));
+		), 1);
 
-		logoCanvas->addShape(canvas_shape
+		logoCanvas->addShapes(&canvas_shape
 		(
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f)),
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f)),
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-1.0f, 1.0f, 0.0f), texture_pos(0.0f, 0.0f))
-		));
+		), 1);
 
 		logoCanvas->bindTexture(textures[TEXTURE_INIT]);
 
