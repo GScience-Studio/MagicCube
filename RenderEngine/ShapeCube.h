@@ -1,14 +1,17 @@
 #pragma once
 
+#include "Camera.h"
 #include "Canvas.h"
 #include "CanvasTexture.h"
 
-enum cube_direction
+class shape_cube
 {
-	FRONT, BACK, LEFT, RIGHT, UP, DOWN
-};
-class shape_cube :public canvas_shape
-{
+	canvas_shape _canvasShape[2];
 public:
-	shape_cube(cube_direction cubeDirection, canvas_texture texture);
+	shape_cube(cube_texture cubetexture, GLuint size, camera cubeDirection);
+
+	operator canvas_shape*()
+	{
+		return _canvasShape;
+	}
 };

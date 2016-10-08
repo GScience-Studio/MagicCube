@@ -1,5 +1,6 @@
 
 #include "../GSRenderEngine.h"
+#include "../RenderEngine/ShapeCube.h"
 
 class test_app :public application
 {
@@ -7,68 +8,34 @@ private:
 	unsigned long int count = 0;
 
 public:
-	test_app() :application(u8"Test", "1.0.0", size_vec(600, 600)) {}
-
-	canvas* testcanvas1;
-	canvas* testcanvas2;
+	test_app() :application(u8"Test", "1.0.0", size_vec(880, 495)) {}
 
 	void init()
 	{
+		//init screen
 		scene* testScene = addScene();
 
-		testcanvas1 = testScene->addCanvas();
-		testcanvas2 = testScene->addCanvas();
+		//init texture
+		char* blockTextureFileName[]{ "block.png","normal.png" };
 
-		char* textureFileName[]{ "block.png","normal.png" };
+		texture texture = genTexture(blockTextureFileName, 2);
 
-		texture blockTexture = genTexture(textureFileName, 2);
+		canvas* logoCanvas = testScene->addCanvas(normal2DShader);
 
-		testcanvas1->addShape(canvas_shape
-		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -2.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, -0.9f, -2.0f), texture_pos(1.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -2.0f), texture_pos(0.0f, 0.0f))
-		));
+		logoCanvas->addShapes(
+			shape_cube(cube_texture(
+		vec<texture_pos, 4>{ texture_pos{ 1.0,0.0 } ,texture_pos{ 1.0,0.0 } ,texture_pos{ 1.0,0.0 } ,texture_pos{ 1.0,0.0 } }
+		, vec<color, 4>{ color( 0.0,0.0,0.0 ), color( 0.0,0.0,0.0 ), color( 0.0,0.0,0.0 ), color( 0.0,0.0,0.0 ) })
+		, 1, camera(0.0, 0.0, -1.0, 0.0f, 0.0f)),2
+		);
 
-		testcanvas1->addShape(canvas_shape
-		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -2.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -2.0f), texture_pos(0.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, 0.9f, -2.0f), texture_pos(0.0f, 1.0f))
-		));
-
-		testcanvas2->addShape(canvas_shape
-		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -5.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, -0.9f, -5.0f), texture_pos(1.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -5.0f), texture_pos(0.0f, 0.0f))
-		));
-
-		testcanvas2->addShape(canvas_shape
-		(
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, -0.9f, -5.0f), texture_pos(1.0f, 1.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(0.9f, 0.9f, -5.0f), texture_pos(0.0f, 0.0f)),
-			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-0.9f, 0.9f, -5.0f), texture_pos(0.0f, 1.0f))
-		));
-
-		testcanvas1->getGolbalCamera()->getLocation()->setZ(-5.0f);
-
-		testcanvas1->bindTexture(blockTexture);
-		testcanvas2->bindTexture(blockTexture);
+		logoCanvas->bindTexture(texture);
 
 		showScene(testScene);
 	}
 	void tickCall()
 	{
 		count++;
-
-		camera* nodeGolbalCamera = testcanvas1->getGolbalCamera();
-		camera* nodeModelCamera = testcanvas1->getModelCamera();
-
-		camera* globalCamera = getGlobalCamera();
-
-		nodeModelCamera->getRotate()->setPosX(nodeModelCamera->getRotate()->getPosX() + 0.01f);
-		nodeModelCamera->getRotate()->setPosY(nodeModelCamera->getRotate()->getPosY() + 0.01f);
 
 		if (count % 100 == 0)
 		{
