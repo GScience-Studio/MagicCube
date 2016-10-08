@@ -62,8 +62,6 @@ public:
 	{
 		return location<T>(get(0) + loc[0], get(1) + loc[1], get(2) + loc[2]);
 	}
-	location(glm::tvec3<T> vec3) :vec<T, 3>({ vec3[0], vec3[1], vec3[2] }) {}
-
 	location(T x, T y, T z) :vec<T, 3>({ x, y, z }) {}
 
 	T getX() const
@@ -95,9 +93,5 @@ public:
 		data[0] = x;
 		data[1] = y;
 		data[2] = z;
-	}
-	glm::tvec3<T> vec3()
-	{
-		return glm::tvec3<T>(data[0], data[1], data[2]);
 	}
 };

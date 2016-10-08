@@ -7,16 +7,16 @@ void canvas::addShapes(const canvas_shape* shapeInfo, unsigned int count)
 	for (unsigned int i = 0; i < count; i++)
 		for (unsigned char j = 0; j < 3; j++)
 		{
-			_renderData.push_back(shapeInfo[count].points[j].locationData.getX());
-			_renderData.push_back(shapeInfo[count].points[j].locationData.getY());
-			_renderData.push_back(shapeInfo[count].points[j].locationData.getZ());
+			_renderData.push_back(shapeInfo[i].points[j].locationData.getX());
+			_renderData.push_back(shapeInfo[i].points[j].locationData.getY());
+			_renderData.push_back(shapeInfo[i].points[j].locationData.getZ());
 
-			_renderData.push_back(shapeInfo[count].points[j].colorData.get(0));
-			_renderData.push_back(shapeInfo[count].points[j].colorData.get(1));
-			_renderData.push_back(shapeInfo[count].points[j].colorData.get(2));
+			_renderData.push_back(shapeInfo[i].points[j].colorData.get(0));
+			_renderData.push_back(shapeInfo[i].points[j].colorData.get(1));
+			_renderData.push_back(shapeInfo[i].points[j].colorData.get(2));
 
-			_renderData.push_back(shapeInfo[count].points[j].texturePosData.get(0));
-			_renderData.push_back(shapeInfo[count].points[j].texturePosData.get(1));
+			_renderData.push_back(shapeInfo[i].points[j].texturePosData.get(0));
+			_renderData.push_back(shapeInfo[i].points[j].texturePosData.get(1));
 		}
 
 	_hasChange = true;

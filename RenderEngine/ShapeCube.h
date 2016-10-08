@@ -8,7 +8,7 @@ class shape_cube
 {
 	canvas_shape _canvasShape[2];
 public:
-	shape_cube(cube_texture cubetexture, GLuint size, camera cubeDirection);
+	shape_cube(cube_texture cubetexture, GLuint size);
 
 	operator canvas_shape*()
 	{

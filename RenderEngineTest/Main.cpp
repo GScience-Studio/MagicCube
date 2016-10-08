@@ -22,13 +22,12 @@ public:
 
 		canvas* logoCanvas = testScene->addCanvas(normal2DShader);
 
-		logoCanvas->addShapes(
-			shape_cube(cube_texture(
-		vec<texture_pos, 4>{ texture_pos{ 1.0,0.0 } ,texture_pos{ 1.0,0.0 } ,texture_pos{ 1.0,0.0 } ,texture_pos{ 1.0,0.0 } }
-		, vec<color, 4>{ color( 0.0,0.0,0.0 ), color( 0.0,0.0,0.0 ), color( 0.0,0.0,0.0 ), color( 0.0,0.0,0.0 ) })
-		, 1, camera(0.0, 0.0, -1.0, 0.0f, 0.0f)),2
-		);
-
+		shape_cube testCube(cube_texture(
+			vec<texture_pos, 4>{ texture_pos{ 0.0,0.0 }, texture_pos{ 0.0,1.0 }, texture_pos{ 1.0,1.0 }, texture_pos{ 1.0,0.0 } }
+		, vec<color, 4>{ color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0) })
+			, 1);
+		logoCanvas->addShapes(testCube, 2);
+		
 		logoCanvas->bindTexture(texture);
 
 		showScene(testScene);
