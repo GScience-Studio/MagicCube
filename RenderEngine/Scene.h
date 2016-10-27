@@ -19,4 +19,8 @@ private:
 			renderNode->_draw(globalCamera);
 		}
 	}
+
+public:
+	//will call at each tick if the scene is enable
+	virtual void sceneTickCall() {};
 };

@@ -39,12 +39,17 @@ protected:
 			else
 				return;
 
-		//play scene changing
 		if (_nextScene != nullptr)
 		{
+			//play scene changing
 			_nowScene = _nextScene;
 
 			_nextScene = nullptr;
+		}
+		else
+		{
+			//refresh scene
+			_nowScene->sceneTickCall();
 		}
 
 		if (draw)
@@ -55,9 +60,16 @@ protected:
 
 public:
 	//add an scene
+	scene* addScene(scene* scene)
+	{
+		_sceneList.push_back(scene);
+
+		return scene;
+	}
+	//add an scene with no tick function
 	scene* addScene()
 	{
-		_sceneList.push_back(new scene());
+		_sceneList.push_back(new scene);
 
 		return _sceneList.back();
 	}

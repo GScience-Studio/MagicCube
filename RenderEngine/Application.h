@@ -49,7 +49,7 @@ public:
 	virtual void init() = 0;
 
 	//call when each tick
-	virtual void tickCall() = 0;
+	virtual void tickCall() {};
 
 	//get instance
 	static application& getInstance()

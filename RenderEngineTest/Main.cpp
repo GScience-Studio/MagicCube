@@ -3,18 +3,25 @@
 #include "../RenderEngine/ShapeCube.h"
 #include "../RenderEngine/NormalShader.h"
 
+class test_scene:public scene
+{
+	void sceneTickCall() 
+	{
+		std::cout << "³¡¾°Tick²âÊÔ" << std::endl;
+	}
+};
 class test_app :public application
 {
 private:
 	unsigned long int count = 0;
 
 public:
-	test_app() :application(u8"MagicCube", "beta-1.0.0", size_vec(880, 495)) {}
+	test_app() :application(u8"MagicCube-RenderEngineTest", "beta-1.0.0", size_vec(880, 495)) {}
 
 	void init()
 	{
 		//init screen
-		scene* testScene = addScene();
+		scene* testScene = addScene(new test_scene());
 
 		//init texture
 		char* blockTextureFileName[]{ "block.png","normal.png" };
