@@ -2,15 +2,16 @@
 
 #include "RenderEngine.h"
 #include "SceneManager.h"
+#include "ListenerManager.h"
 
 //app instance
 class	application;
 extern	application* applicationInstance;
 
 //applicaion
-class application :public scene_manager
+class application :public scene_manager, public listener_manager
 {
-	friend class gl_manager;
+	friend class listener_manager;
 
 protected:
 	//application base info

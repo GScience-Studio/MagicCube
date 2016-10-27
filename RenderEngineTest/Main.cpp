@@ -3,11 +3,13 @@
 #include "../RenderEngine/ShapeCube.h"
 #include "../RenderEngine/NormalShader.h"
 
+void keyDown(int key, int action);
+
 class test_scene:public scene
 {
 	void sceneTickCall() 
 	{
-		std::cout << "³¡¾°Tick²âÊÔ" << std::endl;
+		
 	}
 };
 class test_app :public application
@@ -44,6 +46,9 @@ public:
 
 		//show screen
 		showScene(testScene);
+
+		//register listener
+		registerListener(keyDown);
 	}
 	void tickCall()
 	{
@@ -59,4 +64,8 @@ int main()
 {
 	test_app Test;
 	Test.run();
+}
+void keyDown(int key, int action)
+{
+	std::cout << key << action << std::endl;
 }

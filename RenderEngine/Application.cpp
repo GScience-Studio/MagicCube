@@ -20,6 +20,9 @@ void application::run()
 	//call init
 	init();
 
+	//init listener
+	_initListenerManager(_glInstance._window);
+
 	//main loop
 	_mainLoop();
 }
