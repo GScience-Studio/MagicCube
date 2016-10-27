@@ -1,5 +1,7 @@
 
 #include "../GSRenderEngine.h"
+#include "../RenderEngine/Canvas.h"
+#include "../RenderEngine/NormalShader.h"
 
 enum scene_name
 {
@@ -35,9 +37,11 @@ public:
 		textures[TEXTURE_INIT] = genTexture(initTextureFileName, 1);
 		textures[TEXTURE_BLOCK] = genTexture(blockTextureFileName,2);
 
+		initNormalShadersExtension();
+
 		scene* initScreen = scenes[SCENE_INIT];
 
-		canvas* logoCanvas = scenes[SCENE_INIT]->addCanvas(normal2DShader);
+		canvas* logoCanvas = (canvas*)scenes[SCENE_INIT]->addRenderNode(new canvas(normal2DShader));
 
 		logoCanvas->addShapes(&canvas_shape
 		(

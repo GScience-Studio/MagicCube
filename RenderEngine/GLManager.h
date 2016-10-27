@@ -79,7 +79,7 @@ private:
 	texture _usingTexture;
 
 	//start an window,only can be use in application::run()
-	void _loadWindow();
+	void _loadWindow(const size_vec &windowSize, const char* appName);
 
 	//save window
 	GLFWwindow* _window;

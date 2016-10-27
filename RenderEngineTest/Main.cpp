@@ -1,6 +1,7 @@
 
 #include "../GSRenderEngine.h"
 #include "../RenderEngine/ShapeCube.h"
+#include "../RenderEngine/NormalShader.h"
 
 class test_app :public application
 {
@@ -17,19 +18,24 @@ public:
 
 		//init texture
 		char* blockTextureFileName[]{ "block.png","normal.png" };
-
 		texture texture = genTexture(blockTextureFileName, 2);
 
-		canvas* logoCanvas = testScene->addCanvas(normal2DShader);
+		initNormalShadersExtension();
 
+		//add canvas(render node)
+		canvas* logoCanvas = (canvas*)testScene->addRenderNode(new canvas(normal2DShader));
+
+		//add shape
 		shape_cube testCube(cube_texture(
 			vec<texture_pos, 4>{ texture_pos{ 0.0,0.0 }, texture_pos{ 0.0,1.0 }, texture_pos{ 1.0,1.0 }, texture_pos{ 1.0,0.0 } }
 		, vec<color, 4>{ color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0) })
 			, 1);
 		logoCanvas->addShapes(testCube, 2);
 		
+		//bind texture
 		logoCanvas->bindTexture(texture);
 
+		//show screen
 		showScene(testScene);
 	}
 	void tickCall()

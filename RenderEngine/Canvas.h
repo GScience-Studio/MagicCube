@@ -61,7 +61,6 @@ private:
 	void _refreshShape();
 	
 public:
-	canvas() :render_node() {}
 	canvas(shader_program* shaderProgram) :render_node(shaderProgram) {}
 
 	//add shape
