@@ -1,7 +1,6 @@
 
 #include "Application.h"
 #include "GLManager.h"
-#include "NormalShader.h"
 
 //tick call time
 #define TICK_TIME 0.01
@@ -16,16 +15,13 @@ application* applicationInstance;
 void application::run()
 {
 	//load window
-	_glInstance._loadWindow();
-
-	//load normal 3d shader
-	_glInstance.genShader("Normal3d.vert", "Normal3d.frag", normal3DShader);
-
-	//load normal 2d shader
-	_glInstance.genShader("Normal3d.vert", "Normal3d.frag", normal2DShader);
+	_glInstance._loadWindow(_windowSize,_appName);
 
 	//call init
 	init();
+
+	//init listener
+	_initListenerManager(_glInstance._window);
 
 	//main loop
 	_mainLoop();

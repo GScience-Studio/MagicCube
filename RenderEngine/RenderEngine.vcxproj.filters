@@ -17,9 +17,6 @@
     <ClInclude Include="Message.h">
       <Filter>Message</Filter>
     </ClInclude>
-    <ClInclude Include="Canvas.h">
-      <Filter>RengerEngine</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
@@ -46,6 +43,12 @@
     </ClInclude>
     <ClInclude Include="CanvasTexture.h">
       <Filter>Extension\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>Extension\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="ListenerManager.h">
+      <Filter>RengerEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -78,14 +81,17 @@
     <ClCompile Include="Message.cpp">
       <Filter>Message</Filter>
     </ClCompile>
-    <ClCompile Include="Canvas.cpp">
-      <Filter>RengerEngine</Filter>
-    </ClCompile>
     <ClCompile Include="NormalShader.cpp">
       <Filter>Extension\Shader</Filter>
     </ClCompile>
     <ClCompile Include="ShapeCube.cpp">
       <Filter>Extension\Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>Extension\Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="ListenerManager.cpp">
+      <Filter>RengerEngine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

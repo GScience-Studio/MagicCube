@@ -1,5 +1,7 @@
 
 #include "../GSRenderEngine.h"
+#include "../RenderEngine/Canvas.h"
+#include "../RenderEngine/NormalShader.h"
 
 enum scene_name
 {
@@ -35,23 +37,25 @@ public:
 		textures[TEXTURE_INIT] = genTexture(initTextureFileName, 1);
 		textures[TEXTURE_BLOCK] = genTexture(blockTextureFileName,2);
 
+		initNormalShadersExtension();
+
 		scene* initScreen = scenes[SCENE_INIT];
 
-		canvas* logoCanvas = scenes[SCENE_INIT]->addCanvas(normal2DShader);
+		canvas* logoCanvas = (canvas*)scenes[SCENE_INIT]->addRenderNode(new canvas(normal2DShader));
 
-		logoCanvas->addShape(canvas_shape
+		logoCanvas->addShapes(&canvas_shape
 		(
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f)),
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(1.0f, -1.0f, 0.0f), texture_pos(1.0f, 1.0f)),
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f))
-		));
+		), 1);
 
-		logoCanvas->addShape(canvas_shape
+		logoCanvas->addShapes(&canvas_shape
 		(
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f)),
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f)),
 			canvas_point_info(color(0.0f, 0.0f, 0.0f), location<GLfloat>(-1.0f, 1.0f, 0.0f), texture_pos(0.0f, 0.0f))
-		));
+		), 1);
 
 		logoCanvas->bindTexture(textures[TEXTURE_INIT]);
 

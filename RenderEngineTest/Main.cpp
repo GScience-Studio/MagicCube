@@ -1,36 +1,54 @@
 
 #include "../GSRenderEngine.h"
 #include "../RenderEngine/ShapeCube.h"
+#include "../RenderEngine/NormalShader.h"
 
+void keyDown(int key, int action);
+
+class test_scene:public scene
+{
+	void sceneTickCall() 
+	{
+		
+	}
+};
 class test_app :public application
 {
 private:
 	unsigned long int count = 0;
 
 public:
-	test_app() :application(u8"MagicCube", "beta-1.0.0", size_vec(880, 495)) {}
+	test_app() :application(u8"MagicCube-RenderEngineTest", "beta-1.0.0", size_vec(880, 495)) {}
 
 	void init()
 	{
 		//init screen
-		scene* testScene = addScene();
+		scene* testScene = addScene(new test_scene());
 
 		//init texture
 		char* blockTextureFileName[]{ "block.png","normal.png" };
-
 		texture texture = genTexture(blockTextureFileName, 2);
 
-		canvas* logoCanvas = testScene->addCanvas(normal2DShader);
+		initNormalShadersExtension();
 
+		//add canvas(render node)
+		canvas* logoCanvas = (canvas*)testScene->addRenderNode(new canvas(normal2DShader));
+
+		//add shape
 		shape_cube testCube(cube_texture(
 			vec<texture_pos, 4>{ texture_pos{ 0.0,0.0 }, texture_pos{ 0.0,1.0 }, texture_pos{ 1.0,1.0 }, texture_pos{ 1.0,0.0 } }
 		, vec<color, 4>{ color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0) })
 			, 1);
 		logoCanvas->addShapes(testCube, 2);
 		
+		//bind texture
 		logoCanvas->bindTexture(texture);
 
+		//show screen
 		showScene(testScene);
+
+		//register listener
+		registerListener(keyDown);
 	}
 	void tickCall()
 	{
@@ -46,4 +64,8 @@ int main()
 {
 	test_app Test;
 	Test.run();
+}
+void keyDown(int key, int action)
+{
+	std::cout << key << action << std::endl;
 }

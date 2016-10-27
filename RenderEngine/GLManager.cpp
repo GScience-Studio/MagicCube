@@ -2,7 +2,6 @@
 #define PNG_BYTES_TO_CHECK 4
 
 #include "GLManager.h"
-#include "Application.h"
 
 //libpng
 #include <libPNG\png.h>
@@ -152,13 +151,10 @@ GLuint loadShader(shader_info* Shaders)
 }
 
 //create window
-void gl_manager::_loadWindow()
+void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 {
-	//get app instance
-	application& appInstance = application::getInstance();
-
 	//load window
-	_window = glfwCreateWindow(appInstance._windowSize.getHeight(), appInstance._windowSize.getWidth(), appInstance._appName, nullptr, nullptr);
+	_window = glfwCreateWindow(windowSize.getHeight(), windowSize.getWidth(), appName, nullptr, nullptr);
 
 	if (!_window)
 	{
@@ -171,7 +167,7 @@ void gl_manager::_loadWindow()
 	glfwMakeContextCurrent(_window);
 
 	//set view port
-	glViewport(0, 0, appInstance._windowSize.getHeight(), appInstance._windowSize.getWidth());
+	glViewport(0, 0, windowSize.getHeight(), windowSize.getWidth());
 
 	//set vertical retrace
 	glfwSwapInterval(1);

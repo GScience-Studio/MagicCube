@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="ListenerManager.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="GLManager.cpp" />
     <ClCompile Include="NormalShader.cpp" />
@@ -31,6 +32,7 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CanvasTexture.h" />
+    <ClInclude Include="ListenerManager.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="NormalShader.h" />
     <ClInclude Include="RenderEngine.h" />

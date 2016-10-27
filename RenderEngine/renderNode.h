@@ -2,11 +2,11 @@
 
 #include "RenderEngine.h"
 #include "GLManager.h"
-#include "NormalShader.h"
 
 class render_node
 {
 	friend class scene;
+	friend class render_node_manager;
 
 private:
 	gl_manager&		_glInstance = gl_manager::getInstance();
@@ -34,28 +34,18 @@ protected:
 			_glInstance.useShaderProgram(_shaderProgram);
 		}
 	}
-
-public:
-	//init
-	render_node(buffer buffer) :_buffer(buffer)
-	{
-		_shaderProgram = normal3DShader;
-	}
 	render_node(shader_program* shaderProgram)
 	{
-		_buffer			= _glInstance.genBuffer();
-		_shaderProgram	= shaderProgram;
+		_buffer = _glInstance.genBuffer();
+		_shaderProgram = shaderProgram;
 	}
 	render_node(buffer buffer, shader_program* shaderProgram) :_buffer(buffer)
 	{
 		_shaderProgram = shaderProgram;
 	}
 
-	render_node()
-	{
-		_buffer			= _glInstance.genBuffer();
-		_shaderProgram	= normal3DShader;
-	}
+	~render_node() {}
+public:
 	//texture
 	void bindTexture(const texture& texture)
 	{

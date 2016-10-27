@@ -40,3 +40,5 @@ public:
 		glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(cameraTranslate));
 	}
 };
+
+void initNormalShadersExtension();
