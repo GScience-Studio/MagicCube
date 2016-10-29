@@ -33,6 +33,11 @@ public:
 	{
 		return rotate(inRotate.get(0) + get(0), inRotate.get(1) + get(1));
 	}
+
+	rotate operator -(rotate inRotate)
+	{
+		return rotate(inRotate.get(0) - get(0), inRotate.get(1) - get(1));
+	}
 };
 class camera
 {
@@ -52,8 +57,13 @@ public:
 	camera(double x, double y, double z, float posX, float posY) :_location(x, y, z), _rotate(posX, posY) {}
 	camera() :camera(0.0, 0.0, 0.0, 0.0f, 0.0f) {}
 
-	camera operator +(camera inCamera)
+	camera operator +(const camera& inCamera)
 	{
 		return camera(_location + inCamera._location, _rotate + inCamera._rotate);
+	}
+
+	camera operator -(const camera& inCamera)
+	{
+		return camera(_location - inCamera._location, _rotate - inCamera._rotate);
 	}
 };

@@ -19,7 +19,7 @@ protected:
 
 	//node camera
 	camera			_nodeGolbalCamera;
-	camera			_modelCamera;
+	camera			_modelLocation;
 
 	//is the render_node can draw
 	bool _isEnable = false;
@@ -57,8 +57,8 @@ public:
 		return &_nodeGolbalCamera;
 	}
 	//model camera
-	camera* getModelCamera()
+	camera* getModelLocation()
 	{
-		return &_modelCamera;
+		return &_modelLocation;
 	}
 };

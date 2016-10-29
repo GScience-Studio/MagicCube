@@ -50,6 +50,9 @@
     <ClInclude Include="ListenerManager.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
+    <ClInclude Include="FPSController.h">
+      <Filter>Extension\FPSController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">
@@ -69,6 +72,9 @@
     </Filter>
     <Filter Include="Extension\Canvas">
       <UniqueIdentifier>{b108fca7-6a20-4393-a900-e4042f0999af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extension\FPSController">
+      <UniqueIdentifier>{60f71f5c-edb4-4a39-88bb-09a15972bf7e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="ListenerManager.cpp">
       <Filter>RengerEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="FPSController.cpp">
+      <Filter>Extension\FPSController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

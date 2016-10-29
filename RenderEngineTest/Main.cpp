@@ -2,6 +2,7 @@
 #include "../GSRenderEngine.h"
 #include "../RenderEngine/ShapeCube.h"
 #include "../RenderEngine/NormalShader.h"
+#include "../RenderEngine/FPSController.h"
 
 void keyDown(int key, int action);
 
@@ -18,6 +19,8 @@ private:
 	unsigned long int count = 0;
 
 public:
+	fps_controller fpsController = fps_controller(getGlobalCamera());
+
 	test_app() :application(u8"MagicCube-RenderEngineTest", "beta-1.0.0", size_vec(880, 495)) {}
 
 	void init()
@@ -32,7 +35,7 @@ public:
 		initNormalShadersExtension();
 
 		//add canvas(render node)
-		canvas* logoCanvas = (canvas*)testScene->addRenderNode(new canvas(normal2DShader));
+		canvas* logoCanvas = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
 
 		//add shape
 		shape_cube testCube(cube_texture(
@@ -43,6 +46,10 @@ public:
 		
 		//bind texture
 		logoCanvas->bindTexture(texture);
+
+		logoCanvas->getModelLocation()->getLocation()->setZ(10.0);
+		logoCanvas->getModelLocation()->getLocation()->setY(-5.0);
+		logoCanvas->getModelLocation()->getLocation()->setX(3.0);
 
 		//show screen
 		showScene(testScene);
@@ -60,12 +67,13 @@ public:
 		}
 	}
 };
+test_app Test;
+
 int main()
 {
-	test_app Test;
 	Test.run();
 }
 void keyDown(int key, int action)
 {
-	std::cout << key << action << std::endl;
+	Test.fpsController.refresh(key, action);
 }

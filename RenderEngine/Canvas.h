@@ -1,6 +1,5 @@
 #pragma once
 
-#include "RenderEngine.h"
 #include "GLManager.h"
 #include "RenderNode.h"
 #include "Camera.h"
