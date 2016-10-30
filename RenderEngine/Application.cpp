@@ -11,6 +11,9 @@ double	startTime = glfwGetTime();
 //application instance
 application* applicationInstance;
 
+//tick listener
+void listenerTickRefresh();
+
 //run program
 void application::run()
 {
@@ -48,6 +51,9 @@ void application::_mainLoop()
 
 			//tick call
 			_tickRefresh(hasDraw);
+
+			//tick listener
+			listenerTickRefresh();
 
 			if (hasDraw)
 			{

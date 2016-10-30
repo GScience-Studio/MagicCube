@@ -36,6 +36,10 @@ public:
 	{
 		return data[id];
 	}
+	void set(unsigned char id, T value)
+	{
+		data[id] = value;
+	}
 };
 
 //size(such as window size)
