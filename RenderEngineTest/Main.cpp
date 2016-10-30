@@ -1,16 +1,16 @@
 
 #include "../GSRenderEngine.h"
-#include "../RenderEngine/ShapeCube.h"
-#include "../RenderEngine/NormalShader.h"
-#include "../RenderEngine/FPSController.h"
+#include "../RenderEngine/CanvasExtension.h"
+#include "../RenderEngine/NormalShaderExtension.h"
+#include "../RenderEngine/FPSControllerExtension.h"
 
-void keyDown(int key, int action);
+canvas* logoCanvas;
 
 class test_scene:public scene
 {
 	void sceneTickCall() 
 	{
-		
+		//logoCanvas->getModelLocation()->getAngle()->setPosY(logoCanvas->getModelLocation()->getAngle()->getPosY() + 0.01);
 	}
 };
 class test_app :public application
@@ -25,17 +25,19 @@ public:
 
 	void init()
 	{
+		//load extension
+		loadExtension(new normal_shader_extension());
+		loadExtension(new fps_controller_extension());
+
 		//init screen
 		scene* testScene = addScene(new test_scene());
 
 		//init texture
-		char* blockTextureFileName[]{ "block.png","normal.png" };
+		char* blockTextureFileName[]{ "coordinate.png","normal.png" };
 		texture texture = genTexture(blockTextureFileName, 2);
 
-		initNormalShadersExtension();
-
 		//add canvas(render node)
-		canvas* logoCanvas = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
+		logoCanvas = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
 
 		//add shape
 		shape_cube testCube(cube_texture(
@@ -47,15 +49,16 @@ public:
 		//bind texture
 		logoCanvas->bindTexture(texture);
 
-		logoCanvas->getModelLocation()->getLocation()->setZ(10.0);
-		logoCanvas->getModelLocation()->getLocation()->setY(-5.0);
-		logoCanvas->getModelLocation()->getLocation()->setX(3.0);
+		logoCanvas->getModelLocation()->getLocation()->setZ(5.0);
+		logoCanvas->getModelLocation()->getLocation()->setY(0.0);
+		logoCanvas->getModelLocation()->getLocation()->setX(0.0);
+
+		logoCanvas->getModelLocation()->getAngle()->setPosY(3.14 / 4);
+
+		bindFPSController(&fpsController);
 
 		//show screen
 		showScene(testScene);
-
-		//register listener
-		registerListener(keyDown);
 	}
 	void tickCall()
 	{
@@ -72,8 +75,4 @@ test_app Test;
 int main()
 {
 	Test.run();
-}
-void keyDown(int key, int action)
-{
-	Test.fpsController.refresh(key, action);
 }

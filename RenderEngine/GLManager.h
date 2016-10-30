@@ -37,7 +37,6 @@ private:
 
 protected:
 	//only can use new
-	~shader_program() {}
 	shader_program() {}
 
 	GLuint _projection = 0;

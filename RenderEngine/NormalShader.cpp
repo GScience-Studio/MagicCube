@@ -1,7 +1,6 @@
 
 #include "NormalShader.h"
 
-//normal shader
 shader_program* normal2DShader;
 shader_program* normal3DShader;
 
@@ -33,17 +32,4 @@ void normal_3d_shader::setBufferData(const void* bufferData, const unsigned int 
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
 		glEnableVertexAttribArray(2);
 	}
-}
-//init shader
-void initNormalShadersExtension()
-{
-	//normal shader
-	normal2DShader = new normal_2d_shader();
-	normal3DShader = new normal_3d_shader();
-
-	//load normal 3d shader
-	gl_manager::getInstance().genShader("Normal3d.vert", "Normal3d.frag", normal3DShader);
-
-	//load normal 2d shader
-	gl_manager::getInstance().genShader("Normal3d.vert", "Normal3d.frag", normal2DShader);
 }

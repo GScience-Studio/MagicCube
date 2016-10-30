@@ -3,13 +3,14 @@
 #include "RenderEngine.h"
 #include "SceneManager.h"
 #include "ListenerManager.h"
+#include "ExtensionManager.h"
 
 //app instance
 class	application;
 extern	application* applicationInstance;
 
 //applicaion
-class application :public scene_manager, public listener_manager
+class application :public scene_manager, public listener_manager, public extension_manager
 {
 	friend class listener_manager;
 

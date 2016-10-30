@@ -18,7 +18,7 @@ protected:
 	texture			_texture;
 
 	//node camera
-	camera			_nodeGolbalCamera;
+	camera			_nodeCamera;
 	camera			_modelLocation;
 
 	//is the render_node can draw
@@ -52,9 +52,9 @@ public:
 		_texture = texture;
 	}
 	//golbal Camera
-	camera* getGolbalCamera()
+	camera* getNodeCamera()
 	{
-		return &_nodeGolbalCamera;
+		return &_nodeCamera;
 	}
 	//model camera
 	camera* getModelLocation()

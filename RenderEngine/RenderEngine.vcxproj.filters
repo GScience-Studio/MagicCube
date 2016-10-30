@@ -53,6 +53,21 @@
     <ClInclude Include="FPSController.h">
       <Filter>Extension\FPSController</Filter>
     </ClInclude>
+    <ClInclude Include="ExtensionManager.h">
+      <Filter>Extension</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSControllerExtension.h">
+      <Filter>Extension\FPSController</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalShaderExtension.h">
+      <Filter>Extension\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasExtension.h">
+      <Filter>Extension\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="FPSControllerManager.h">
+      <Filter>Extension\FPSController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">

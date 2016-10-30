@@ -32,11 +32,16 @@
     <ClInclude Include="..\GSRenderEngine.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CanvasExtension.h" />
     <ClInclude Include="CanvasTexture.h" />
+    <ClInclude Include="ExtensionManager.h" />
     <ClInclude Include="FPSController.h" />
+    <ClInclude Include="FPSControllerExtension.h" />
+    <ClInclude Include="FPSControllerManager.h" />
     <ClInclude Include="ListenerManager.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="NormalShader.h" />
+    <ClInclude Include="NormalShaderExtension.h" />
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="GLManager.h" />
     <ClInclude Include="Canvas.h" />
