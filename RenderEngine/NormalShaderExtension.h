@@ -19,10 +19,4 @@ public:
 		//load normal 2d shader
 		gl_manager::getInstance().genShader("Normal3d.vert", "Normal3d.frag", normal2DShader);
 	}
-
-	void unload()
-	{
-		delete(normal2DShader);
-		delete(normal3DShader);
-	}
 };

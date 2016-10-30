@@ -13,11 +13,14 @@ void bindFPSController(fps_controller* fpsController)
 void fpsTickCall()
 {
 	//…Ë÷√ÀŸ∂»
-	for (unsigned char i=0;i<3;i++)
+	for (unsigned char i = 0; i < 3; i++)
 		if (bindedFPSController->speedState[i] != fps_controller::fps_controller::SPEED_STOP && bindedFPSController->speed[i] < 0.1f && bindedFPSController->speed[i] > -0.1f)
 			bindedFPSController->speed.set(i, bindedFPSController->speed[i] + (bindedFPSController->speedState[i] == fps_controller::fps_controller::SPEED_UP ? 0.005f : -0.005f));
 		else if (bindedFPSController->speedState[i] == fps_controller::fps_controller::SPEED_STOP && bindedFPSController->speed[i] != 0.0f)
-			bindedFPSController->speed.set(i, bindedFPSController->speed[i] + (bindedFPSController->speed[i] < 0.0f ? 0.005f : -0.005f));
+			if (bindedFPSController->speed[i] <= 0.005 && bindedFPSController->speed[i] >= -0.005)
+				bindedFPSController->speed.set(i, 0.0f);
+			else
+				bindedFPSController->speed.set(i, bindedFPSController->speed[i] + (bindedFPSController->speed[i] < 0.0f ? 0.005f : -0.005f));
 
 	bindedFPSController->_camera->getLocation()->move(
 		bindedFPSController->speed[1],

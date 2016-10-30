@@ -36,9 +36,6 @@ private:
 	virtual void _init() = 0;
 
 protected:
-	//only can use new
-	shader_program() {}
-
 	GLuint _projection = 0;
 	GLuint _programID = 0;
 
