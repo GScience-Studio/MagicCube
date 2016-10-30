@@ -44,7 +44,11 @@ public:
 	~extension_manager()
 	{
 		for (auto getExtension : extensionList)
+		{
+			getExtension->unload();
+
 			delete(getExtension);
+		}
 	}
 	bool _hasExtension(std::string extensionName)
 	{
