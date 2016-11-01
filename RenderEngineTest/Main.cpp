@@ -78,9 +78,9 @@ public:
 	{
 		count++;
 
-		if (count % 100 == 0)
+		if (count % 50 == 0)
 		{
-			std::cout << count / 100 << std::endl;
+			std::cout << count / 50 << std::endl;
 		}
 	}
 };

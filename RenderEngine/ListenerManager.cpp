@@ -1,29 +1,34 @@
 
 #include "ListenerManager.h"
 
+//only can uuse in listener manager
 listener_manager* listenerManagerInstance;
 
+//register callback
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (listenerManagerInstance == nullptr)
 		return;
 
-	for (key_listener keyListener : listenerManagerInstance->keyListenerList)
+	for (listener* listenerList : listenerManagerInstance->listenerList)
 	{
-		keyListener(key, action);
+		listenerList->keyListener(key, action);
 	}
 }
 
-void listenerTickRefresh()
+//tick refresh
+void tickListenerRefresh()
 {
 	if (listenerManagerInstance == nullptr)
 		return;
 
-	for (tick_listener tickListener : listenerManagerInstance->tickListenerList)
+	for (listener* listenerList : listenerManagerInstance->listenerList)
 	{
-		tickListener();
+		listenerList->tickListener();
 	}
 }
+
+//init listener manager(instance and callback)
 void listener_manager::_initListenerManager(GLFWwindow* window)
 {
 	listenerManagerInstance = this;

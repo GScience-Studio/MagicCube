@@ -1,33 +1,44 @@
 #pragma once
 
+#include <algorithm>
 #include "RenderEngine.h"
-#include <functional>
 
-/*键盘监听函数
-  key为用户所发送的按键
-  action为用户的具体操作*/
-typedef std::function<void(int key, int action)> key_listener;
-typedef std::function<void()> tick_listener;
+class listener
+{
+	friend class listener_manager;
+
+private:
+	//listener's ID
+	std::forward_list<listener*>::iterator listenerID;
+
+public:
+	//keyboard function
+	virtual void keyListener(int key, int action) {}
+	
+	//tick function
+	virtual void tickListener() {}
+};
 
 class listener_manager
 {
 	friend void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	friend void listenerTickRefresh();
+	friend void tickListenerRefresh();
 
 private:
-	std::vector<key_listener>	keyListenerList;
-	std::vector<tick_listener>	tickListenerList;
+	std::forward_list<listener*> listenerList;
 
 protected:
 	void _initListenerManager(GLFWwindow* window);
 
 public:
-	void registerListener(key_listener keyListener)
+	void registerListener(listener* listener)
 	{
-		keyListenerList.push_back(keyListener);
+		listenerList.push_front(listener);
+		listener->listenerID = listenerList.begin();
 	}
-	void registerListener(tick_listener tickListener)
+
+	void unregisterListener(listener* listener)
 	{
-		tickListenerList.push_back(tickListener);
+		listenerList.erase_after(listener->listenerID);
 	}
 };

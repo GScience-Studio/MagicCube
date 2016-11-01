@@ -170,7 +170,7 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 	glViewport(0, 0, windowSize.getHeight(), windowSize.getWidth());
 
 	//set vertical retrace
-	glfwSwapInterval(1);
+	glfwSwapInterval(1.0f);
 
 	//init glew
 	glewInit();
