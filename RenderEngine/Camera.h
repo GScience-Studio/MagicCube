@@ -2,10 +2,10 @@
 
 #include "RenderEngine.h"
 
-class rotate :private vec<float, 2>
+class angle:private vec<float, 2>
 {
 public:
-	rotate(float posX, float posY) :vec<float, 2>({ posX, posY }) {}
+	angle(float posX, float posY) :vec<float, 2>({ posX, posY }) {}
 
 	float getPosX() const
 	{
@@ -28,32 +28,47 @@ public:
 		data[0] = posX;
 		data[1] = posY;
 	}
-
-	rotate operator +(rotate inRotate)
+	void rotate(float posX, float posY)
 	{
-		return rotate(inRotate.get(0) + get(0), inRotate.get(1) + get(1));
+		data[0] += posX;
+		data[1] += posY;
+	}
+
+	angle operator +(angle inRotate)
+	{
+		return angle(inRotate.get(0) + get(0), inRotate.get(1) + get(1));
+	}
+
+	angle operator -(angle inRotate)
+	{
+		return angle(inRotate.get(0) - get(0), inRotate.get(1) - get(1));
 	}
 };
 class camera
 {
 private:
 	location<double>	_location;
-	rotate				_rotate;
+	angle				_angle;
 public:
 	location<double>* getLocation()
 	{
 		return &_location;
 	}
-	rotate* getRotate()
+	angle* getAngle()
 	{
-		return &_rotate;
+		return &_angle;
 	}
-	camera(location<double> location, rotate rotate) :_location(location), _rotate(rotate) {}
-	camera(double x, double y, double z, float posX, float posY) :_location(x, y, z), _rotate(posX, posY) {}
+	camera(location<double> location, angle angle) :_location(location), _angle(angle) {}
+	camera(double x, double y, double z, float posX, float posY) :_location(x, y, z), _angle(posX, posY) {}
 	camera() :camera(0.0, 0.0, 0.0, 0.0f, 0.0f) {}
 
-	camera operator +(camera inCamera)
+	camera operator +(const camera& inCamera)
 	{
-		return camera(_location + inCamera._location, _rotate + inCamera._rotate);
+		return camera(_location + inCamera._location, _angle + inCamera._angle);
+	}
+
+	camera operator -(const camera& inCamera)
+	{
+		return camera(_location - inCamera._location, _angle - inCamera._angle);
 	}
 };

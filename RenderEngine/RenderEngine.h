@@ -1,6 +1,7 @@
 #pragma once
 
 #define _CRT_SECURE_NO_WARNINGS
+#define GLEW_STATIC
 
 //std
 #include <iostream>

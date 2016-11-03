@@ -36,6 +36,10 @@ public:
 	{
 		return data[id];
 	}
+	void set(unsigned char id, T value)
+	{
+		data[id] = value;
+	}
 };
 
 //size(such as window size)
@@ -62,6 +66,10 @@ public:
 	{
 		return location<T>(get(0) + loc[0], get(1) + loc[1], get(2) + loc[2]);
 	}
+	location operator -(location loc)
+	{
+		return location<T>(-get(0), -get(1), -get(2));
+	}
 	location(T x, T y, T z) :vec<T, 3>({ x, y, z }) {}
 
 	T getX() const
@@ -87,6 +95,12 @@ public:
 	void setZ(T z)
 	{
 		data[2] = z;
+	}
+	void move(T x, T y, T z)
+	{
+		data[0] += x;
+		data[1] += y;
+		data[2] += z;
 	}
 	void moveTo(T x, T y, T z)
 	{
