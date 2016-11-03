@@ -1,15 +1,13 @@
 #pragma once
 
 #include <algorithm>
+#include <list>
+
 #include "RenderEngine.h"
 
 class listener
 {
 	friend class listener_manager;
-
-private:
-	//listener's ID
-	std::forward_list<listener*>::iterator listenerID;
 
 public:
 	//keyboard function
@@ -17,28 +15,59 @@ public:
 	
 	//tick function
 	virtual void tickListener() {}
+
+	//destructor
+	virtual ~listener() {}
 };
 
 class listener_manager
 {
+	//call back
 	friend void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	friend void tickListenerRefresh();
 
 private:
-	std::forward_list<listener*> listenerList;
+	//listener list
+	std::list<listener*> listenerList;
 
 protected:
+	//init function
 	void _initListenerManager(GLFWwindow* window);
 
 public:
-	void registerListener(listener* listener)
+	//register an new listener.please use new to allocate memory to listener
+	listener* registerListener(listener* inListener)
 	{
-		listenerList.push_front(listener);
-		listener->listenerID = listenerList.begin();
+		//whether it is an unable listener
+		if (inListener == nullptr)
+			return nullptr;
+
+		//register it
+		listenerList.push_front(inListener);
+
+		return inListener;
 	}
 
-	void unregisterListener(listener* listener)
+	//unregister listener and auto free its memory
+	void unregisterListener(listener* inListener)
 	{
-		listenerList.erase_after(listener->listenerID);
+		//whether it is an unable listener
+		if (inListener == nullptr)
+			return;
+
+		//find and delete listener
+		for (auto findObject = listenerList.begin(); findObject != listenerList.end(); findObject++)
+		{
+			//is listener?
+			if (*findObject == inListener)
+			{
+				//remove
+				listenerList.erase(findObject);
+
+				delete(inListener);
+
+				return;
+			}
+		}
 	}
 };

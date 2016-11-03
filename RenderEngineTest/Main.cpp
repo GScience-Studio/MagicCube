@@ -5,12 +5,34 @@
 #include "../RenderEngine/FPSControllerExtension.h"
 
 canvas* logoCanvas;
+listener* listener1;
+listener* listener2;
 
 class test_scene:public scene
 {
 	void sceneTickCall() 
 	{
-		logoCanvas->getModelLocation()->getAngle()->setPosY(logoCanvas->getModelLocation()->getAngle()->getPosY() + 0.0001f);
+		logoCanvas->getModelLocation()->getAngle()->setPosY(logoCanvas->getModelLocation()->getAngle()->getPosY() + 0.1f);
+	}
+};
+class testListener:public listener
+{
+	int ID;
+public:
+	testListener(int ID) :ID(ID) {}
+
+	~testListener()
+	{
+		std::cout << "Listener: " << ID << "has been unregister" << std::endl;
+	}
+	virtual void keyListener(int key, int action)
+	{
+		if (ID == 0)
+			std::cout << "[Listener: " << ID << "]" << key << std::endl;
+		else
+		{
+			std::cout << "[Listener: " << ID << "]" << action << std::endl;
+		}
 	}
 };
 class test_app :public application
@@ -73,6 +95,11 @@ public:
 
 		//show screen
 		showScene(testScene);
+
+		//register listener
+		listener1 = registerListener(new testListener(0));
+		listener2 = registerListener(new testListener(1));
+	
 	}
 	void tickCall()
 	{
@@ -81,6 +108,11 @@ public:
 		if (count % 50 == 0)
 		{
 			std::cout << count / 50 << std::endl;
+
+			if (count / 50 > 5)
+				application::getInstance().unregisterListener(listener1);
+			if (count / 50 > 10)
+				application::getInstance().unregisterListener(listener2);
 		}
 	}
 };
