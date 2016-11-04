@@ -51,7 +51,17 @@ public:
 	{
 		return *applicationInstance;
 	}
-
+	
 	//run program
 	void run();
+
+	//set cursor input mode
+	void hideCursor()
+	{
+		glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+	void showCursor()
+	{
+		glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
 };

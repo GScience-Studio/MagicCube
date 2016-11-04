@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Canvas.cpp" />
-    <ClCompile Include="FPSController.cpp" />
+    <ClCompile Include="FPC.cpp" />
     <ClCompile Include="ListenerManager.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="GLManager.cpp" />
@@ -35,9 +35,9 @@
     <ClInclude Include="CanvasExtension.h" />
     <ClInclude Include="CanvasTexture.h" />
     <ClInclude Include="ExtensionManager.h" />
-    <ClInclude Include="FPSController.h" />
-    <ClInclude Include="FPSControllerExtension.h" />
-    <ClInclude Include="FPSControllerManager.h" />
+    <ClInclude Include="FPC.h" />
+    <ClInclude Include="FPCExtension.h" />
+    <ClInclude Include="FPCManager.h" />
     <ClInclude Include="ListenerManager.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="NormalShader.h" />

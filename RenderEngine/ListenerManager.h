@@ -16,14 +16,22 @@ public:
 	//tick function
 	virtual void tickListener() {}
 
+	//cursor listener function
+	virtual void cursorListener(double lastPosX, double lastPosY, double posX, double posY) {}
+
 	//destructor
 	virtual ~listener() {}
 };
 
 class listener_manager
 {
-	//call back
-	friend void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	//key callback
+	friend void keyCallback(GLFWwindow*, int, int, int, int);
+	
+	//cursor callback
+	friend void cursorCallback(GLFWwindow*, double, double);
+
+	//tick refresh
 	friend void tickListenerRefresh();
 
 private:

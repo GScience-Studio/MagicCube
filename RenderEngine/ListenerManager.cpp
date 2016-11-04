@@ -28,10 +28,30 @@ void tickListenerRefresh()
 	}
 }
 
+//cursor move callback
+double lastPosX = 0;
+double lastPosY = 0;
+
+void cursorCallback(GLFWwindow* window, double posX, double posY)
+{
+	for (listener* listenerList : listenerManagerInstance->listenerList)
+	{
+		listenerList->cursorListener(lastPosX, lastPosY, posX, posY);
+	}
+
+	lastPosX = posX;
+	lastPosY = posY;
+}
+
 //init listener manager(instance and callback)
 void listener_manager::_initListenerManager(GLFWwindow* window)
 {
 	listenerManagerInstance = this;
 
+	//init listener
+	glfwGetCursorPos(window, &lastPosX, &lastPosY);
+
+	//register callback
 	glfwSetKeyCallback(window, keyCallback);
+	glfwSetCursorPosCallback(window, cursorCallback);
 }

@@ -2,7 +2,7 @@
 #include "../GSRenderEngine.h"
 #include "../RenderEngine/CanvasExtension.h"
 #include "../RenderEngine/NormalShaderExtension.h"
-#include "../RenderEngine/FPSControllerExtension.h"
+#include "../RenderEngine/FPCExtension.h"
 
 canvas* logoCanvas;
 listener* listener1;
@@ -29,7 +29,7 @@ public:
 	{
 		if (ID == 0)
 			std::cout << "[Listener: " << ID << "]" << key << std::endl;
-		else
+		else if (ID == 1)
 		{
 			std::cout << "[Listener: " << ID << "]" << action << std::endl;
 		}
@@ -41,7 +41,7 @@ private:
 	unsigned long int count = 0;
 
 public:
-	fps_controller fpsController = fps_controller(getGlobalCamera());
+	fpc fpController = fpc(getGlobalCamera());
 
 	test_app() :application(u8"MagicCube-RenderEngineTest", "beta-1.0.0", size_vec(880, 495)) {}
 
@@ -49,7 +49,7 @@ public:
 	{
 		//load extension
 		loadExtension(new normal_shader_extension());
-		loadExtension(new fps_controller_extension());
+		loadExtension(new fpc_extension());
 
 		//init screen
 		scene* testScene = addScene(new test_scene());
@@ -63,6 +63,7 @@ public:
 
 		//add canvas(render node)
 		canvas* coordinateCanvas = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
+		canvas* coordinateCanvas2 = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
 
 		//add shape
 		shape_cube testCube(cube_texture(
@@ -70,6 +71,15 @@ public:
 		, vec<color, 4>{ color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0) })
 			, 1);
 		coordinateCanvas->addShapes(testCube, 2);
+
+		shape_cube testCube3(cube_texture(
+			vec<texture_pos, 4>{ texture_pos{ 0.0,0.0 }, texture_pos{ 0.0,1.0 }, texture_pos{ 1.0,1.0 }, texture_pos{ 1.0,0.0 } }
+		, vec<color, 4>{ color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0) })
+			, 1);
+
+		coordinateCanvas2->addShapes(testCube3, 2);
+		coordinateCanvas2->getModelLocation()->getAngle()->rotateTo(0.0, PI);
+		coordinateCanvas2->getModelLocation()->getLocation()->moveTo(0.0, 0.0, 3.0);
 
 		logoCanvas = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
 
@@ -83,15 +93,16 @@ public:
 		//bind texture
 		coordinateCanvas->bindTexture(coordinateTexture);
 		logoCanvas->bindTexture(logoTexture);
+		coordinateCanvas2->bindTexture(coordinateTexture);
 
-		coordinateCanvas->getNodeCamera()->getLocation()->setZ(-3);
+		coordinateCanvas->getNodeCamera()->getLocation()->setZ(-3.0);
 		logoCanvas->getModelLocation()->getLocation()->setZ(5.0);
 		logoCanvas->getModelLocation()->getLocation()->setY(0.0);
 		logoCanvas->getModelLocation()->getLocation()->setX(0.0);
 
 		logoCanvas->getModelLocation()->getAngle()->setPosY(3.14f / 4.0f);
 
-		bindFPSController(&fpsController);
+		bindFPC(&fpController);
 
 		//show screen
 		showScene(testScene);

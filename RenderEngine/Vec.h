@@ -9,7 +9,7 @@ protected:
 	T data[vecSize];
 
 public:
-	T operator [](unsigned int pos)
+	T& operator [](unsigned int pos)
 	{
 		return data[pos];
 	}

@@ -50,14 +50,8 @@
     <ClInclude Include="ListenerManager.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="FPSController.h">
-      <Filter>Extension\FPSController</Filter>
-    </ClInclude>
     <ClInclude Include="ExtensionManager.h">
       <Filter>Extension</Filter>
-    </ClInclude>
-    <ClInclude Include="FPSControllerExtension.h">
-      <Filter>Extension\FPSController</Filter>
     </ClInclude>
     <ClInclude Include="NormalShaderExtension.h">
       <Filter>Extension\Shader</Filter>
@@ -65,8 +59,14 @@
     <ClInclude Include="CanvasExtension.h">
       <Filter>Extension\Canvas</Filter>
     </ClInclude>
-    <ClInclude Include="FPSControllerManager.h">
-      <Filter>Extension\FPSController</Filter>
+    <ClInclude Include="FPCExtension.h">
+      <Filter>Extension\FPC</Filter>
+    </ClInclude>
+    <ClInclude Include="FPC.h">
+      <Filter>Extension\FPC</Filter>
+    </ClInclude>
+    <ClInclude Include="FPCManager.h">
+      <Filter>Extension\FPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -88,7 +88,7 @@
     <Filter Include="Extension\Canvas">
       <UniqueIdentifier>{b108fca7-6a20-4393-a900-e4042f0999af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Extension\FPSController">
+    <Filter Include="Extension\FPC">
       <UniqueIdentifier>{60f71f5c-edb4-4a39-88bb-09a15972bf7e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -114,8 +114,8 @@
     <ClCompile Include="ListenerManager.cpp">
       <Filter>RengerEngine</Filter>
     </ClCompile>
-    <ClCompile Include="FPSController.cpp">
-      <Filter>Extension\FPSController</Filter>
+    <ClCompile Include="FPC.cpp">
+      <Filter>Extension\FPC</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
