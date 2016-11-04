@@ -14,6 +14,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 	{
 		listenerList->keyListener(key, action);
 	}
+
+	listenerManagerInstance->_refreshListener();
 }
 
 //tick refresh
@@ -26,6 +28,8 @@ void tickListenerRefresh()
 	{
 		listenerList->tickListener();
 	}
+
+	listenerManagerInstance->_refreshListener();
 }
 
 //cursor move callback
@@ -38,6 +42,8 @@ void cursorCallback(GLFWwindow* window, double posX, double posY)
 	{
 		listenerList->cursorListener(lastPosX, lastPosY, posX, posY);
 	}
+
+	listenerManagerInstance->_refreshListener();
 
 	lastPosX = posX;
 	lastPosY = posY;

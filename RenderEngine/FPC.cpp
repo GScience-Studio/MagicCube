@@ -32,6 +32,10 @@ void bindFPC(fpc* fpc)
 //监听鼠标
 void fpc::cursorListener(double lastPosX, double lastPosY, double posX, double posY)
 {
+	//判断这个控制器是否是当前激活的控制器
+	if (bindedFPSController != this)
+		return;
+
 	_camera->getAngle()->rotate((lastPosY - posY) * 0.001f, (lastPosX - posX) * 0.001f);
 
 	if (_angle.getPosX() > PI / 2.0f)
@@ -39,7 +43,8 @@ void fpc::cursorListener(double lastPosX, double lastPosY, double posX, double p
 	else if (_angle.getPosX() < -PI / 2.0f)
 		_camera->getAngle()->setPosX(-PI / 2.0f);
 
-	std::cout << cos(_angle.getPosY()) << std::endl;
+	if (_angle.getPosY() > PI * 2.0f || _angle.getPosY() < -PI * 2.0f)
+		_camera->getAngle()->setPosY(0.0f);
 }
 
 //监听tick

@@ -38,6 +38,20 @@ private:
 	//listener list
 	std::list<listener*> listenerList;
 
+	//has refreshing listener?
+	std::forward_list<std::list<listener*>::iterator> unregisterListenerList;
+
+	//is refreshing listener?
+	bool _isCallingListener = false;
+
+	//remove listener which had been unregister by user
+	void _refreshListener()
+	{
+		for (auto findObject : unregisterListenerList)
+		{
+			listenerList.erase(findObject);
+		}
+	}
 protected:
 	//init function
 	void _initListenerManager(GLFWwindow* window);
@@ -69,10 +83,21 @@ public:
 			//is listener?
 			if (*findObject == inListener)
 			{
-				//remove
-				listenerList.erase(findObject);
+				//set it to null and free its memory
+				*findObject = nullptr;
 
 				delete(inListener);
+
+				//can I unregister this listener?
+				if (_isCallingListener)
+				{
+					unregisterListenerList.push_front(findObject);
+
+					return;
+				}
+
+				//remove
+				listenerList.erase(findObject);
 
 				return;
 			}

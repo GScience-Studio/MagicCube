@@ -5,14 +5,35 @@
 #include "../RenderEngine/FPCExtension.h"
 
 canvas* logoCanvas;
+canvas* coordinateCanvas2;
+
 listener* listener1;
 listener* listener2;
+
+unsigned long int count = 0;
 
 class test_scene:public scene
 {
 	void sceneTickCall() 
 	{
 		logoCanvas->getModelLocation()->getAngle()->setPosY(logoCanvas->getModelLocation()->getAngle()->getPosY() + 0.1f);
+
+		coordinateCanvas2->addShapes(new canvas_shape[2]
+		{ 
+		canvas_shape
+		(
+			canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, count / 1000.0f), texture_pos(1.0f, 0.0f)),
+			canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, 1.0f, count / 1000.0f), texture_pos(0.0f, 0.0f)),
+			canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, count / 1000.0f), texture_pos(0.0f, 1.0f))
+		)
+		,
+		canvas_shape
+		(
+			canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, count / 1000.0f), texture_pos(0.0f, 1.0f)),
+			canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, -1.0f, count / 1000.0f), texture_pos(1.0f, 1.0f)),
+			canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, count / 1000.0f), texture_pos(1.0f, 0.0f))
+		)
+		}, 2);
 	}
 };
 class testListener:public listener
@@ -27,6 +48,9 @@ public:
 	}
 	virtual void keyListener(int key, int action)
 	{
+		if (key == GLFW_KEY_Q)
+			application::getInstance().unregisterListener(this);
+
 		if (ID == 0)
 			std::cout << "[Listener: " << ID << "]" << key << std::endl;
 		else if (ID == 1)
@@ -37,9 +61,6 @@ public:
 };
 class test_app :public application
 {
-private:
-	unsigned long int count = 0;
-
 public:
 	fpc fpController = fpc(getGlobalCamera());
 
@@ -63,7 +84,7 @@ public:
 
 		//add canvas(render node)
 		canvas* coordinateCanvas = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
-		canvas* coordinateCanvas2 = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
+		coordinateCanvas2 = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
 
 		//add shape
 		shape_cube testCube(cube_texture(
@@ -118,7 +139,7 @@ public:
 
 		if (count % 50 == 0)
 		{
-			std::cout << count / 50 << std::endl;
+			std::cout << "now has "<< count << " cube in a scene" << std::endl;
 
 			if (count / 50 > 5)
 				application::getInstance().unregisterListener(listener1);

@@ -19,7 +19,7 @@ private:
 	camera* _camera;
 
 	//各个方向的速度
-	vec<float, 3> _speed{ 0.0f,0.0f,0.0f };
+	vec<double, 3> _speed{ 0.0f,0.0f,0.0f };
 
 	//各个方向的速度状态
 	vec<speed_state, 3> _speedState{ SPEED_STOP ,SPEED_STOP ,SPEED_STOP };

@@ -75,6 +75,9 @@ void application::_mainLoop()
 			if (refreshTime > 2)
 				std::cout << "[Warning]Can't keep up!" << std::endl;
 
+			if (refreshTime > 20)
+				continue;
+
 			//tick call
 			_tickRefresh(hasDraw, true);
 
