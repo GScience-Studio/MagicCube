@@ -68,6 +68,9 @@
     <ClInclude Include="FPCManager.h">
       <Filter>Extension\FPC</Filter>
     </ClInclude>
+    <ClInclude Include="ModLoader.h">
+      <Filter>Extension\ModLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">
@@ -90,6 +93,9 @@
     </Filter>
     <Filter Include="Extension\FPC">
       <UniqueIdentifier>{60f71f5c-edb4-4a39-88bb-09a15972bf7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extension\ModLoader">
+      <UniqueIdentifier>{0bf76644-3626-499a-ad6d-ef659b62e996}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="FPC.cpp">
       <Filter>Extension\FPC</Filter>
+    </ClCompile>
+    <ClCompile Include="ModLoader.cpp">
+      <Filter>Extension\ModLoader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

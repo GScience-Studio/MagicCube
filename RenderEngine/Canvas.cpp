@@ -1,6 +1,13 @@
 
 #include "Canvas.h"
 
+void canvas::addShapes(const void* data, unsigned int size)
+{
+	for (unsigned int i = 0; i < size; i++)
+		_renderData.push_back(((double*)data)[i]);
+
+	_hasChange = true;
+}
 void canvas::addShapes(const canvas_shape* shapeInfo, unsigned int count)
 {
 	//set data

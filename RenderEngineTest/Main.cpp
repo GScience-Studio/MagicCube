@@ -3,6 +3,7 @@
 #include "../RenderEngine/CanvasExtension.h"
 #include "../RenderEngine/NormalShaderExtension.h"
 #include "../RenderEngine/FPCExtension.h"
+#include "../RenderEngine/ModLoader.h"
 
 canvas* logoCanvas;
 canvas* coordinateCanvas2;
@@ -17,7 +18,8 @@ class test_scene:public scene
 	void sceneTickCall() 
 	{
 		logoCanvas->getModelLocation()->getAngle()->setPosY(logoCanvas->getModelLocation()->getAngle()->getPosY() + 0.1f);
-
+		//coordinateCanvas2->getNodeCamera()->getAngle()->setPosY(logoCanvas->getNodeCamera()->getAngle()->getPosY() + 0.1f);
+		/*
 		coordinateCanvas2->addShapes(new canvas_shape[2]
 		{ 
 		canvas_shape
@@ -33,7 +35,7 @@ class test_scene:public scene
 			canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, -1.0f, count / 1000.0f), texture_pos(1.0f, 1.0f)),
 			canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, count / 1000.0f), texture_pos(1.0f, 0.0f))
 		)
-		}, 2);
+		}, 2);*/
 	}
 };
 class testListener:public listener
@@ -68,16 +70,21 @@ public:
 
 	void init()
 	{
+		std::vector<double> modle = loadOBJ("testModle.obj");
+
 		//load extension
 		loadExtension(new normal_shader_extension());
 		loadExtension(new fpc_extension());
 
 		//init screen
 		scene* testScene = addScene(new test_scene());
-
+		
 		//init texture
 		char* coordinateTextureFileName[]{ "coordinate.png","normal.png" };
 		texture coordinateTexture = genTexture(coordinateTextureFileName, 2);
+
+		char* coordinateTextureFileName3[]{ "testModleTexture.png" };
+		texture coordinateTexture3 = genTexture(coordinateTextureFileName3, 1);
 
 		char* blockTextureFileName[]{ "logo.png","normal.png" };
 		texture logoTexture = genTexture(blockTextureFileName, 2);
@@ -93,14 +100,9 @@ public:
 			, 1);
 		coordinateCanvas->addShapes(testCube, 2);
 
-		shape_cube testCube3(cube_texture(
-			vec<texture_pos, 4>{ texture_pos{ 0.0,0.0 }, texture_pos{ 0.0,1.0 }, texture_pos{ 1.0,1.0 }, texture_pos{ 1.0,0.0 } }
-		, vec<color, 4>{ color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0), color(0.0, 0.0, 0.0) })
-			, 1);
-
-		coordinateCanvas2->addShapes(testCube3, 2);
-		coordinateCanvas2->getModelLocation()->getAngle()->rotateTo(0.0, PI);
-		coordinateCanvas2->getModelLocation()->getLocation()->moveTo(0.0, 0.0, 3.0);
+		coordinateCanvas2->addShapes(&modle[0], modle.size());
+		coordinateCanvas2->getModelLocation()->getLocation()->setZ(5.0);
+		coordinateCanvas2->getModelLocation()->getLocation()->setY(-5.0);
 
 		logoCanvas = (canvas*)testScene->addRenderNode(new canvas(normal3DShader));
 
@@ -112,9 +114,9 @@ public:
 		logoCanvas->addShapes(testCube2, 2);
 		
 		//bind texture
-		coordinateCanvas->bindTexture(coordinateTexture);
+		coordinateCanvas->bindTexture(coordinateTexture3);
 		logoCanvas->bindTexture(logoTexture);
-		coordinateCanvas2->bindTexture(coordinateTexture);
+		coordinateCanvas2->bindTexture(coordinateTexture3);
 
 		coordinateCanvas->getNodeCamera()->getLocation()->setZ(-3.0);
 		logoCanvas->getModelLocation()->getLocation()->setZ(5.0);

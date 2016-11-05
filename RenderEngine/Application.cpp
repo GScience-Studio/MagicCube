@@ -58,9 +58,6 @@ void application::_mainLoop()
 	//loop
 	while (!_glInstance.windowShouldClose())
 	{
-		//has draw
-		bool hasDraw = true;
-
 		//clear screen
 		_glInstance.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -76,25 +73,17 @@ void application::_mainLoop()
 				std::cout << "[Warning]Can't keep up!" << std::endl;
 
 			if (refreshTime > 20)
+			{
+				std::cout << "[Warning]Drop!" << std::endl;
+
 				continue;
+			}
 
 			//tick call
-			_tickRefresh(hasDraw, true);
-
-			if (hasDraw)
-			{
-				hasDraw = false;
-
-				//swap buffer
-				_glInstance.swapBuffers();
-			}
+			_tickRefresh(false, true);
 		}
-		//need draw?
-		if (refreshTime == 0)
-		{
-			_tickRefresh(true, false);
-			_glInstance.swapBuffers();
-		}
+		_tickRefresh(true, false);
+		_glInstance.swapBuffers();
 
 		//pool event
 		_glInstance.poolEvent();
