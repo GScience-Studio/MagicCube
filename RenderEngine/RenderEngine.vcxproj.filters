@@ -71,6 +71,15 @@
     <ClInclude Include="ModLoader.h">
       <Filter>Extension\ModLoader</Filter>
     </ClInclude>
+    <ClInclude Include="MapRender.h">
+      <Filter>Extension\MapRender</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRenderExtension.h">
+      <Filter>Extension\MapRender</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRenderShader.h">
+      <Filter>Extension\MapRender</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">
@@ -96,6 +105,9 @@
     </Filter>
     <Filter Include="Extension\ModLoader">
       <UniqueIdentifier>{0bf76644-3626-499a-ad6d-ef659b62e996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extension\MapRender">
+      <UniqueIdentifier>{6fdd1cf8-9a3c-41dd-93bc-d5b4f821cbc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +137,12 @@
     </ClCompile>
     <ClCompile Include="ModLoader.cpp">
       <Filter>Extension\ModLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapRender.cpp">
+      <Filter>Extension\MapRender</Filter>
+    </ClCompile>
+    <ClCompile Include="MapRenderShader.cpp">
+      <Filter>Extension\MapRender</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

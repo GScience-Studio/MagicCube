@@ -196,9 +196,26 @@ shader_program* gl_manager::genShader(char* vert, char* frag, shader_program* ne
 
 	_shaderProgramList.push_front(newShaderProgramClass);
 
-	return nullptr;
+	return newShaderProgramClass;
 }
+shader_program* gl_manager::genShader(char* vert, char* frag, char* gs, shader_program* newShaderProgramClass)
+{
+	shader_info shaderInfo[] = {
+		{ GL_VERTEX_SHADER, vert },
+		{ GL_FRAGMENT_SHADER, frag },
+		{ GL_GEOMETRY_SHADER, gs},
+		{ GL_NONE, NULL } };
 
+	//load shader
+	newShaderProgramClass->_programID = loadShader(shaderInfo);
+	newShaderProgramClass->_projection = glGetUniformLocation(newShaderProgramClass->_programID, "projection");
+
+	newShaderProgramClass->_init();
+
+	_shaderProgramList.push_front(newShaderProgramClass);
+
+	return newShaderProgramClass;
+}
 void shader_program::setCamera(camera& globalCamera,camera& modelLocation) const
 {
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)640 / (GLfloat)480, 0.1f, 500.0f);

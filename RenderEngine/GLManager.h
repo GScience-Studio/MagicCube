@@ -89,6 +89,7 @@ private:
 public:
 	//add shader
 	shader_program* genShader(char* vert, char* frag, shader_program* newShaderProgramClass);
+	shader_program* genShader(char* vert, char* frag, char* gs, shader_program* newShaderProgramClass);
 
 	//gen texture
 	texture genTexture(char* fileName[], GLuint count);

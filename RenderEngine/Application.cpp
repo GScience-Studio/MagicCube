@@ -40,11 +40,8 @@ void application::_tickRefresh(bool draw, bool refresh)
 		//listener call
 		tickListenerRefresh();
 	}
-	if (draw)
-	{
-		//scene refresh
-		_sceneRefreshAndDraw(draw);
-	}
+	//scene refresh
+	_sceneRefreshAndDraw(draw);
 }
 //game main loop
 void application::_mainLoop()
@@ -58,10 +55,11 @@ void application::_mainLoop()
 	//loop
 	while (!_glInstance.windowShouldClose())
 	{
+		//time has refresh
+		unsigned char refreshTime = 0;
+
 		//clear screen
 		_glInstance.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		unsigned char refreshTime = 0;
 
 		//check time to call tick refresh
 		while (glfwGetTime() - startTime - refreshCallTime * TICK_TIME >= TICK_TIME)
@@ -69,20 +67,15 @@ void application::_mainLoop()
 			++refreshCallTime;
 			++refreshTime;
 
-			if (refreshTime > 2)
-				std::cout << "[Warning]Can't keep up!" << std::endl;
-
-			if (refreshTime > 20)
-			{
-				std::cout << "[Warning]Drop!" << std::endl;
-
-				continue;
-			}
-
 			//tick call
 			_tickRefresh(false, true);
 		}
+		if (refreshTime > 2)
+			std::cout << "[Warning]Can't keep up!" << std::endl;
+
+		//render
 		_tickRefresh(true, false);
+
 		_glInstance.swapBuffers();
 
 		//pool event
