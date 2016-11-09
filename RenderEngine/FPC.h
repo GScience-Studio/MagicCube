@@ -6,6 +6,8 @@
 //第一人称控制器
 class fpc :public listener
 {
+	friend void bindFPC(fpc*);
+
 	enum speed_state
 	{
 		SPEED_UP, SPEED_STOP, SPEED_DOWN

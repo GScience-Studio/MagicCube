@@ -5,7 +5,9 @@
 listener_manager* listenerManagerInstance;
 
 //register callback
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+
+/*keyboard callback*/
+void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (listenerManagerInstance == nullptr)
 		return;
@@ -18,7 +20,21 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 	listenerManagerInstance->_refreshListener();
 }
 
-//tick refresh
+/*window size change listener*/
+void windowsSizeChangeCallback(GLFWwindow* window, int width, int height)
+{
+	if (listenerManagerInstance == nullptr)
+		return;
+
+	for (listener* listenerList : listenerManagerInstance->listenerList)
+	{
+		listenerList->windowsSizeChangeListener(width, height);
+	}
+
+	listenerManagerInstance->_refreshListener();
+}
+
+/*tick refresh*/
 void tickListenerRefresh()
 {
 	if (listenerManagerInstance == nullptr)
@@ -32,10 +48,13 @@ void tickListenerRefresh()
 	listenerManagerInstance->_refreshListener();
 }
 
-//cursor move callback
+/*cursor move callback*/
+
+//save the last cursor location
 double lastPosX = 0;
 double lastPosY = 0;
 
+//callback
 void cursorCallback(GLFWwindow* window, double posX, double posY)
 {
 	for (listener* listenerList : listenerManagerInstance->listenerList)
@@ -49,6 +68,12 @@ void cursorCallback(GLFWwindow* window, double posX, double posY)
 	lastPosY = posY;
 }
 
+//framebuffer size change callback(this callback will no support register to listener)
+void framebufferSizeChangeCallback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+
 //init listener manager(instance and callback)
 void listener_manager::_initListenerManager(GLFWwindow* window)
 {
@@ -58,6 +83,8 @@ void listener_manager::_initListenerManager(GLFWwindow* window)
 	glfwGetCursorPos(window, &lastPosX, &lastPosY);
 
 	//register callback
-	glfwSetKeyCallback(window, keyCallback);
+	glfwSetKeyCallback(window, keyboardCallback);
+	glfwSetFramebufferSizeCallback(window, framebufferSizeChangeCallback);
+	glfwSetWindowSizeCallback(window, windowsSizeChangeCallback);
 	glfwSetCursorPosCallback(window, cursorCallback);
 }

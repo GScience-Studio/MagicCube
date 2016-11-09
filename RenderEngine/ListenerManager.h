@@ -19,6 +19,9 @@ public:
 	//cursor listener function
 	virtual void cursorListener(double lastPosX, double lastPosY, double posX, double posY) {}
 
+	//window size change function
+	virtual void windowsSizeChangeListener(int width, int height) {}
+
 	//destructor
 	virtual ~listener() {}
 };
@@ -26,10 +29,13 @@ public:
 class listener_manager
 {
 	//key callback
-	friend void keyCallback(GLFWwindow*, int, int, int, int);
+	friend void keyboardCallback(GLFWwindow*, int, int, int, int);
 	
 	//cursor callback
 	friend void cursorCallback(GLFWwindow*, double, double);
+
+	//window size callback
+	friend void windowsSizeChangeCallback(GLFWwindow*, int, int);
 
 	//tick refresh
 	friend void tickListenerRefresh();
@@ -69,8 +75,15 @@ public:
 
 		return inListener;
 	}
+	//unregister listener and free memory
+	void unregisterListenerAndFreeMemory(listener* inListener)
+	{
+		unregisterListener(inListener);
 
-	//unregister listener and auto free its memory
+		delete(inListener);
+	}
+
+	//unregister listener but don't free memory
 	void unregisterListener(listener* inListener)
 	{
 		//whether it is an unable listener
@@ -83,11 +96,6 @@ public:
 			//is listener?
 			if (*findObject == inListener)
 			{
-				//set it to null and free its memory
-				*findObject = nullptr;
-
-				delete(inListener);
-
 				//can I unregister this listener?
 				if (_isCallingListener)
 				{

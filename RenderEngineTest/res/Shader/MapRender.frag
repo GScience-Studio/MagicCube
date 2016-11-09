@@ -4,10 +4,13 @@ uniform sampler2D texture;
 uniform sampler2D normal;
 
 out vec4 fColor;
-in vec2 texturePos;
+
+in GS_OUT
+{
+   vec2 texturePos;
+}gs_out;
 
 void main()  
 {
-	fColor = texture2D(texture,texturePos) + texture2D(normal,texturePos) * 0.1;
-	fColor = vec4(1.0,0.0,0.0,1.0);
+	fColor = texture2D(texture,gs_out.texturePos) + texture2D(normal,gs_out.texturePos) * 0.1;
 }

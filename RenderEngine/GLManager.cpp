@@ -154,7 +154,7 @@ GLuint loadShader(shader_info* Shaders)
 void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 {
 	//load window
-	_window = glfwCreateWindow(windowSize.getHeight(), windowSize.getWidth(), appName, nullptr, nullptr);
+	_window = glfwCreateWindow(windowSize.getWidth(), windowSize.getHeight(), appName, nullptr, nullptr);
 
 	if (!_window)
 	{
@@ -167,13 +167,16 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 	glfwMakeContextCurrent(_window);
 
 	//set view port
-	glViewport(0, 0, windowSize.getHeight(), windowSize.getWidth());
+	glViewport(0, 0, windowSize.getWidth(), windowSize.getHeight());
 
 	//set vertical retrace
 	glfwSwapInterval(1);
 
 	//init glew
 	glewInit();
+
+	//set window size
+	_windowSize = windowSize;
 
 	//init opengl state
 	glEnable(GL_DEPTH_TEST);
@@ -218,7 +221,9 @@ shader_program* gl_manager::genShader(char* vert, char* frag, char* gs, shader_p
 }
 void shader_program::setCamera(camera& globalCamera,camera& modelLocation) const
 {
-	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)640 / (GLfloat)480, 0.1f, 500.0f);
+	size_vec windowSize = gl_manager::getInstance()._windowSize;
+
+	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)windowSize.getWidth() / (GLfloat)windowSize.getHeight(), 0.1f, 500.0f);
 	glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(globalCamera.getLocation()->getX(), -globalCamera.getLocation()->getY(), globalCamera.getLocation()->getZ()));
 	glm::mat4 cameraRotate = glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
 
@@ -337,7 +342,7 @@ bool loadPNG(const char *filepath, image_info& image)
 	return true;
 }
 
-texture gl_manager::genTexture(char* fileName[], GLuint count)
+texture gl_manager::genTexture(const char* fileName[], GLuint count)
 {
 	texture texture;
 

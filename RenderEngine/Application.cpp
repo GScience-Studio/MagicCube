@@ -34,9 +34,6 @@ void application::_tickRefresh(bool draw, bool refresh)
 {
 	if (refresh)
 	{
-		//user call
-		tickCall();
-
 		//listener call
 		tickListenerRefresh();
 	}

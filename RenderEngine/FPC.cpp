@@ -10,9 +10,15 @@ void bindFPC(fpc* fpc)
 	//是否为空？
 	if (fpc == nullptr)
 	{
+		if (bindedFPSController == nullptr)
+			return;
+
+		application::getInstance().unregisterListener(bindedFPSController);
+
 		//解绑
 		bindedFPSController = fpc;
 
+		//显示光标
 		application::getInstance().showCursor();
 
 		return;
@@ -72,6 +78,9 @@ void fpc::tickListener()
 //监听键盘
 void fpc::keyListener(int key, int action)
 {
+	if (bindedFPSController != this)
+		return;
+
 	//速度状态
 	if (action == GLFW_PRESS)
 	{
