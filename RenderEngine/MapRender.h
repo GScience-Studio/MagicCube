@@ -18,6 +18,8 @@ public:
 		_glInstance.useTexture(_texture);
 		_glInstance.useShaderProgram(_shaderProgram);
 
-		_glInstance.draw(0, 1);
+		_shaderProgram->setCamera(_golbalCamera + _nodeCamera, _modelLocation);
+
+		_glInstance.draw(0, 100000);
 	}
 };

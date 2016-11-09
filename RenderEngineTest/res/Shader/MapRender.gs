@@ -1,29 +1,24 @@
-#version 330  
+#version 330 core
 
 uniform mat4 projection;
 
-layout(points) in;
-layout(triangle_strip, max_vertices = 3) out;
+layout(points) in ;
+layout(triangle_strip, max_vertices = 4) out;
 
-out vec3 gColor;
-out vec2 texturePos;
-
+void renderBlock(vec4 position)
+{
+    gl_Position = vec4(-1.0f, -1.0f, -position[1] / 1000.0f, 1.0f) * projection;
+    EmitVertex();
+    gl_Position = vec4(1.0f, -1.0f, -position[1] / 1000.0f, 1.0f) * projection;
+    EmitVertex();
+    gl_Position = vec4(-1.0f, 1.0f, -position[1] / 1000.0f, 1.0f) * projection;
+	EmitVertex();
+    gl_Position = vec4(1.0f, 1.0f, -position[1] / 1000.0f, 1.0f) * projection;
+    EmitVertex();
+    EndPrimitive();
+}
 void main()
 {
-	gl_Position = vec4(0.0,0.0,0.0,0.0);
-	texturePos = vec2(0.0,0.0);
-	gColor = vec3(1.0f,1.0f,1.0f);
-	EmitVertex();
-
-	gl_Position = vec4(0.0,1.0,0.0,0.0);
-	texturePos = vec2(1.0,0.0);
-	gColor = vec3(1.0f,1.0f,1.0f);
-	EmitVertex();
-
-	gl_Position = vec4(1.0,1.0,0.0,0.0);
-	texturePos = vec2(0.0,1.0);
-	gColor = vec3(1.0f,1.0f,1.0f);
-	EmitVertex();
-
-	EndPrimitive();
+    gl_PointSize = gl_in[0].gl_PointSize;
+    renderBlock(gl_in[0].gl_Position);
 }

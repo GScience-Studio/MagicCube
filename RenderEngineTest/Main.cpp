@@ -46,7 +46,7 @@ public:
 
 		scene* firstScene = addScene();
 
-		firstScene->addRenderNode(new map_render(10));
+		firstScene->addRenderNode(new map_render(10))->getModelLocation()->getLocation()->moveTo(0.0,0.0,10.0);
 		showScene(firstScene);
 
 	}

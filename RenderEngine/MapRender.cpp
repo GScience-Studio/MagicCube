@@ -3,7 +3,11 @@
 
 map_render::map_render(unsigned char sight) :_sight(sight), render_node(mapRenderShader)
 {
-	int i[]{ 0,0,0 };
+	int block[200000]{ 0 };
 
-	_shaderProgram->setBufferData(&i, 0, 1, _buffer);
+	for (unsigned j = 0; j < 100000; j++)
+	{
+		block[j * 2] = j;
+	}
+	_shaderProgram->setBufferData(&block, 0, 200000, _buffer);
 }

@@ -20,7 +20,11 @@ void map_render_shader::setBufferData(const void* bufferData, const unsigned int
 		buffer.hasInit = true;
 
 		//block data
-		glVertexAttribPointer(0, 1, GL_UNSIGNED_INT, GL_FALSE, 1 * sizeof(GLuint), 0);
+		glVertexAttribPointer(0, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(GLuint) * 2, 0);
+		glEnableVertexAttribArray(0);
+
+		//block location
+		glVertexAttribPointer(1, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(GLuint) * 2, (const void*)sizeof(GLuint));
 		glEnableVertexAttribArray(0);
 	}
 }
