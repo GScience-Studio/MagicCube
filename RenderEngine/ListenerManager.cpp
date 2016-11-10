@@ -14,6 +14,9 @@ void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int
 
 	for (listener* listenerList : listenerManagerInstance->listenerList)
 	{
+		if (listenerList == nullptr)
+			continue;
+
 		listenerList->keyListener(key, action);
 	}
 
@@ -28,6 +31,9 @@ void windowsSizeChangeCallback(GLFWwindow* window, int width, int height)
 
 	for (listener* listenerList : listenerManagerInstance->listenerList)
 	{
+		if (listenerList == nullptr)
+			continue;
+
 		listenerList->windowsSizeChangeListener(width, height);
 	}
 
@@ -42,6 +48,9 @@ void tickListenerRefresh()
 
 	for (listener* listenerList : listenerManagerInstance->listenerList)
 	{
+		if (listenerList == nullptr)
+			continue;
+
 		listenerList->tickListener();
 	}
 

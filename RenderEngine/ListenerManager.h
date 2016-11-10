@@ -99,6 +99,8 @@ public:
 				//can I unregister this listener?
 				if (_isCallingListener)
 				{
+					inListener = nullptr;
+
 					unregisterListenerList.push_front(findObject);
 
 					return;
