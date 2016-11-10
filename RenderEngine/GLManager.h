@@ -54,10 +54,14 @@ class gl_manager
 {
 	//sone function only can be use when the app start run
 	friend class application;
+	friend class shader_program;
 
 private:
 	//gl instance
 	static gl_manager _glInstance;
+
+	//save window size
+	size_vec _windowSize{ 0,0 };
 
 	//save the vao and vbo id that now use
 	buffer _enableBuffer = buffer(-1, -1);
@@ -89,9 +93,10 @@ private:
 public:
 	//add shader
 	shader_program* genShader(char* vert, char* frag, shader_program* newShaderProgramClass);
+	shader_program* genShader(char* vert, char* frag, char* gs, shader_program* newShaderProgramClass);
 
 	//gen texture
-	texture genTexture(char* fileName[], GLuint count);
+	texture genTexture(const char* fileName[], GLuint count);
 
 	//treate event
 	void poolEvent() const

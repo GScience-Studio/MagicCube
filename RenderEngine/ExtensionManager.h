@@ -28,7 +28,7 @@ class extension_manager
 private:
 	std::vector<extension*> extensionList;
 
-	bool _hasExtension(extension* extension)
+	bool _hasLoadExtension(extension* extension)
 	{
 		for (auto getExtension : extensionList)
 			if (*getExtension == *extension)
@@ -50,7 +50,7 @@ public:
 			delete(getExtension);
 		}
 	}
-	bool _hasExtension(std::string extensionName)
+	bool hasLoadExtension(std::string extensionName)
 	{
 		for (auto getExtension : extensionList)
 			if (getExtension->_extensionName == extensionName)
@@ -68,7 +68,7 @@ public:
 			message("[ERROR]fail to load extension,extension's name is empty", msgError, true);
 
 		//has load?
-		if (_hasExtension(extension))
+		if (_hasLoadExtension(extension))
 			return;
 
 		//load

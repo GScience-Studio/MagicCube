@@ -9,7 +9,7 @@ protected:
 	T data[vecSize];
 
 public:
-	T operator [](unsigned int pos)
+	T& operator [](unsigned int pos)
 	{
 		return data[pos];
 	}
@@ -46,15 +46,24 @@ public:
 class size_vec :private vec<unsigned int, 2>
 {
 public:
-	size_vec(unsigned int height, unsigned int width) :vec( {height,width} ) {}
+	size_vec(unsigned int width, unsigned int height) :vec( { width, height } ) {}
 
 	unsigned int getHeight() const
 	{
-		return get(0);
+		return data[1];
 	}
 	unsigned int getWidth() const
 	{
-		return get(1);
+		return data[0];
+	}
+
+	void setHeight(unsigned int height)
+	{
+		data[1] = height;
+	}
+	void setWidth(unsigned int width)
+	{
+		data[0] = width;
 	}
 };
 

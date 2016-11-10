@@ -34,17 +34,11 @@ void application::_tickRefresh(bool draw, bool refresh)
 {
 	if (refresh)
 	{
-		//user call
-		tickCall();
-
 		//listener call
 		tickListenerRefresh();
 	}
-	if (draw)
-	{
-		//scene refresh
-		_sceneRefreshAndDraw(draw);
-	}
+	//scene refresh
+	_sceneRefreshAndDraw(draw);
 }
 //game main loop
 void application::_mainLoop()
@@ -58,13 +52,11 @@ void application::_mainLoop()
 	//loop
 	while (!_glInstance.windowShouldClose())
 	{
-		//has draw
-		bool hasDraw = true;
+		//time has refresh
+		unsigned char refreshTime = 0;
 
 		//clear screen
 		_glInstance.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		unsigned char refreshTime = 0;
 
 		//check time to call tick refresh
 		while (glfwGetTime() - startTime - refreshCallTime * TICK_TIME >= TICK_TIME)
@@ -72,26 +64,16 @@ void application::_mainLoop()
 			++refreshCallTime;
 			++refreshTime;
 
-			if (refreshTime > 2)
-				std::cout << "[Warning]Can't keep up!" << std::endl;
-
 			//tick call
-			_tickRefresh(hasDraw, true);
-
-			if (hasDraw)
-			{
-				hasDraw = false;
-
-				//swap buffer
-				_glInstance.swapBuffers();
-			}
+			_tickRefresh(false, true);
 		}
-		//need draw?
-		if (refreshTime == 0)
-		{
-			_tickRefresh(true, false);
-			_glInstance.swapBuffers();
-		}
+		if (refreshTime > 2)
+			std::cout << "[Warning]Can't keep up!" << std::endl;
+
+		//render
+		_tickRefresh(true, false);
+
+		_glInstance.swapBuffers();
 
 		//pool event
 		_glInstance.poolEvent();

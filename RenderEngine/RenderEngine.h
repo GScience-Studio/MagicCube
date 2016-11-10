@@ -1,5 +1,8 @@
 #pragma once
 
+//PI
+#define PI 3.14159265358979f
+
 #define _CRT_SECURE_NO_WARNINGS
 #define GLEW_STATIC
 

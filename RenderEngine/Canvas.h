@@ -64,6 +64,7 @@ public:
 
 	//add shape
 	void addShapes(const canvas_shape* shapeInfo, unsigned int count);
+	void addShapes(const void* data, unsigned int count);
 
 	//clean all
 	void clear();

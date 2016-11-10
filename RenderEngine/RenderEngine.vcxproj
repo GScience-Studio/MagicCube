@@ -21,12 +21,15 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Canvas.cpp" />
-    <ClCompile Include="FPSController.cpp" />
+    <ClCompile Include="FPC.cpp" />
     <ClCompile Include="ListenerManager.cpp" />
+    <ClCompile Include="MapRender.cpp" />
+    <ClCompile Include="MapRenderShader.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="GLManager.cpp" />
     <ClCompile Include="NormalShader.cpp" />
     <ClCompile Include="ShapeCube.cpp" />
+    <ClCompile Include="ModLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\GSRenderEngine.h" />
@@ -34,12 +37,16 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CanvasExtension.h" />
     <ClInclude Include="CanvasTexture.h" />
+    <ClInclude Include="MapRender.h" />
+    <ClInclude Include="MapRenderExtension.h" />
     <ClInclude Include="ExtensionManager.h" />
-    <ClInclude Include="FPSController.h" />
-    <ClInclude Include="FPSControllerExtension.h" />
-    <ClInclude Include="FPSControllerManager.h" />
+    <ClInclude Include="FPC.h" />
+    <ClInclude Include="FPCExtension.h" />
+    <ClInclude Include="FPCManager.h" />
     <ClInclude Include="ListenerManager.h" />
+    <ClInclude Include="MapRenderShader.h" />
     <ClInclude Include="Message.h" />
+    <ClInclude Include="ModLoader.h" />
     <ClInclude Include="NormalShader.h" />
     <ClInclude Include="NormalShaderExtension.h" />
     <ClInclude Include="RenderEngine.h" />
@@ -63,26 +70,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
