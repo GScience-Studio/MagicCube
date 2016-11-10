@@ -59,7 +59,7 @@ public:
 		bindFPC(&fpController);
 
 		//load texture
-		texture loadTexture = genTexture({ "coordinate.png" }, 1);
+		texture loadTexture = genTexture({ "BlockTexture.png" }, 1);
 
 		//add test render node
 		scene* firstScene = addScene();
@@ -70,6 +70,9 @@ public:
 		testRenderNode->getModelLocation()->getLocation()->moveTo(0.0, 0.0, 10.0);
 
 		showScene(firstScene);
+
+		//clear color
+		glClearColor(0.0f, 0.5f, 0.7f, 0.0f);
 
 	}
 	void tickCall()

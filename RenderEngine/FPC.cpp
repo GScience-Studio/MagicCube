@@ -72,9 +72,9 @@ void fpc::tickListener()
 	
 	if (_isFastMode == true)
 		_camera->getLocation()->move(
-			(_speed[X] + 5) * cos(_angle.getPosY()) + (_speed[Z] + 5) * sin(_angle.getPosY()),
+			(_speed[X] * 2) * cos(_angle.getPosY()) + (_speed[Z] * 2) * sin(_angle.getPosY()),
 			0.0,
-			(_speed[Z] +  5) * cos(_angle.getPosY()) - (_speed[X] + 5) * sin(_angle.getPosY()));
+			(_speed[Z] * 2) * cos(_angle.getPosY()) - (_speed[X] * 2) * sin(_angle.getPosY()));
 	else
 		_camera->getLocation()->move(
 			_speed[X] * cos(_angle.getPosY()) + _speed[Z] * sin(_angle.getPosY()),

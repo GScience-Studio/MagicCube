@@ -13,4 +13,7 @@ in GS_OUT
 void main()  
 {
 	fColor = texture2D(texture,gs_out.texturePos) + texture2D(normal,gs_out.texturePos) * 0.1;
+	
+	if (fColor.a < 0.5f)
+		discard;
 }
