@@ -26,6 +26,9 @@ void application::run()
 	//init listener
 	_initListenerManager(_glInstance._window);
 
+	//register listener
+	registerListener(&_glInstance);
+
 	//main loop
 	_mainLoop();
 }

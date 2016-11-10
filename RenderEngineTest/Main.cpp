@@ -4,6 +4,8 @@
 #include "../RenderEngine/NormalShaderExtension.h"
 #include "../RenderEngine/FPCExtension.h"
 #include "../RenderEngine/ModLoader.h"
+#include "../RenderEngine/CanvasExtension.h"
+#include "../RenderEngine/NormalShader.h"
 
 class testListener:public listener
 {
@@ -54,20 +56,40 @@ public:
 		//load extension
 		loadExtension(new map_render_extension());
 		loadExtension(new fpc_extension());
+		loadExtension(new normal_shader_extension());
+		loadExtension(new canvas_extension());
 	
 		//bind fpc
 		bindFPC(&fpController);
-
-		//load texture
-		texture loadTexture = genTexture({ "BlockTexture.png" }, 1);
 
 		//add test render node
 		scene* firstScene = addScene();
 
 		render_node* testRenderNode = firstScene->addRenderNode(new map_render(10));
 
-		testRenderNode->bindTexture(loadTexture);
-		testRenderNode->getModelLocation()->getLocation()->moveTo(0.0, 0.0, 10.0);
+		testRenderNode->bindTexture(genTexture({ "BlockTexture.png" }, 1));
+
+		//add coordinate
+		canvas* coordinate = (canvas*)firstScene->addRenderNode(new canvas(normal2DShader));
+
+		coordinate->addShapes(new canvas_shape[2]
+		{
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(0.1f, 0.1f, 0.0f), texture_pos(1.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-0.1f, 0.1f, 0.0f), texture_pos(0.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-0.1f, -0.1f, 0.0f), texture_pos(0.0f, 1.0f))
+			)
+			,
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-0.1f, -0.1f, 0.0f), texture_pos(0.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(0.1f, -0.1f, 0.0f), texture_pos(1.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(0.1f, 0.1f, 0.0f), texture_pos(1.0f, 0.0f))
+			)
+		}, 2);
+
+		coordinate->bindTexture(genTexture({ "Coordinate.png" }, 1));
 
 		showScene(firstScene);
 

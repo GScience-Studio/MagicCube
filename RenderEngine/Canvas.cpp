@@ -4,7 +4,7 @@
 void canvas::addShapes(const void* data, unsigned int size)
 {
 	for (unsigned int i = 0; i < size; i++)
-		_renderData.push_back(((double*)data)[i]);
+		_renderData.push_back(((GLfloat*)data)[i]);
 
 	_hasChange = true;
 }

@@ -42,7 +42,7 @@ void fpc::cursorListener(double lastPosX, double lastPosY, double posX, double p
 	if (bindedFPSController != this)
 		return;
 
-	_camera->getAngle()->rotate((lastPosY - posY) * 0.001f, (lastPosX - posX) * 0.001f);
+	_camera->getAngle()->rotate((float)(lastPosY - posY) * 0.001f, (float)(lastPosX - posX) * 0.001f);
 
 	if (_angle.getPosX() > PI / 2.0f)
 		_camera->getAngle()->setPosX(PI / 2.0f);
@@ -73,13 +73,15 @@ void fpc::tickListener()
 	if (_isFastMode == true)
 		_camera->getLocation()->move(
 			(_speed[X] * 2) * cos(_angle.getPosY()) + (_speed[Z] * 2) * sin(_angle.getPosY()),
-			0.0,
+			_speed[Y],
 			(_speed[Z] * 2) * cos(_angle.getPosY()) - (_speed[X] * 2) * sin(_angle.getPosY()));
 	else
 		_camera->getLocation()->move(
 			_speed[X] * cos(_angle.getPosY()) + _speed[Z] * sin(_angle.getPosY()),
-			0.0,
+			_speed[Y],
 			_speed[Z] * cos(_angle.getPosY()) - _speed[X] * sin(_angle.getPosY()));
+
+	std::cout << (int)_camera->getLocation()->getX() << "," << (int)_camera->getLocation()->getY() << "," << (int)_camera->getLocation()->getZ() << std::endl;
 }
 //¼àÌý¼üÅÌ
 void fpc::keyListener(int key, int action)
@@ -91,15 +93,17 @@ void fpc::keyListener(int key, int action)
 	if (action == GLFW_PRESS)
 	{
 		if (key == GLFW_KEY_W)
-			bindedFPSController->_speedState.set(Z, SPEED_UP);
-		else if (key == GLFW_KEY_S)
 			bindedFPSController->_speedState.set(Z, SPEED_DOWN);
+		else if (key == GLFW_KEY_S)
+			bindedFPSController->_speedState.set(Z, SPEED_UP);
 		else if (key == GLFW_KEY_A)
-			bindedFPSController->_speedState.set(X, SPEED_UP);
-		else if (key == GLFW_KEY_D)
 			bindedFPSController->_speedState.set(X, SPEED_DOWN);
+		else if (key == GLFW_KEY_D)
+			bindedFPSController->_speedState.set(X, SPEED_UP);
 		else if (key == GLFW_KEY_LEFT_SHIFT)
-			_isFastMode = true;
+			bindedFPSController->_speedState.set(Y, SPEED_DOWN);
+		else if (key == GLFW_KEY_SPACE)
+			bindedFPSController->_speedState.set(Y, SPEED_UP);
 	}
 	else if (action == GLFW_RELEASE)
 	{
@@ -107,7 +111,7 @@ void fpc::keyListener(int key, int action)
 			bindedFPSController->_speedState.set(Z, SPEED_STOP);
 		else if (key == GLFW_KEY_A || key == GLFW_KEY_D)
 			bindedFPSController->_speedState.set(X, SPEED_STOP);
-		else if (key == GLFW_KEY_LEFT_SHIFT)
-			_isFastMode = false;
+		else if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_SPACE)
+			bindedFPSController->_speedState.set(Y, SPEED_STOP);
 	}
 }
