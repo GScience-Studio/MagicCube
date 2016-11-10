@@ -25,6 +25,6 @@ void map_render_shader::setBufferData(const void* bufferData, const unsigned int
 
 		//block location
 		glVertexAttribPointer(1, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(GLuint) * 2, (const void*)sizeof(GLuint));
-		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 	}
 }

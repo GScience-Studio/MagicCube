@@ -20,6 +20,9 @@ private:
 	//绑定的相机
 	camera* _camera;
 
+	//是否为快速模式
+	bool _isFastMode = false;
+
 	//各个方向的速度
 	vec<double, 3> _speed{ 0.0f,0.0f,0.0f };
 

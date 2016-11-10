@@ -33,7 +33,7 @@ class test_app :public application
 public:
 	fpc fpController = fpc(getGlobalCamera());
 
-	test_app() :application(u8"MagicCube-RenderEngineTest 100000 quad test", "test-1.0.0", size_vec(880, 495)) {}
+	test_app() :application(u8"MagicCube-RenderEngineTest gs test", "test-1.0.0", size_vec(880, 495)) {}
 
 	void keyListener(int key, int action)
 	{

@@ -20,6 +20,6 @@ public:
 
 		_shaderProgram->setCamera(_golbalCamera + _nodeCamera, _modelLocation);
 
-		_glInstance.draw(0, 100000);
+		_glInstance.draw(0, 1048576);
 	}
 };

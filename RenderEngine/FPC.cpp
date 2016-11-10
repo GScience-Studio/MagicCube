@@ -71,9 +71,9 @@ void fpc::tickListener()
 				_speed[i] += _speed[i] < 0.0f ? 0.005f : -0.005f;
 
 	_camera->getLocation()->move(
-		_speed[X] * cos(_angle.getPosY()) + _speed[Z] * sin(_angle.getPosY()),
+		_speed[X] * (_isFastMode * 10) * cos(_angle.getPosY()) + _speed[Z] * (_isFastMode * 10) * sin(_angle.getPosY()),
 		0.0,
-		_speed[Z] * cos(_angle.getPosY()) - _speed[X] * sin(_angle.getPosY()));
+		_speed[Z] * (_isFastMode * 10) * cos(_angle.getPosY()) - _speed[X] * (_isFastMode * 10) * sin(_angle.getPosY()));
 }
 //¼àÌý¼üÅÌ
 void fpc::keyListener(int key, int action)
@@ -92,6 +92,8 @@ void fpc::keyListener(int key, int action)
 			bindedFPSController->_speedState.set(X, SPEED_UP);
 		else if (key == GLFW_KEY_D)
 			bindedFPSController->_speedState.set(X, SPEED_DOWN);
+		else if (key == GLFW_KEY_LEFT_SHIFT)
+			_isFastMode = true;
 	}
 	else if (action == GLFW_RELEASE)
 	{
@@ -99,5 +101,7 @@ void fpc::keyListener(int key, int action)
 			bindedFPSController->_speedState.set(Z, SPEED_STOP);
 		else if (key == GLFW_KEY_A || key == GLFW_KEY_D)
 			bindedFPSController->_speedState.set(X, SPEED_STOP);
+		else if (key == GLFW_KEY_LEFT_SHIFT)
+			_isFastMode = false;
 	}
 }

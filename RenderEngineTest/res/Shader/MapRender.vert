@@ -1,7 +1,7 @@
 #version 330  
 
 layout(location = 0) in float blockID;
-layout(location = 0) in float blockLocation;
+layout(location = 1) in float blockLocation;
 
 void  main()
 {
