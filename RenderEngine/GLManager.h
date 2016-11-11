@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RenderEngine.h"
-#include "ListenerManager.h"
+#include "Listener.h"
 #include "Texture.h"
 #include "Camera.h"
 
@@ -239,21 +239,25 @@ public:
 		if (_usingTexture == texture)
 			return;
 
-		_usingTexture = texture;
-
 		//no texture
-		if (texture._textureCount == 0)
-		{
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
-		else
+		if (texture._textureCount != 0)
 			//has texture
 			for (unsigned int i = 0; i < texture._textureCount; i++)
 			{
 				glActiveTexture(GL_TEXTURE0 + i);
 				glBindTexture(GL_TEXTURE_2D, texture._textureIDList[i]);
 			}
+
+		//need disable texture?
+		if (_usingTexture._textureCount > texture._textureCount)
+			//disable some texture
+			for (unsigned int i = texture._textureCount; i < _usingTexture._textureCount; i++)
+			{
+				glActiveTexture(GL_TEXTURE0 + i);
+
+				glBindTexture(GL_TEXTURE_2D, 0);
+			}
+		_usingTexture = texture;
 	}
 	//get rendermanager instance
 	static gl_manager& getInstance()

@@ -80,6 +80,9 @@
     <ClInclude Include="MapRenderShader.h">
       <Filter>Extension\MapRender</Filter>
     </ClInclude>
+    <ClInclude Include="Listener.h">
+      <Filter>RengerEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">

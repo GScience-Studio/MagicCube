@@ -4,7 +4,7 @@
 //only can uuse in listener manager
 listener_manager* listenerManagerInstance;
 
-//register callback
+//callback
 
 /*keyboard callback*/
 void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -12,7 +12,7 @@ void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int
 	if (listenerManagerInstance == nullptr)
 		return;
 
-	for (listener* listenerList : listenerManagerInstance->listenerList)
+	for (listener* listenerList : listenerManagerInstance->_listenerList)
 	{
 		if (listenerList == nullptr)
 			continue;
@@ -29,7 +29,7 @@ void windowsSizeChangeCallback(GLFWwindow* window, int width, int height)
 	if (listenerManagerInstance == nullptr)
 		return;
 
-	for (listener* listenerList : listenerManagerInstance->listenerList)
+	for (listener* listenerList : listenerManagerInstance->_listenerList)
 	{
 		if (listenerList == nullptr)
 			continue;
@@ -46,7 +46,7 @@ void tickListenerRefresh()
 	if (listenerManagerInstance == nullptr)
 		return;
 
-	for (listener* listenerList : listenerManagerInstance->listenerList)
+	for (listener* listenerList : listenerManagerInstance->_listenerList)
 	{
 		if (listenerList == nullptr)
 			continue;
@@ -66,7 +66,7 @@ double lastPosY = 0;
 //callback
 void cursorCallback(GLFWwindow* window, double posX, double posY)
 {
-	for (listener* listenerList : listenerManagerInstance->listenerList)
+	for (listener* listenerList : listenerManagerInstance->_listenerList)
 	{
 		listenerList->cursorListener(lastPosX, lastPosY, posX, posY);
 	}

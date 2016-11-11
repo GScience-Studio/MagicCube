@@ -37,6 +37,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CanvasExtension.h" />
     <ClInclude Include="CanvasTexture.h" />
+    <ClInclude Include="Listener.h" />
     <ClInclude Include="MapRender.h" />
     <ClInclude Include="MapRenderExtension.h" />
     <ClInclude Include="ExtensionManager.h" />
