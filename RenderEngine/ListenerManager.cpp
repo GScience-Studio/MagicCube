@@ -66,6 +66,9 @@ double lastPosY = 0;
 //callback
 void cursorCallback(GLFWwindow* window, double posX, double posY)
 {
+	if (listenerManagerInstance == nullptr)
+		return;
+
 	for (listener* listenerList : listenerManagerInstance->_listenerList)
 	{
 		listenerList->cursorListener(lastPosX, lastPosY, posX, posY);
@@ -77,6 +80,20 @@ void cursorCallback(GLFWwindow* window, double posX, double posY)
 	lastPosY = posY;
 }
 
+/*input chars callback*/
+void characterCallback(GLFWwindow* window, unsigned int codepoint)
+{
+	//recieve data
+	std::wcout << "recieve: " << (wchar_t)codepoint << std::endl;
+
+	//treate listener
+	for (listener* listenerList : listenerManagerInstance->_listenerList)
+	{
+
+		//listenerList->charInputCallback(getChar);
+	}
+	listenerManagerInstance->_refreshListener();
+}
 //framebuffer size change callback(this callback will no support register to listener)
 void framebufferSizeChangeCallback(GLFWwindow* window, int width, int height)
 {
@@ -96,4 +113,5 @@ void listener_manager::_initListenerManager(GLFWwindow* window)
 	glfwSetFramebufferSizeCallback(window, framebufferSizeChangeCallback);
 	glfwSetWindowSizeCallback(window, windowsSizeChangeCallback);
 	glfwSetCursorPosCallback(window, cursorCallback);
+	glfwSetCharCallback(window, characterCallback);
 }

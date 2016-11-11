@@ -16,8 +16,11 @@ public:
 	//cursor listener function
 	virtual void cursorListener(double lastPosX, double lastPosY, double posX, double posY) {}
 
-	//window size change function
+	//window size change listener function
 	virtual void windowsSizeChangeListener(int width, int height) {}
+
+	//char input listener function
+	virtual void charInputCallback(const char* chars) {}
 
 	//destructor
 	virtual ~listener() {}

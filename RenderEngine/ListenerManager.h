@@ -17,6 +17,9 @@ class listener_manager
 	//window size callback
 	friend void windowsSizeChangeCallback(GLFWwindow*, int, int);
 
+	//char input callback
+	friend void characterCallback(GLFWwindow* window, unsigned int codepoint);
+
 	//tick refresh
 	friend void tickListenerRefresh();
 
