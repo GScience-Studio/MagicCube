@@ -23,7 +23,6 @@ private:
 	void _init()
 	{
 		glUniform1i(glGetUniformLocation(_programID, "texture"), 0);
-		glUniform1i(glGetUniformLocation(_programID, "normal"), 1);
 	}
 public:
 	//create buffer by daat
