@@ -5,7 +5,7 @@ uniform sampler2D depthMap;
 uniform sampler2D normal;
 
 out vec4 fColor;
-float height_scale = -0.55;
+float height_scale = -0.055;
 
 in GS_OUT
 {
@@ -90,5 +90,5 @@ void main()
 	float diffuse = clamp(dot(normal,gs_out.lightPos), 0.0, 1.0);
 	
 	fColor *= vec4(min(vec3(0.0,0.0,0.0) + vec3(1.0,1.0,1.0) * diffuse, vec3(1.0)),1.0);
-	//fColor = vec4(normalizeEyesPos,1.0);
+	fColor = vec4(normalizeEyesPos,1.0);
 }

@@ -139,13 +139,13 @@ public:
 
 		testRenderNode->setLight(0.0, 1.0, 0.0);
 
-		/*
+		
 		if (tick < 1000)
 			testRenderNode->setLight(-(tick / 1000.0f), tick / 1000.0f, -(tick / 1000.0f));
 		else if (tick < 2000)
 			testRenderNode->setLight(tick / 1000.0f, (2000.0f - tick) / 1000.0f, tick / 1000.0f);
 		else 
-			testRenderNode->setLight((1000.0f - tick) / 1000.0f, (1000.0f - tick) / 1000.0f, (1000.0f - tick) / 1000.0f);*/
+			testRenderNode->setLight((1000.0f - tick) / 1000.0f, (1000.0f - tick) / 1000.0f, (1000.0f - tick) / 1000.0f);
 	}
 };
 test_app Test;
