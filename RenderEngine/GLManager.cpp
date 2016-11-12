@@ -179,7 +179,7 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 	_perspective = glm::perspective(45.0f, (GLfloat)windowSize.getWidth() / (GLfloat)windowSize.getHeight(), 0.1f, 500.0f);
 
 	//set vertical retrace
-	glfwSwapInterval(1);
+	//glfwSwapInterval(1);
 
 	//init glew
 	glewInit();
