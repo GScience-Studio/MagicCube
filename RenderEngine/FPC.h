@@ -34,6 +34,12 @@ private:
 	const angle&			_angle		= *_camera->getAngle();
 public:
 	fpc(camera* camera) :_camera(camera) {}
+	
+	//获取位置
+	camera* getLocation()
+	{
+		return _camera;
+	}
 
 	//tick刷新
 	void tickListener();

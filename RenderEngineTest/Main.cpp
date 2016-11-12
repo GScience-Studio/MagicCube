@@ -1,6 +1,6 @@
 
 #include "../GSRenderEngine.h"
-#include "../RenderEngine/MapRenderExtension.h"
+#include "../RenderEngine/ChunkRenderExtension.h"
 #include "../RenderEngine/NormalShaderExtension.h"
 #include "../RenderEngine/FPCExtension.h"
 #include "../RenderEngine/ModLoader.h"
@@ -36,6 +36,8 @@ public:
 	canvas* coordinateX;
 	canvas* coordinateZ;
 
+	chunk_render* testRenderNode;
+
 	fpc fpController = fpc(getGlobalCamera());
 
 	test_app() :application(u8"MagicCube-RenderEngineTest gs test", "test-1.0.0", size_vec(880, 495)) {}
@@ -57,7 +59,7 @@ public:
 	void init()
 	{
 		//load extension
-		loadExtension(new map_render_extension());
+		loadExtension(new chunk_render_extension());
 		loadExtension(new fpc_extension());
 		loadExtension(new normal_shader_extension());
 		loadExtension(new canvas_extension());
@@ -68,9 +70,9 @@ public:
 		//add test render node
 		scene* firstScene = addScene();
 
-		render_node* testRenderNode = firstScene->addRenderNode(new map_render(10));
+		testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
 
-		testRenderNode->bindTexture(genTexture({ "BlockTexture.png","BlockTextureNormal.png" }, 2));
+		testRenderNode->bindTexture(genTexture({ "BlockTexture.png","BlockTextureNormal.png","BlockTextureDepth.png" }, 3));
 
 		//add coordinate
 		coordinateX = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
@@ -122,10 +124,25 @@ public:
 		glClearColor(0.0f, 0.5f, 0.7f, 0.0f);
 
 	}
+	unsigned int tick = 0;
+
 	void tickListener()
 	{
+		tick++;
+
 		coordinateX->getModelLocation()->getLocation()->move(0.0, 0.0, 0.002f);
 		coordinateZ->getModelLocation()->getLocation()->move(0.002f, 0.0, 0.0f);
+
+		testRenderNode->setLight(0.0, 1.0, 0.0);
+
+		testRenderNode->setEyes(fpController.getLocation()->getLocation()->getZ(), fpController.getLocation()->getLocation()->getY(), fpController.getLocation()->getLocation()->getX());
+
+		if (tick < 1000)
+			testRenderNode->setLight(-(tick / 1000.0f), tick / 1000.0f, -(tick / 1000.0f));
+		else if (tick < 2000)
+			testRenderNode->setLight(tick / 1000.0f, (2000.0f - tick) / 1000.0f, tick / 1000.0f);
+		else 
+			testRenderNode->setLight((1000.0f - tick) / 1000.0f, (1000.0f - tick) / 1000.0f, (1000.0f - tick) / 1000.0f);
 	}
 };
 test_app Test;

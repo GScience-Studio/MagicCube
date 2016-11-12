@@ -1,7 +1,7 @@
 
-#include "MapRender.h"
+#include "ChunkRender.h"
 
-map_render::map_render(unsigned char sight) :_sight(sight), render_node(mapRenderShader)
+chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chunkRenderShader)
 {
 	GLuint* block = new GLuint[1048576 * 2];
 
