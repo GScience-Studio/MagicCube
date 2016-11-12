@@ -62,25 +62,25 @@ void renderBlock(vec3 position,float blockTextureID)
 	
 	gs_out.lightPos = normalizeLightPos * TBN;
 
-	gs_out.eyesPos = normalize(eyesPos - vec3(0.0f,0.0f,0.0f) - position) * TBN;
+	gs_out.eyesPos = abs((vec3(0.0f,0.0f,0.0f) + position - eyesPos)) * TBN;
 	
 	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePosX,texturePosY2);
 	EmitVertex();
 	
-	gs_out.eyesPos = normalize(eyesPos - vec3(0.0f,0.0f,1.0f) - position) * TBN;
+	gs_out.eyesPos = abs((vec3(0.0f,0.0f,1.0f) + position - eyesPos)) * TBN;
 	
 	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePosX2,texturePosY2);
 	EmitVertex();
 	
-	gs_out.eyesPos = normalize(eyesPos - vec3(1.0f,0.0f,0.0f) - position) * TBN;
+	gs_out.eyesPos = abs((vec3(1.0f,0.0f,0.0f) + position - eyesPos)) * TBN;
 	
 	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePosX,texturePosY);
 	EmitVertex();
 	
-	gs_out.eyesPos = normalize(eyesPos - vec3(1.0f,0.0f,1.0f) - position) * TBN;
+	gs_out.eyesPos = abs((vec3(1.0f,0.0f,1.0f) + position - eyesPos)) * TBN;
 	
 	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePosX2,texturePosY);

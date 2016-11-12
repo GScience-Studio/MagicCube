@@ -5,7 +5,7 @@ uniform sampler2D depthMap;
 uniform sampler2D normal;
 
 out vec4 fColor;
-float height_scale = -0.055;
+float height_scale = -0.55;
 
 in GS_OUT
 {
@@ -32,7 +32,7 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
     // depth of current layer
     float currentLayerDepth = 0.0;
     // the amount to shift the texture coordinates per layer (from vector P)
-    vec2 P = viewDir.xy / viewDir.z * height_scale; 
+    vec2 P = viewDir.yx / viewDir.z * height_scale; 
     vec2 deltaTexCoords = P / numLayers;
   
     // get initial values
@@ -68,9 +68,8 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
 void main()
 {
 	vec3 normalizeEyesPos = gs_out.eyesPos;
-	
-	if (gs_out.eyesPos != vec3(0.0,0.0,0.0))
-		normalizeEyesPos = normalize(gs_out.eyesPos);
+
+	normalizeEyesPos = normalize(gs_out.eyesPos);
 		
     vec2 texCoords = ParallaxMapping(gs_out.texturePos,  normalizeEyesPos);
 
