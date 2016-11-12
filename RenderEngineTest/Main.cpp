@@ -35,6 +35,7 @@ class test_app :public application
 public:
 	canvas* coordinateX;
 	canvas* coordinateZ;
+	canvas* logo;
 
 	chunk_render* testRenderNode;
 
@@ -77,6 +78,7 @@ public:
 		//add coordinate
 		coordinateX = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
 		coordinateZ = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
+		logo = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
 
 		coordinateZ->addShapes(new canvas_shape[2]
 		{
@@ -112,6 +114,25 @@ public:
 			)
 		}, 2);
 
+		logo->addShapes(new canvas_shape[2]
+		{
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, 1.0f, 0.0f), texture_pos(0.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f))
+			)
+			,
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, -1.0f, 0.0f), texture_pos(1.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f))
+			)
+		}, 2);
+
+		logo->bindTexture(genTexture({ "Logo.png" }, 1));
+
 		coordinateZ->getModelLocation()->getAngle()->rotateTo(0.0f, -PI / 2);
 		coordinateX->getModelLocation()->getAngle()->rotateTo(0.0f, PI);
 
@@ -133,19 +154,11 @@ public:
 		coordinateX->getModelLocation()->getLocation()->move(0.0, 0.0, 0.002f);
 		coordinateZ->getModelLocation()->getLocation()->move(0.002f, 0.0, 0.0f);
 
-		testRenderNode->setLight(0.0, 1.0, 0.0);
+		float angle = tick * PI / 180;
 
-		testRenderNode->setEyes(fpController.getLocation()->getLocation()->getX(), fpController.getLocation()->getLocation()->getY(), fpController.getLocation()->getLocation()->getZ());
+		testRenderNode->setLight(0.6f, cos(angle) * 1.0f, 0.0f);
+		logo->getModelLocation()->getAngle()->setPosY(-angle + 180);
 
-		testRenderNode->setLight(0.0, 1.0, 0.0);
-
-		
-		if (tick < 1000)
-			testRenderNode->setLight(-(tick / 1000.0f), tick / 1000.0f, -(tick / 1000.0f));
-		else if (tick < 2000)
-			testRenderNode->setLight(tick / 1000.0f, (2000.0f - tick) / 1000.0f, tick / 1000.0f);
-		else 
-			testRenderNode->setLight((1000.0f - tick) / 1000.0f, (1000.0f - tick) / 1000.0f, (1000.0f - tick) / 1000.0f);
 	}
 };
 test_app Test;

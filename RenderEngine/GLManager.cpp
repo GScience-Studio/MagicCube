@@ -153,7 +153,7 @@ GLuint loadShader(shader_info* Shaders)
 //windows size change event
 void gl_manager::windowsSizeChangeListener(int width, int height)
 {
-	_perspective = glm::perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 10000.0f);
+	_perspective = glm::perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1448.0f);
 }
 
 //create window
@@ -179,7 +179,7 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 	_perspective = glm::perspective(45.0f, (GLfloat)windowSize.getWidth() / (GLfloat)windowSize.getHeight(), 0.1f, 500.0f);
 
 	//set vertical retrace
-	//glfwSwapInterval(1);
+	glfwSwapInterval(1);
 
 	//init glew
 	glewInit();

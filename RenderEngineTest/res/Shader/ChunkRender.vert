@@ -18,7 +18,7 @@ void  main()
 	
 	uint posX = blockLocation / 1024u;
 	uint posZ = blockLocation - posX * 1024u;
-	uint posY = 0u;
+	uint posY = posX + posZ;
 	
 	gl_Position = uvec4(posX,posY,posZ,1.0f);
 	//gl_Position = uvec4(0.0,0.0,0.0,1.0f);

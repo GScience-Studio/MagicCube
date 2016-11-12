@@ -40,12 +40,6 @@ void renderBlock(vec3 position,float blockTextureID)
 	texturePosX2 /= 32.0f;
 	texturePosY2 /= 32.0f;
 	
-	texturePosX = 0.0f;
-	texturePosY = 0.0f;
-	
-	texturePosX2 = 1.0f;
-	texturePosY2 = 1.0f;
-	
 	gs_out.textureSizeLimit[0] = vec2(texturePosX,texturePosY);
 	gs_out.textureSizeLimit[1] = vec2(texturePosX2,texturePosY2);
 	

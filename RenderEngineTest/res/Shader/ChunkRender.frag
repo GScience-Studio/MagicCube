@@ -67,14 +67,18 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
 
 void main()
 {
+	/*
 	vec3 normalizeEyesPos = gs_out.eyesPos;
 
 	normalizeEyesPos = normalize(gs_out.eyesPos);
-		
-    vec2 texCoords = ParallaxMapping(gs_out.texturePos,  normalizeEyesPos);
+	*/
+	
+    vec2 texCoords = gs_out.texturePos;//ParallaxMapping(gs_out.texturePos,  normalizeEyesPos);
 
+	/*
 	if(texCoords.x < gs_out.textureSizeLimit[0].x || texCoords.y < gs_out.textureSizeLimit[0].y || texCoords.x > gs_out.textureSizeLimit[1].x || texCoords.y > gs_out.textureSizeLimit[1].y)
        discard;
+	*/
 	
 	fColor = texture2D(texture,texCoords);
 	
@@ -89,6 +93,6 @@ void main()
 
 	float diffuse = clamp(dot(normal,gs_out.lightPos), 0.0, 1.0);
 	
-	fColor *= vec4(min(vec3(0.0,0.0,0.0) + vec3(1.0,1.0,1.0) * diffuse, vec3(1.0)),1.0);
-	fColor = vec4(normalizeEyesPos,1.0);
+	fColor *= vec4(min(vec3(0.3,0.3,0.3) + vec3(1.0,1.0,1.0) * diffuse, vec3(1.0)),1.0);
+	//fColor = vec4(normalizeEyesPos,1.0);
 }
