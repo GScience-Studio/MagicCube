@@ -61,7 +61,11 @@ public:
 		return angle(inRotate.get(0) - get(0), inRotate.get(1) - get(1));
 	}
 };
-//location
+/*
+* location
+* thread safety:can be call in all thread
+* made by GM2000
+*/
 template<class T> class location :private vec<T, 3>
 {
 private:

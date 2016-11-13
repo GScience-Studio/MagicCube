@@ -13,8 +13,11 @@ private:
 	//draw a scene
 	void _draw(camera globalCamera)
 	{
+		//get render node list
+		render_node_list renderNodeList = _getRenderNodeList();
+
 		//check all render node
-		for (auto& renderNode : _getRenderNodeList())
+		for (auto& renderNode : renderNodeList)
 		{
 			renderNode->_refreshData();
 			renderNode->_draw(globalCamera);

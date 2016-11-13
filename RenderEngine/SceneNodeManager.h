@@ -4,6 +4,8 @@
 #include "SceneNode.h"
 #include "Camera.h"
 
+#include <atomic>
+
 class scene_node_manager
 {
 private:
@@ -13,9 +15,8 @@ private:
 	scene_node* _nowScene	= nullptr;
 	scene_node* _nextScene	= nullptr;
 
-	//scene lock
-	std::mutex lock;
-
+	std::atomic_bool _showingScene = false;
+	
 	//get the scene now is shown or will be hide
 	scene_node* _getNowScene() const
 	{
@@ -37,17 +38,23 @@ protected:
 	{
 		//is there has a scene?
 		if (_nowScene == nullptr)
-			if (_nextScene != nullptr)
+			if (_nextScene != nullptr && _showingScene == true)
+			{
 				_nowScene = _nextScene;
+
+				_showingScene = false;
+			}
 			else
 				return;
 
-		if (_nextScene != nullptr)
+		if (_nextScene != nullptr && _showingScene == true)
 		{
 			//play scene changing
 			_nowScene = _nextScene;
 
 			_nextScene = nullptr;
+
+			_showingScene = false;
 		}
 		else
 		{
@@ -57,11 +64,7 @@ protected:
 
 		if (draw)
 		{
-			lock.lock();
-
 			_nowScene->_draw(_globalCamera);
-
-			lock.unlock();
 		}
 	}
 
@@ -69,22 +72,14 @@ public:
 	//add an scene
 	scene_node* addScene(scene_node* scene)
 	{
-		lock.lock();
-
 		_sceneList.push_back(scene);
-
-		lock.unlock();
 
 		return scene;
 	}
 	//add an scene with no tick function
 	scene_node* addScene()
 	{
-		lock.lock();
-
 		_sceneList.push_back(new scene_node);
-
-		lock.unlock();
 
 		return _sceneList.back();
 	}
@@ -96,7 +91,11 @@ public:
 	//show an scene
 	void showScene(scene_node* scene)
 	{
+		while (_showingScene);
+
 		_nextScene = scene;
+
+		_showingScene = true;
 	}
 	~scene_node_manager()
 	{

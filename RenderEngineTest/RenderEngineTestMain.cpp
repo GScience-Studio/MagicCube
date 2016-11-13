@@ -7,6 +7,8 @@
 #include "../RenderEngine/CanvasExtension.h"
 #include "../RenderEngine/NormalShader.h"
 
+scene_node* testScene;
+
 class testListener:public listener
 {
 	int ID;
@@ -17,7 +19,11 @@ public:
 	{
 		std::cout << "Listener: " << ID << "has been unregister" << std::endl;
 	}
-	virtual void keyListener(int key, int action)
+	void tickListener()
+	{
+		//application::getInstance().showScene(application::getInstance().addScene());
+	}
+	void keyListener(int key, int action)
 	{
 		if (key == GLFW_KEY_Q)
 			application::getInstance().unregisterListener(this);
@@ -71,6 +77,8 @@ public:
 	}
 	void init()
 	{
+		testScene = addScene();
+
 		scene_node* firstScene = addScene();
 
 		logo = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
@@ -97,6 +105,8 @@ public:
 		logo->bindTexture(logoTexture);
 
 		showScene(firstScene);
+
+		registerListener(new testListener(1));
 	}
 	unsigned int tick = 0;
 
@@ -110,6 +120,7 @@ public:
 
 	}
 };
+
 test_app Test;
 
 int main()
