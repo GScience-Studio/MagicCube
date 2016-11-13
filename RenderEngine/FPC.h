@@ -30,8 +30,8 @@ private:
 	vec<speed_state, 3> _speedState{ SPEED_STOP ,SPEED_STOP ,SPEED_STOP };
 
 	//简化相机信息
-	const location<double>& _location	= *_camera->getLocation();
-	const angle&			_angle		= *_camera->getAngle();
+	location<double>&	_location	= *_camera->getLocation();
+	angle&				_angle		= *_camera->getAngle();
 public:
 	fpc(camera* camera) :_camera(camera) {}
 	

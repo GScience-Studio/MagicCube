@@ -10,6 +10,8 @@ private:
 
 	unsigned char	_sight = 0;
 
+	bool hasInit = false;
+
 	void _draw(camera _golbalCamera)
 	{
 		_glInstance.useBuffer(*_getBuffer());
@@ -20,6 +22,24 @@ private:
 
 		//_glInstance.draw(0, 1048576);
 		_glInstance.draw(0, 2500);
+	}
+	void _refreshData()
+	{
+		if (!hasInit)
+		{
+			hasInit = true;
+
+			GLuint* block = new GLuint[1048576 * 2];
+
+			for (unsigned j = 0; j < 1048576 * 2; j++)
+			{
+				block[j++] = 0;
+				block[j] = (j + 1) / 2;
+			}
+			_getShaderProgram()->setBufferData(block, 0, 1048576 * 2 * sizeof(GLuint), *_getBuffer());
+
+			delete[]block;
+		}
 	}
 public:
 	chunk_render(unsigned char _sight);

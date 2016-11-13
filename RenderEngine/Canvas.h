@@ -63,7 +63,7 @@ public:
 	canvas(shader_program* shaderProgram) :render_node(shaderProgram) {}
 
 	//add shape
-	void addShapes(const canvas_shape* shapeInfo, unsigned int count);
+	void addShapes(canvas_shape* shapeInfo, unsigned int count);
 	void addShapes(const void* data, unsigned int count);
 
 	//clean all

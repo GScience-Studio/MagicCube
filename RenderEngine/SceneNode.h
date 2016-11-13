@@ -14,8 +14,9 @@ private:
 	void _draw(camera globalCamera)
 	{
 		//check all render node
-		for (auto& renderNode : _renderNodeList)
+		for (auto& renderNode : _getRenderNodeList())
 		{
+			renderNode->_refreshData();
 			renderNode->_draw(globalCamera);
 		}
 	}

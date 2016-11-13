@@ -13,6 +13,9 @@ private:
 	scene_node* _nowScene	= nullptr;
 	scene_node* _nextScene	= nullptr;
 
+	//scene lock
+	std::mutex lock;
+
 	//get the scene now is shown or will be hide
 	scene_node* _getNowScene() const
 	{
@@ -54,7 +57,11 @@ protected:
 
 		if (draw)
 		{
+			lock.lock();
+
 			_nowScene->_draw(_globalCamera);
+
+			lock.unlock();
 		}
 	}
 
@@ -62,14 +69,22 @@ public:
 	//add an scene
 	scene_node* addScene(scene_node* scene)
 	{
+		lock.lock();
+
 		_sceneList.push_back(scene);
+
+		lock.unlock();
 
 		return scene;
 	}
 	//add an scene with no tick function
 	scene_node* addScene()
 	{
+		lock.lock();
+
 		_sceneList.push_back(new scene_node);
+
+		lock.unlock();
 
 		return _sceneList.back();
 	}

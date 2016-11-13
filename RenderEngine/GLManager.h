@@ -282,6 +282,8 @@ public:
 		for (auto texture : _textureList)
 		{
 			texture->_deleteTexture();
+
+			delete(texture);
 		}
 	}
 };

@@ -67,7 +67,9 @@ private:
 
 		while (!_isClose)
 		{
-			
+			std::this_thread::sleep_for(std::chrono::milliseconds(20));
+
+			_tickRefresh(false, true);
 		}
 		_isClose = false;
 	}

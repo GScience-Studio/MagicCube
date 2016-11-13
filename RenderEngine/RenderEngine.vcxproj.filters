@@ -17,9 +17,6 @@
     <ClInclude Include="Texture.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>RengerEngine</Filter>
-    </ClInclude>
     <ClInclude Include="NormalShader.h">
       <Filter>Extension\Shader</Filter>
     </ClInclude>
@@ -84,6 +81,9 @@
       <Filter>EventManager</Filter>
     </ClInclude>
     <ClInclude Include="RenderEngine.h" />
+    <ClInclude Include="Camera.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">

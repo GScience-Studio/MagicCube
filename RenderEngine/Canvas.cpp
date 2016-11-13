@@ -1,5 +1,6 @@
 
 #include "Canvas.h"
+#include "Camera.h"
 
 void canvas::addShapes(const void* data, unsigned int size)
 {
@@ -8,7 +9,7 @@ void canvas::addShapes(const void* data, unsigned int size)
 
 	_hasChange = true;
 }
-void canvas::addShapes(const canvas_shape* shapeInfo, unsigned int count)
+void canvas::addShapes(canvas_shape* shapeInfo, unsigned int count)
 {
 	//set data
 	for (unsigned int i = 0; i < count; i++)

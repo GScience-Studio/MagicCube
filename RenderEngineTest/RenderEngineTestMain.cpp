@@ -58,14 +58,16 @@ public:
 			}
 	}
 	texture* logoTexture;
+	texture* blockTexture;
 
 	void initResources()
 	{
 		loadExtension(new normal_shader_extension());
 		loadExtension(new canvas_extension());
-
+		loadExtension(new chunk_render_extension());
 		
 		logoTexture = genTexture({ "Logo.png" }, 1);
+		blockTexture = genTexture({ "BlockTexture.png", "BlockTextureNormal.png" }, 2);
 	}
 	void init()
 	{
@@ -89,6 +91,8 @@ public:
 				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f))
 			)
 		}, 2);
+
+		firstScene->addRenderNode(new chunk_render(10))->bindTexture(blockTexture);
 
 		logo->bindTexture(logoTexture);
 

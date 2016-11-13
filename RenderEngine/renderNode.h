@@ -34,6 +34,12 @@ protected:
 			_glInstance.useShaderProgram(*_getShaderProgram());
 		}
 	}
+	//automatic refresh data
+	virtual void _refreshData()
+	{
+
+	}
+
 	render_node(shader_program* shaderProgram)
 	{
 		_buffer = _glInstance.genBuffer();
