@@ -11,12 +11,12 @@ class render_node
 private:
 	gl_manager&		_glInstance = gl_manager::getInstance();
 
-protected:
 	//these are the thing that about opengl
 	shader_program* _shaderProgram;
 	buffer			_buffer;
-	texture			_texture;
+	const texture*	_texture;
 
+protected:
 	//node camera
 	camera			_nodeCamera;
 	camera			_modelLocation;
@@ -29,9 +29,9 @@ protected:
 	{
 		if (_isEnable)
 		{
-			_glInstance.useBuffer(_buffer);
-			_glInstance.useTexture(_texture);
-			_glInstance.useShaderProgram(_shaderProgram);
+			_glInstance.useBuffer(*_getBuffer());
+			_glInstance.useTexture(*_getTexture());
+			_glInstance.useShaderProgram(*_getShaderProgram());
 		}
 	}
 	render_node(shader_program* shaderProgram)
@@ -44,10 +44,27 @@ protected:
 		_shaderProgram = shaderProgram;
 	}
 
+	buffer* _getBuffer()
+	{
+		if (_buffer.vao == 0 || _buffer.vbo == 0)
+			_buffer = _glInstance.genBuffer();
+
+		return &_buffer;
+	}
+
+	shader_program* _getShaderProgram()
+	{
+		return _shaderProgram;
+	}
+
+	const texture* _getTexture()
+	{
+		return _texture;
+	}
 	~render_node() {}
 public:
 	//texture
-	void bindTexture(const texture& texture)
+	void bindTexture(const texture* texture)
 	{
 		_texture = texture;
 	}

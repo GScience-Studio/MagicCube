@@ -12,11 +12,11 @@ private:
 
 	void _draw(camera _golbalCamera)
 	{
-		_glInstance.useBuffer(_buffer);
-		_glInstance.useTexture(_texture);
-		_glInstance.useShaderProgram(_shaderProgram);
+		_glInstance.useBuffer(*_getBuffer());
+		_glInstance.useTexture(*_getTexture());
+		_glInstance.useShaderProgram(*_getShaderProgram());
 
-		_shaderProgram->setCamera(_golbalCamera + _nodeCamera, _modelLocation);
+		_getShaderProgram()->setCamera(_golbalCamera + _nodeCamera, _modelLocation);
 
 		//_glInstance.draw(0, 1048576);
 		_glInstance.draw(0, 2500);
@@ -29,10 +29,10 @@ public:
 	*/
 	void setLight(float x, float y, float z)
 	{
-		((chunk_render_shader*)_shaderProgram)->setLight(x, y, z);
+		((chunk_render_shader*)_getShaderProgram())->setLight(x, y, z);
 	}
 	void setEyes(float x, float y, float z)
 	{
-		((chunk_render_shader*)_shaderProgram)->setEyes(x, y, z);
+		((chunk_render_shader*)_getShaderProgram())->setEyes(x, y, z);
 	}
 };

@@ -74,13 +74,13 @@ private:
 	std::forward_list<shader_program*> _shaderProgramList;
 
 	//save the texture list
-	std::forward_list<texture> _textureList;
+	std::forward_list<texture*> _textureList;
 
 	//save the shader programid that is in use
 	const void* _shaderProgram = nullptr;
 
 	//the texture that now is in use
-	texture _usingTexture;
+	const texture* _usingTexture;
 
 	//start an window,only can be use in application::run()
 	void _loadWindow(const size_vec &windowSize, const char* appName);
@@ -106,7 +106,7 @@ public:
 	shader_program* genShader(char* vert, char* frag, char* gs, shader_program* newShaderProgramClass);
 
 	//gen texture
-	texture genTexture(const char* fileName[], GLuint count);
+	texture* genTexture(const char* fileName[], GLuint count);
 
 	//treate event
 	void pollEvent() const
@@ -227,19 +227,19 @@ public:
 		return false;
 	}
 	//use program
-	void useShaderProgram(const shader_program* shaderProgram)
+	void useShaderProgram(const shader_program& shaderProgram)
 	{
-		if (_shaderProgram == nullptr || ((shader_program*)_shaderProgram)->_programID != shaderProgram->_programID)
+		if (_shaderProgram == nullptr || ((shader_program*)_shaderProgram)->_programID != shaderProgram._programID)
 		{
-			_shaderProgram = shaderProgram;
+			_shaderProgram = &shaderProgram;
 
-			glUseProgram(shaderProgram->_programID);
+			glUseProgram(shaderProgram._programID);
 		}
 	}
 	//use texture
 	void useTexture(const texture& texture)
 	{
-		if (_usingTexture == texture)
+		if (_usingTexture == &texture)
 			return;
 
 		//no texture
@@ -251,16 +251,20 @@ public:
 				glBindTexture(GL_TEXTURE_2D, texture._textureIDList[i]);
 			}
 
-		//need disable texture?
-		if (_usingTexture._textureCount > texture._textureCount)
-			//disable some texture
-			for (unsigned int i = texture._textureCount; i < _usingTexture._textureCount; i++)
-			{
-				glActiveTexture(GL_TEXTURE0 + i);
+		//has load texture before?
+		if (_usingTexture != nullptr)
+			//need disable texture?
+			if (_usingTexture->_textureCount > texture._textureCount)
+				//disable some texture
+				for (unsigned int i = texture._textureCount; i < _usingTexture->_textureCount; i++)
+				{
+					glActiveTexture(GL_TEXTURE0 + i);
 
-				glBindTexture(GL_TEXTURE_2D, 0);
-			}
-		_usingTexture = texture;
+					glBindTexture(GL_TEXTURE_2D, 0);
+				}
+
+		//set new texture
+		_usingTexture = &texture;
 	}
 	//get rendermanager instance
 	static gl_manager& getInstance()
@@ -277,7 +281,7 @@ public:
 		}
 		for (auto texture : _textureList)
 		{
-			texture.deleteTexture();
+			texture->_deleteTexture();
 		}
 	}
 };

@@ -10,7 +10,7 @@ chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chun
 		block[j++] = 0;
 		block[j] = (j + 1) / 2;
 	}
-	_shaderProgram->setBufferData(block, 0, 1048576 * 2 * sizeof(GLuint), _buffer);
+	_getShaderProgram()->setBufferData(block, 0, 1048576 * 2 * sizeof(GLuint), *_getBuffer());
 
 	delete[]block;
 }

@@ -345,14 +345,14 @@ bool loadPNG(const char *filepath, image_info& image)
 	return true;
 }
 
-texture gl_manager::genTexture(const char* fileName[], GLuint count)
+texture* gl_manager::genTexture(const char* fileName[], GLuint count)
 {
-	texture texture;
+	texture* newTexture = new texture();
 
-	texture._textureCount	= count;
-	texture._textureIDList	= new GLuint[count];
+	newTexture->_textureCount	= count;
+	newTexture->_textureIDList	= new GLuint[count];
 
-	glGenTextures(count, texture._textureIDList);
+	glGenTextures(count, newTexture->_textureIDList);
 
 	for (unsigned int i = 0; i < count; i++)
 	{
@@ -366,7 +366,7 @@ texture gl_manager::genTexture(const char* fileName[], GLuint count)
 		}
 		else
 		{
-			glBindTexture(GL_TEXTURE_2D, texture._textureIDList[i]);
+			glBindTexture(GL_TEXTURE_2D, newTexture->_textureIDList[i]);
 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -383,7 +383,7 @@ texture gl_manager::genTexture(const char* fileName[], GLuint count)
 			delete[](image.imageData);
 		}
 	}
-	_textureList.push_front(texture);
+	_textureList.push_front(newTexture);
 
-	return texture;
+	return newTexture;
 }

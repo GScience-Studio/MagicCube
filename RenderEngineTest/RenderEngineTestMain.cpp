@@ -57,13 +57,14 @@ public:
 				bindFPC(nullptr);
 			}
 	}
-	texture logoTexture;
+	texture* logoTexture;
 
 	void initResources()
 	{
 		loadExtension(new normal_shader_extension());
 		loadExtension(new canvas_extension());
 
+		
 		logoTexture = genTexture({ "Logo.png" }, 1);
 	}
 	void init()

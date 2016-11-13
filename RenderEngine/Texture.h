@@ -20,7 +20,7 @@ private:
 	}
 
 	//delete texture
-	void deleteTexture()
+	void _deleteTexture()
 	{
 		delete[](_textureIDList);
 	}

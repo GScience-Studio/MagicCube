@@ -83,11 +83,11 @@ public:
 	virtual void initResources() = 0;
 
 	//gen texture
-	texture genTexture(std::initializer_list<const char*> fileName, GLuint count)
+	texture* genTexture(std::initializer_list<const char*> fileName, GLuint count)
 	{
 		return _glInstance.genTexture((const char**)fileName.begin(), count);
 	}
-	texture genTexture(const char* fileName[], GLuint count)
+	texture* genTexture(const char* fileName[], GLuint count)
 	{
 		return _glInstance.genTexture(fileName, count);
 	}
