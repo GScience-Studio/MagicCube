@@ -5,7 +5,7 @@
 
 class render_node
 {
-	friend class scene;
+	friend class scene_node;
 	friend class render_node_manager;
 
 private:

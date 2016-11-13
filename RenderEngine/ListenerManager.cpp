@@ -1,117 +1,130 @@
 
 #include "ListenerManager.h"
 
-//only can uuse in listener manager
+//only can use in listener manager and callback
 listener_manager* listenerManagerInstance;
 
-//callback
+/*
+* register and init all callback
+* made by GM2000
+*/
+void initCallback(GLFWwindow* window);
 
-/*keyboard callback*/
-void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+/*
+unregister listener but don't free memory
+
+thread-safety: can be use in all thread
+
+made by GM2000
+*/
+void listener_manager::unregisterListener(listener* inListener)
 {
-	if (listenerManagerInstance == nullptr)
+	//whether it is an unable listener
+	if (inListener == nullptr)
 		return;
 
-	for (listener* listenerList : listenerManagerInstance->_listenerList)
-	{
-		if (listenerList == nullptr)
-			continue;
+	listenerManagerInstance->lock.lock();
 
-		listenerList->keyListener(key, action);
+	//find and delete listener
+	for (auto findObject = _listenerList.begin(); findObject != _listenerList.end(); findObject++)
+	{
+		//is listener?
+		if (*findObject == inListener)
+		{
+			listenerManagerInstance->lock.unlock();
+
+			//can I unregister this listener?
+			if (_isCallingListener)
+			{
+				inListener = nullptr;
+
+				_unregisterListenerList.push_front(findObject);
+
+				return;
+			}
+
+			//remove
+			_listenerList.erase(findObject);
+
+			return;
+		}
 	}
 
-	listenerManagerInstance->_refreshListener();
+	listenerManagerInstance->lock.unlock();
 }
 
-/*window size change listener*/
-void windowsSizeChangeCallback(GLFWwindow* window, int width, int height)
+/*
+unregister listener and free memory
+
+thread-safety: can be use in all thread
+
+warning:make sure that your listener can be delete
+
+made by GM2000
+*/
+void listener_manager::unregisterListenerAndFreeMemory(listener* inListener)
 {
-	if (listenerManagerInstance == nullptr)
-		return;
+	unregisterListener(inListener);
 
-	for (listener* listenerList : listenerManagerInstance->_listenerList)
+	delete(inListener);
+}
+
+/*
+* register an new listener.please use new to allocate memory to listener
+
+* thread-safety: can be use in all thread
+
+* made by GM2000
+*/
+listener* listener_manager::registerListener(listener* inListener)
+{
+	//whether it is an unable listener
+	if (inListener == nullptr)
+		return nullptr;
+
+	listenerManagerInstance->lock.lock();
+	
+	//get thread ID
+	inListener->_threadID = std::this_thread::get_id();
+
+	//register it
+	_listenerList.push_front(inListener);
+
+	listenerManagerInstance->lock.unlock();
+
+	return inListener;
+}
+
+/*
+* remove listener which had been unregister by user
+
+* thread-safety: can be use in all thread
+
+* made by GM2000
+*/
+void listener_manager::_refreshListeners()
+{
+	listenerManagerInstance->lock.lock();
+
+	for (auto findObject : _unregisterListenerList)
 	{
-		if (listenerList == nullptr)
-			continue;
-
-		listenerList->windowsSizeChangeListener(width, height);
+		_listenerList.erase(findObject);
 	}
 
-	listenerManagerInstance->_refreshListener();
+	listenerManagerInstance->lock.unlock();
 }
 
-/*tick refresh*/
-void tickListenerRefresh()
-{
-	if (listenerManagerInstance == nullptr)
-		return;
+/*
+* init listener manager(instance and callback)
 
-	for (listener* listenerList : listenerManagerInstance->_listenerList)
-	{
-		if (listenerList == nullptr)
-			continue;
+* warning: user shouldn't call this function except
+* they know what are you doing
 
-		listenerList->tickListener();
-	}
-
-	listenerManagerInstance->_refreshListener();
-}
-
-/*cursor move callback*/
-
-//save the last cursor location
-double lastPosX = 0;
-double lastPosY = 0;
-
-//callback
-void cursorCallback(GLFWwindow* window, double posX, double posY)
-{
-	if (listenerManagerInstance == nullptr)
-		return;
-
-	for (listener* listenerList : listenerManagerInstance->_listenerList)
-	{
-		listenerList->cursorListener(lastPosX, lastPosY, posX, posY);
-	}
-
-	listenerManagerInstance->_refreshListener();
-
-	lastPosX = posX;
-	lastPosY = posY;
-}
-
-/*input chars callback*/
-void characterCallback(GLFWwindow* window, unsigned int codepoint)
-{
-	//recieve data
-	std::wcout << "recieve: " << (wchar_t)codepoint << std::endl;
-
-	//treate listener
-	for (listener* listenerList : listenerManagerInstance->_listenerList)
-	{
-
-		//listenerList->charInputCallback(getChar);
-	}
-	listenerManagerInstance->_refreshListener();
-}
-//framebuffer size change callback(this callback will no support register to listener)
-void framebufferSizeChangeCallback(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
-}
-
-//init listener manager(instance and callback)
+* made by GM2000
+*/
 void listener_manager::_initListenerManager(GLFWwindow* window)
 {
 	listenerManagerInstance = this;
 
-	//init listener
-	glfwGetCursorPos(window, &lastPosX, &lastPosY);
-
-	//register callback
-	glfwSetKeyCallback(window, keyboardCallback);
-	glfwSetFramebufferSizeCallback(window, framebufferSizeChangeCallback);
-	glfwSetWindowSizeCallback(window, windowsSizeChangeCallback);
-	glfwSetCursorPosCallback(window, cursorCallback);
-	glfwSetCharCallback(window, characterCallback);
+	initCallback(window);
 }

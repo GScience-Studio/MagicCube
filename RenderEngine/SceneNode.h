@@ -5,9 +5,9 @@
 #include "Camera.h"
 
 //scene
-class scene :public render_node_manager
+class scene_node :public render_node_manager
 {
-	friend class scene_manager;
+	friend class scene_node_manager;
 
 private:
 	//draw a scene

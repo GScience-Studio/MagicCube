@@ -11,6 +11,8 @@
 #include <forward_list>
 #include <vector>
 #include <string>
+#include <thread>
+#include <mutex>
 
 //the thing about opengl
 #include "GL\glew.h"

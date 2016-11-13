@@ -1,26 +1,26 @@
 #pragma once
 
 #include "RenderEngine.h"
-#include "Scene.h"
+#include "SceneNode.h"
 #include "Camera.h"
 
-class scene_manager
+class scene_node_manager
 {
 private:
 	//scene list
-	std::vector<scene*> _sceneList;
+	std::vector<scene_node*> _sceneList;
 
-	scene* _nowScene	= nullptr;
-	scene* _nextScene	= nullptr;
+	scene_node* _nowScene	= nullptr;
+	scene_node* _nextScene	= nullptr;
 
 	//get the scene now is shown or will be hide
-	scene* _getNowScene() const
+	scene_node* _getNowScene() const
 	{
 		return _nowScene;
 	}
 
 	//get the scene that will be show after transition
-	scene* _getNextScene() const
+	scene_node* _getNextScene() const
 	{
 		return _nextScene;
 	}
@@ -60,16 +60,16 @@ protected:
 
 public:
 	//add an scene
-	scene* addScene(scene* scene)
+	scene_node* addScene(scene_node* scene)
 	{
 		_sceneList.push_back(scene);
 
 		return scene;
 	}
 	//add an scene with no tick function
-	scene* addScene()
+	scene_node* addScene()
 	{
-		_sceneList.push_back(new scene);
+		_sceneList.push_back(new scene_node);
 
 		return _sceneList.back();
 	}
@@ -79,11 +79,11 @@ public:
 		return &_globalCamera;
 	}
 	//show an scene
-	void showScene(scene* scene)
+	void showScene(scene_node* scene)
 	{
 		_nextScene = scene;
 	}
-	~scene_manager()
+	~scene_node_manager()
 	{
 		for (auto screen : _sceneList)
 		{

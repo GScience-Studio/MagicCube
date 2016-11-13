@@ -26,11 +26,11 @@ public:
 class extension_manager
 {
 private:
-	std::vector<extension*> extensionList;
+	std::vector<extension*> _extensionList;
 
 	bool _hasLoadExtension(extension* extension)
 	{
-		for (auto getExtension : extensionList)
+		for (auto getExtension : _extensionList)
 			if (*getExtension == *extension)
 			{
 				delete(extension);
@@ -43,7 +43,7 @@ private:
 public:
 	~extension_manager()
 	{
-		for (auto getExtension : extensionList)
+		for (auto getExtension : _extensionList)
 		{
 			getExtension->unload();
 
@@ -52,7 +52,7 @@ public:
 	}
 	bool hasLoadExtension(std::string extensionName)
 	{
-		for (auto getExtension : extensionList)
+		for (auto getExtension : _extensionList)
 			if (getExtension->_extensionName == extensionName)
 			{
 				return true;
@@ -72,7 +72,7 @@ public:
 			return;
 
 		//load
-		extensionList.push_back(extension);
+		_extensionList.push_back(extension);
 
 		extension->init();
 	}

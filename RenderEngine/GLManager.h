@@ -64,6 +64,9 @@ private:
 	//gl instance
 	static gl_manager _glInstance;
 
+	//lock
+	std::mutex windowShouldClockLock;
+
 	//save the vao and vbo id that now use
 	buffer _enableBuffer = buffer(-1, -1);
 
@@ -106,7 +109,7 @@ public:
 	texture genTexture(const char* fileName[], GLuint count);
 
 	//treate event
-	void poolEvent() const
+	void pollEvent() const
 	{
 		glfwPollEvents();
 	}
@@ -126,7 +129,7 @@ public:
 		glfwTerminate();
 	}
 	//should close the window
-	bool windowShouldClose() const
+	bool windowShouldClose()
 	{
 		return glfwWindowShouldClose(_window) == 1;
 	}

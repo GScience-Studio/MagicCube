@@ -4,9 +4,10 @@
 #include <list>
 
 #include "RenderEngine.h"
+#include "EventPool.h"
 #include "Listener.h"
 
-class listener_manager
+class listener_manager: protected event_pool
 {
 	//key callback
 	friend void keyboardCallback(GLFWwindow*, int, int, int, int);
@@ -16,9 +17,6 @@ class listener_manager
 
 	//window size callback
 	friend void windowsSizeChangeCallback(GLFWwindow*, int, int);
-
-	//char input callback
-	friend void characterCallback(GLFWwindow* window, unsigned int codepoint);
 
 	//tick refresh
 	friend void tickListenerRefresh();
@@ -33,67 +31,57 @@ private:
 	//is refreshing listener?
 	bool _isCallingListener = false;
 
-	//remove listener which had been unregister by user
-	void _refreshListener()
-	{
-		for (auto findObject : _unregisterListenerList)
-		{
-			_listenerList.erase(findObject);
-		}
-	}
+	//thread ID(to automatic register thread)
+	const std::thread::id mainThreadID = std::this_thread::get_id();
+
+	/*
+	* remove listener which had been unregister by user
+
+	* thread-safety: can be use in any thread
+
+	* made by GM2000
+	*/
+	void _refreshListeners();
+
 protected:
-	//init function
+	/*
+	* register an new listener.please use new to allocate memory to listener
+
+	* thread-safety: only can use
+
+	* made by GM2000
+	*/
 	void _initListenerManager(GLFWwindow* window);
 
+	//thread lock
+	std::mutex lock;
 public:
-	//register an new listener.please use new to allocate memory to listener
-	listener* registerListener(listener* inListener)
-	{
-		//whether it is an unable listener
-		if (inListener == nullptr)
-			return nullptr;
+	/*
+	* register an new listener.please use new to allocate memory to listener
 
-		//register it
-		_listenerList.push_front(inListener);
+	* thread-safety: can be use in all thread
 
-		return inListener;
-	}
-	//unregister listener and free memory
-	void unregisterListenerAndFreeMemory(listener* inListener)
-	{
-		unregisterListener(inListener);
+	* made by GM2000
+	*/
+	listener* registerListener(listener* inListener);
 
-		delete(inListener);
-	}
+	/*
+	* unregister listener and free memory
 
-	//unregister listener but don't free memory
-	void unregisterListener(listener* inListener)
-	{
-		//whether it is an unable listener
-		if (inListener == nullptr)
-			return;
+	* thread-safety:c an be use in all thread
 
-		//find and delete listener
-		for (auto findObject = _listenerList.begin(); findObject != _listenerList.end(); findObject++)
-		{
-			//is listener?
-			if (*findObject == inListener)
-			{
-				//can I unregister this listener?
-				if (_isCallingListener)
-				{
-					inListener = nullptr;
+	* warning:make sure that your listener can be delete
 
-					_unregisterListenerList.push_front(findObject);
+	* made by GM2000
+	*/
+	void unregisterListenerAndFreeMemory(listener* inListener);
 
-					return;
-				}
+	/*
+	* unregister listener but don't free memory
 
-				//remove
-				_listenerList.erase(findObject);
+	* thread-safety: can be use in all thread
 
-				return;
-			}
-		}
-	}
+	* made by GM2000
+	*/
+	void unregisterListener(listener* inListener);
 };

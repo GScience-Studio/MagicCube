@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "GLManager.h"
 
+#include <thread>
+
 //tick call time
 #define TICK_TIME 0.02
 
@@ -20,17 +22,29 @@ void application::run()
 	//load window
 	_glInstance._loadWindow(_windowSize,_appName);
 
-	//call init
-	init();
-
 	//init listener
 	_initListenerManager(_glInstance._window);
 
-	//register listener
+	//register listeners
 	registerListener(&_glInstance);
+	registerListener(this);
+
+	//init resources
+	initResources();
+
+	//start event thread and wait for init
+	_eventThread = std::thread(&application::_eventThreadMain, this);
+	_eventThread.detach();
+
+	while (!_initialization);
 
 	//main loop
 	_mainLoop();
+
+	//wait for thread end
+	_isClose = true;
+
+	while (_isClose);
 }
 //tick call
 void application::_tickRefresh(bool draw, bool refresh)
@@ -51,7 +65,7 @@ void application::_mainLoop()
 
 	//set start time
 	startTime = glfwGetTime();
-
+	
 	//loop
 	while (!_glInstance.windowShouldClose())
 	{
@@ -79,7 +93,7 @@ void application::_mainLoop()
 		_glInstance.swapBuffers();
 
 		//pool event
-		_glInstance.poolEvent();
+		_glInstance.pollEvent();
 	}
 	//end
 	_glInstance.terminate();

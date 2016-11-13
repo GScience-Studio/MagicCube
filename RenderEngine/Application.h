@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RenderEngine.h"
-#include "SceneManager.h"
+#include "SceneNodeManager.h"
 #include "ListenerManager.h"
 #include "ExtensionManager.h"
 
@@ -17,7 +17,7 @@ So in there you can add your own listener function and register or unregister li
 And it's also a scene manager witch can add and remove scene.
 You can add more thing by extension such as shader and new kind of render node(some of them it's not necessary to add by extension manager)
 */
-class application :public scene_manager, public listener_manager, public extension_manager, public listener
+class application :public scene_node_manager, public listener_manager, protected extension_manager, public listener
 {
 	friend class listener_manager;
 
@@ -29,6 +29,15 @@ protected:
 	size_vec	_windowSize;
 
 private:
+	//thread
+	std::thread _eventThread;
+
+	//whether the program is end
+	volatile bool _isClose = false;
+
+	//has init the game
+	volatile bool _initialization = false;
+
 	//gl instance
 	gl_manager& _glInstance = gl_manager::getInstance();
 
@@ -44,6 +53,24 @@ private:
 		_windowSize.setWidth(width);
 		_windowSize.setHeight(height);
 	}
+
+	/*
+	* event thread main
+	* made by GM2000
+	*/
+	void _eventThreadMain()
+	{
+		//init application and thread
+		init();
+
+		_initialization = true;
+
+		while (!_isClose)
+		{
+			
+		}
+		_isClose = false;
+	}
 public:
 	//cursor info
 	bool isCursorEnable = true;
@@ -51,9 +78,9 @@ public:
 	application(const char* appName, const char* version, const size_vec& windowSize) :_appName(appName), _version(version), _windowSize(windowSize)
 	{
 		applicationInstance = this;
-
-		registerListener(this);
 	}
+
+	virtual void initResources() = 0;
 
 	//gen texture
 	texture genTexture(std::initializer_list<const char*> fileName, GLuint count)

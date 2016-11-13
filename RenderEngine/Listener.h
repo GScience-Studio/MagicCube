@@ -2,9 +2,21 @@
 
 #include "RenderEngine.h"
 
+/*
+* listener is a way to get user input or something 
+* will call in program.
+
+* thread-safety: all listener will only call in event thread
+
+made by GM2000
+*/
 class listener
 {
 	friend class listener_manager;
+
+private:
+	//save the thread ID to automatic call events
+	std::thread::id _threadID;
 
 public:
 	//keyboard function
@@ -18,9 +30,6 @@ public:
 
 	//window size change listener function
 	virtual void windowsSizeChangeListener(int width, int height) {}
-
-	//char input listener function
-	virtual void charInputCallback(const char* chars) {}
 
 	//destructor
 	virtual ~listener() {}
