@@ -56,11 +56,6 @@ protected:
 
 			_showingScene = false;
 		}
-		else
-		{
-			//refresh scene
-			_nowScene->sceneTickCall();
-		}
 
 		if (draw)
 		{
