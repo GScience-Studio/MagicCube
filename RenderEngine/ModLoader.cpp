@@ -149,17 +149,17 @@ std::vector<double> loadOBJ(const char* FileName)
 #ifdef _DEBUG
 				std::cout << "VI" << i << ":" << GetVI << " ";
 #endif
-				VerticesIndex.push_back(GetVI);
+				VerticesIndex.push_back((float)GetVI);
 
 #ifdef _DEBUG
 				std::cout << "NI" << i << ":" << GetTI << " ";
 #endif
-				TextureIndex.push_back(GetTI);
+				TextureIndex.push_back((float)GetTI);
 
 #ifdef _DEBUG
 				std::cout << "TI" << i << ":" << GetNI << " ";
 #endif
-				NormalsIndex.push_back(GetNI);
+				NormalsIndex.push_back((float)GetNI);
 			}
 #ifdef _DEBUG
 			std::cout << std::endl;

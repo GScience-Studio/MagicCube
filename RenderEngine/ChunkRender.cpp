@@ -1,9 +1,9 @@
 
-#include "MapRender.h"
+#include "ChunkRender.h"
 
-map_render::map_render(unsigned char sight) :_sight(sight), render_node(mapRenderShader)
+chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chunkRenderShader)
 {
-	int* block = new int[1048576 * 2];
+	GLuint* block = new GLuint[1048576 * 2];
 
 	for (unsigned j = 0; j < 1048576 * 2; j++)
 	{

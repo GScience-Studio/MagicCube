@@ -42,7 +42,7 @@ void fpc::cursorListener(double lastPosX, double lastPosY, double posX, double p
 	if (bindedFPSController != this)
 		return;
 
-	_camera->getAngle()->rotate((lastPosY - posY) * 0.001f, (lastPosX - posX) * 0.001f);
+	_camera->getAngle()->rotate((float)(lastPosY - posY) * 0.001f, (float)(lastPosX - posX) * 0.001f);
 
 	if (_angle.getPosX() > PI / 2.0f)
 		_camera->getAngle()->setPosX(PI / 2.0f);
@@ -73,12 +73,12 @@ void fpc::tickListener()
 	if (_isFastMode == true)
 		_camera->getLocation()->move(
 			(_speed[X] * 2) * cos(_angle.getPosY()) + (_speed[Z] * 2) * sin(_angle.getPosY()),
-			0.0,
+			_speed[Y],
 			(_speed[Z] * 2) * cos(_angle.getPosY()) - (_speed[X] * 2) * sin(_angle.getPosY()));
 	else
 		_camera->getLocation()->move(
 			_speed[X] * cos(_angle.getPosY()) + _speed[Z] * sin(_angle.getPosY()),
-			0.0,
+			_speed[Y],
 			_speed[Z] * cos(_angle.getPosY()) - _speed[X] * sin(_angle.getPosY()));
 }
 //¼àÌý¼üÅÌ
@@ -88,26 +88,32 @@ void fpc::keyListener(int key, int action)
 		return;
 
 	//ËÙ¶È×´Ì¬
-	if (action == GLFW_PRESS)
+	if (action != GLFW_RELEASE)
 	{
-		if (key == GLFW_KEY_W)
-			bindedFPSController->_speedState.set(Z, SPEED_UP);
-		else if (key == GLFW_KEY_S)
-			bindedFPSController->_speedState.set(Z, SPEED_DOWN);
-		else if (key == GLFW_KEY_A)
-			bindedFPSController->_speedState.set(X, SPEED_UP);
-		else if (key == GLFW_KEY_D)
-			bindedFPSController->_speedState.set(X, SPEED_DOWN);
+		if (key == GLFW_KEY_W && _speedState.get(Z) == SPEED_STOP)
+			_speedState.set(Z, SPEED_DOWN);
+		else if (key == GLFW_KEY_S && _speedState.get(Z) == SPEED_STOP)
+			_speedState.set(Z, SPEED_UP);
+		else if (key == GLFW_KEY_A && _speedState.get(X) == SPEED_STOP)
+			_speedState.set(X, SPEED_DOWN);
+		else if (key == GLFW_KEY_D && _speedState.get(X) == SPEED_STOP)
+			_speedState.set(X, SPEED_UP);
 		else if (key == GLFW_KEY_LEFT_SHIFT)
-			_isFastMode = true;
+			_speedState.set(Y, SPEED_DOWN);
+		else if (key == GLFW_KEY_SPACE)
+			_speedState.set(Y, SPEED_UP);
 	}
-	else if (action == GLFW_RELEASE)
+	else
 	{
-		if (key == GLFW_KEY_W || key == GLFW_KEY_S)
-			bindedFPSController->_speedState.set(Z, SPEED_STOP);
-		else if (key == GLFW_KEY_A || key == GLFW_KEY_D)
-			bindedFPSController->_speedState.set(X, SPEED_STOP);
-		else if (key == GLFW_KEY_LEFT_SHIFT)
-			_isFastMode = false;
+		if (key == GLFW_KEY_W && _speedState.get(Z) == SPEED_DOWN)
+			_speedState.set(Z, SPEED_STOP);
+		else if(key == GLFW_KEY_S && _speedState.get(Z) == SPEED_UP)
+			_speedState.set(Z, SPEED_STOP);
+		else if (key == GLFW_KEY_A && _speedState.get(X) == SPEED_DOWN)
+			_speedState.set(X, SPEED_STOP);
+		else if (key == GLFW_KEY_D && _speedState.get(X) == SPEED_UP)
+			_speedState.set(X, SPEED_STOP);
+		else if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_SPACE)
+			_speedState.set(Y, SPEED_STOP);
 	}
 }

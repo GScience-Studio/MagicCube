@@ -1,9 +1,9 @@
 
-#include "MapRenderShader.h"
+#include "ChunkRenderShader.h"
 
-shader_program* mapRenderShader;
+shader_program* chunkRenderShader;
 
-void map_render_shader::setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
+void chunk_render_shader::setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
 {
 	glInstance.useBuffer(buffer);
 

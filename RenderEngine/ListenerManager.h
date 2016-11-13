@@ -4,27 +4,7 @@
 #include <list>
 
 #include "RenderEngine.h"
-
-class listener
-{
-	friend class listener_manager;
-
-public:
-	//keyboard function
-	virtual void keyListener(int key, int action) {}
-	
-	//tick function
-	virtual void tickListener() {}
-
-	//cursor listener function
-	virtual void cursorListener(double lastPosX, double lastPosY, double posX, double posY) {}
-
-	//window size change function
-	virtual void windowsSizeChangeListener(int width, int height) {}
-
-	//destructor
-	virtual ~listener() {}
-};
+#include "Listener.h"
 
 class listener_manager
 {
@@ -37,15 +17,18 @@ class listener_manager
 	//window size callback
 	friend void windowsSizeChangeCallback(GLFWwindow*, int, int);
 
+	//char input callback
+	friend void characterCallback(GLFWwindow* window, unsigned int codepoint);
+
 	//tick refresh
 	friend void tickListenerRefresh();
 
 private:
 	//listener list
-	std::list<listener*> listenerList;
+	std::list<listener*> _listenerList;
 
 	//has refreshing listener?
-	std::forward_list<std::list<listener*>::iterator> unregisterListenerList;
+	std::forward_list<std::list<listener*>::iterator> _unregisterListenerList;
 
 	//is refreshing listener?
 	bool _isCallingListener = false;
@@ -53,9 +36,9 @@ private:
 	//remove listener which had been unregister by user
 	void _refreshListener()
 	{
-		for (auto findObject : unregisterListenerList)
+		for (auto findObject : _unregisterListenerList)
 		{
-			listenerList.erase(findObject);
+			_listenerList.erase(findObject);
 		}
 	}
 protected:
@@ -71,7 +54,7 @@ public:
 			return nullptr;
 
 		//register it
-		listenerList.push_front(inListener);
+		_listenerList.push_front(inListener);
 
 		return inListener;
 	}
@@ -91,7 +74,7 @@ public:
 			return;
 
 		//find and delete listener
-		for (auto findObject = listenerList.begin(); findObject != listenerList.end(); findObject++)
+		for (auto findObject = _listenerList.begin(); findObject != _listenerList.end(); findObject++)
 		{
 			//is listener?
 			if (*findObject == inListener)
@@ -101,13 +84,13 @@ public:
 				{
 					inListener = nullptr;
 
-					unregisterListenerList.push_front(findObject);
+					_unregisterListenerList.push_front(findObject);
 
 					return;
 				}
 
 				//remove
-				listenerList.erase(findObject);
+				_listenerList.erase(findObject);
 
 				return;
 			}

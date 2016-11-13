@@ -1,9 +1,11 @@
 
 #include "../GSRenderEngine.h"
-#include "../RenderEngine/MapRenderExtension.h"
+#include "../RenderEngine/ChunkRenderExtension.h"
 #include "../RenderEngine/NormalShaderExtension.h"
 #include "../RenderEngine/FPCExtension.h"
 #include "../RenderEngine/ModLoader.h"
+#include "../RenderEngine/CanvasExtension.h"
+#include "../RenderEngine/NormalShader.h"
 
 class testListener:public listener
 {
@@ -31,6 +33,12 @@ public:
 class test_app :public application
 {
 public:
+	canvas* coordinateX;
+	canvas* coordinateZ;
+	canvas* logo;
+
+	chunk_render* testRenderNode;
+
 	fpc fpController = fpc(getGlobalCamera());
 
 	test_app() :application(u8"MagicCube-RenderEngineTest gs test", "test-1.0.0", size_vec(880, 495)) {}
@@ -52,22 +60,84 @@ public:
 	void init()
 	{
 		//load extension
-		loadExtension(new map_render_extension());
+		loadExtension(new chunk_render_extension());
 		loadExtension(new fpc_extension());
+		loadExtension(new normal_shader_extension());
+		loadExtension(new canvas_extension());
 	
 		//bind fpc
 		bindFPC(&fpController);
 
-		//load texture
-		texture loadTexture = genTexture({ "BlockTexture.png" }, 1);
-
 		//add test render node
 		scene* firstScene = addScene();
 
-		render_node* testRenderNode = firstScene->addRenderNode(new map_render(10));
+		testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
 
-		testRenderNode->bindTexture(loadTexture);
-		testRenderNode->getModelLocation()->getLocation()->moveTo(0.0, 0.0, 10.0);
+		testRenderNode->bindTexture(genTexture({ "BlockTexture.png","BlockTextureNormal.png","BlockTextureDepth.png" }, 3));
+
+		//add coordinate
+		coordinateX = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
+		coordinateZ = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
+		logo = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
+
+		coordinateZ->addShapes(new canvas_shape[2]
+		{
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, 1.0f, 0.0f), texture_pos(0.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f))
+			)
+			,
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, -1.0f, 0.0f), texture_pos(1.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f))
+			)
+		}, 2);
+
+		coordinateX->addShapes(new canvas_shape[2]
+		{
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, 1.0f, 0.0f), texture_pos(0.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f))
+			)
+			,
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, -1.0f, 0.0f), texture_pos(1.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f))
+			)
+		}, 2);
+
+		logo->addShapes(new canvas_shape[2]
+		{
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, 1.0f, 0.0f), texture_pos(0.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f))
+			)
+			,
+			canvas_shape
+			(
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, -1.0f, 0.0f), texture_pos(1.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f))
+			)
+		}, 2);
+
+		logo->bindTexture(genTexture({ "Logo.png" }, 1));
+
+		coordinateZ->getModelLocation()->getAngle()->rotateTo(0.0f, -PI / 2);
+		coordinateX->getModelLocation()->getAngle()->rotateTo(0.0f, PI);
+
+		coordinateX->bindTexture(genTexture({ "X+.png" }, 1));
+		coordinateZ->bindTexture(genTexture({ "Z+.png" }, 1));
 
 		showScene(firstScene);
 
@@ -75,9 +145,20 @@ public:
 		glClearColor(0.0f, 0.5f, 0.7f, 0.0f);
 
 	}
-	void tickCall()
+	unsigned int tick = 0;
+
+	void tickListener()
 	{
-		
+		tick++;
+
+		coordinateX->getModelLocation()->getLocation()->move(0.0, 0.0, 0.002f);
+		coordinateZ->getModelLocation()->getLocation()->move(0.002f, 0.0, 0.0f);
+
+		float angle = tick * PI / 180;
+
+		testRenderNode->setLight(0.6f, cos(angle) * 1.0f, 0.0f);
+		logo->getModelLocation()->getAngle()->setPosY(-angle + 180);
+
 	}
 };
 test_app Test;

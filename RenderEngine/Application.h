@@ -43,8 +43,6 @@ private:
 	{
 		_windowSize.setWidth(width);
 		_windowSize.setHeight(height);
-
-		_glInstance._windowSize = _windowSize;
 	}
 public:
 	//cursor info

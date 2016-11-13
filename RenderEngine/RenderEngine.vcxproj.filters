@@ -71,14 +71,17 @@
     <ClInclude Include="ModLoader.h">
       <Filter>Extension\ModLoader</Filter>
     </ClInclude>
-    <ClInclude Include="MapRender.h">
-      <Filter>Extension\MapRender</Filter>
+    <ClInclude Include="Listener.h">
+      <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="MapRenderExtension.h">
-      <Filter>Extension\MapRender</Filter>
+    <ClInclude Include="ChunkRender.h">
+      <Filter>Extension\ChunkRender</Filter>
     </ClInclude>
-    <ClInclude Include="MapRenderShader.h">
-      <Filter>Extension\MapRender</Filter>
+    <ClInclude Include="ChunkRenderExtension.h">
+      <Filter>Extension\ChunkRender</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkRenderShader.h">
+      <Filter>Extension\ChunkRender</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -106,7 +109,7 @@
     <Filter Include="Extension\ModLoader">
       <UniqueIdentifier>{0bf76644-3626-499a-ad6d-ef659b62e996}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Extension\MapRender">
+    <Filter Include="Extension\ChunkRender">
       <UniqueIdentifier>{6fdd1cf8-9a3c-41dd-93bc-d5b4f821cbc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -138,11 +141,11 @@
     <ClCompile Include="ModLoader.cpp">
       <Filter>Extension\ModLoader</Filter>
     </ClCompile>
-    <ClCompile Include="MapRender.cpp">
-      <Filter>Extension\MapRender</Filter>
+    <ClCompile Include="ChunkRender.cpp">
+      <Filter>Extension\ChunkRender</Filter>
     </ClCompile>
-    <ClCompile Include="MapRenderShader.cpp">
-      <Filter>Extension\MapRender</Filter>
+    <ClCompile Include="ChunkRenderShader.cpp">
+      <Filter>Extension\ChunkRender</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
