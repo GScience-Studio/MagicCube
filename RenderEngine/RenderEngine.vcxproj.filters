@@ -84,6 +84,9 @@
     <ClInclude Include="Camera.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="GLRenderCommands.h">
+      <Filter>RengerEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">

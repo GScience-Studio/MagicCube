@@ -26,7 +26,7 @@ private:
 	}
 public:
 	//create buffer by daat
-	void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const;
+	void _setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const;
 };
 
 class normal_2d_shader :public normal_3d_shader

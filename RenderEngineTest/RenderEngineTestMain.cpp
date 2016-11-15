@@ -8,10 +8,17 @@
 #include "../RenderEngine/NormalShader.h"
 
 scene_node* testScene;
+texture* logoTexture;
+texture* blockTexture;
+scene_node* firstScene;
+
+canvas* logo;
 
 class testListener:public listener
 {
 	int ID;
+	unsigned int tick = 0;
+
 public:
 	testListener(int ID) :ID(ID) {}
 
@@ -21,7 +28,16 @@ public:
 	}
 	void tickListener()
 	{
-		//application::getInstance().showScene(application::getInstance().addScene());
+		tick++;
+
+		if (tick % 50 == 0)
+		{
+			chunk_render* chunkRendere = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
+
+			chunkRendere->bindTexture(blockTexture);
+
+			chunkRendere->getModelLocation()->getLocation()->setY(tick / 50);
+		}
 	}
 	void keyListener(int key, int action)
 	{
@@ -41,7 +57,6 @@ class test_app :public application
 public:
 	canvas* coordinateX;
 	canvas* coordinateZ;
-	canvas* logo;
 
 	chunk_render* testRenderNode;
 
@@ -63,8 +78,6 @@ public:
 				bindFPC(nullptr);
 			}
 	}
-	texture* logoTexture;
-	texture* blockTexture;
 
 	void initResources()
 	{
@@ -79,7 +92,7 @@ public:
 	{
 		testScene = addScene();
 
-		scene_node* firstScene = addScene();
+		firstScene = addScene();
 
 		logo = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
 

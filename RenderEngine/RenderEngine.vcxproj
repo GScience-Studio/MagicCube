@@ -40,6 +40,7 @@
     <ClInclude Include="CanvasExtension.h" />
     <ClInclude Include="CanvasTexture.h" />
     <ClInclude Include="EventPool.h" />
+    <ClInclude Include="GLRenderCommands.h" />
     <ClInclude Include="Listener.h" />
     <ClInclude Include="ChunkRender.h" />
     <ClInclude Include="ChunkRenderExtension.h" />

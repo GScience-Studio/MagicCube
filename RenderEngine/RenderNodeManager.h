@@ -20,7 +20,7 @@ protected:
 	{
 		std::lock_guard<std::mutex> lockGuard(lock);
 
-		return render_node_list(_renderNodeList);
+		return _renderNodeList;
 	}
 
 public:

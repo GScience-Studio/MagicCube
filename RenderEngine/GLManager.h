@@ -4,53 +4,17 @@
 #include "Listener.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "GLRenderCommands.h"
+
+//queue
+#include <queue>
 
 //glm
 #include <glm\gtc\type_ptr.hpp>
 
-struct buffer
-{
-	//save buffer ID
-	GLuint vao = 0;
-	GLuint vbo = 0;
-
-	//buffer size
-	GLsizeiptr	size = 0;
-	
-	//has init
-	bool	hasInit = false;
-
-	buffer() {}
-
-	buffer(GLuint vaoID, GLuint vboID) :vao(vaoID), vbo(vboID) {}
-
-	//is equal
-	bool operator ==(buffer buffer)
-	{
-		return vao == buffer.vao && vbo == buffer.vbo;
-	}
-};
-//please use new
-class shader_program
-{
-	friend class gl_manager;
-
-private:
-	virtual void _draw(const GLint first, const GLsizei count) const = 0;
-	virtual void _init() = 0;
-
-protected:
-	GLuint _projection = 0;
-	GLuint _programID = 0;
-
-public:
-	virtual void setCamera(camera& globalCamera, camera& modelLocation) const;
-
-	virtual void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const = 0;
-};
 /*
-rendermanager
-it is used to do the basic thing
+* rendermanager
+* it is used to do the basic thing
 with opengl such as create an window
 or create vao,vbo
 */
@@ -64,8 +28,11 @@ private:
 	//gl instance
 	static gl_manager _glInstance;
 
-	//lock
-	std::mutex windowShouldClockLock;
+	//queue list
+	std::queue<gl_render_command> _renderQueue;
+	
+	//render queue lock
+	std::mutex _renderQueueLock;
 
 	//save the vao and vbo id that now use
 	buffer _enableBuffer = buffer(-1, -1);
@@ -94,11 +61,65 @@ private:
 	//windows size change event
 	void windowsSizeChangeListener(int width, int height);
 
+	//main thread ID
+	std::thread::id threadID = std::this_thread::get_id();
+
 	//init rendermanager
 	gl_manager()
 	{
 		//init glfw
 		glfwInit();
+	}
+
+	/*
+	* refresh render command queue
+	* made by GM2000
+	*/
+	void refreshQueue()
+	{
+		//check weather is zero(no matter if the data it returned is wrong)
+		if (_renderQueue.size() == 0)
+			return;
+
+		_renderQueueLock.lock();
+
+		double startRefreshTime = glfwGetTime();
+
+		//loop to finish task
+
+		while (glfwGetTime() - startRefreshTime <= 0.016 && _renderQueue.size() != 0)
+		{
+			gl_render_command getRenderCommand = _renderQueue.front();
+
+			switch (getRenderCommand.commandType)
+			{
+			case gl_render_command::COMMAND_GEN_BUFFER:
+			{
+				command_gen_buffer* commandGenBuffer = (command_gen_buffer*)getRenderCommand.data;
+
+				genBuffer(&commandGenBuffer->inBuffer);
+
+				delete(commandGenBuffer);
+
+				break;
+			}
+			case gl_render_command::COMMAND_SET_BUFFER_DATA:
+			{
+				command_set_buffer_data* commandSetBufferData = ((command_set_buffer_data*)getRenderCommand.data);
+
+				bufferData(commandSetBufferData->inBuffer, commandSetBufferData->differentBufferDataPos, commandSetBufferData->size, commandSetBufferData->data, commandSetBufferData->shaderProgram);
+
+				free (commandSetBufferData->data);
+				delete (commandSetBufferData);
+
+				break;
+			}
+			}
+			//remove it
+			_renderQueue.pop();
+		}
+
+		_renderQueueLock.unlock();
 	}
 public:
 	//add shader
@@ -133,25 +154,69 @@ public:
 	{
 		return glfwWindowShouldClose(_window) == 1;
 	}
-	//set buffer data
-	void bufferData(buffer& buffer, const GLsizeiptr& size, const void* data)
+	/*
+	* set buffer data
+	* thread-safety: can be call in all thread
+	* made by GM2000
+	*/
+	void bufferData(buffer& inBuffer, const unsigned int differentBufferDataPos, const GLsizeiptr& size, const void* data, shader_program* shaderProgram)
 	{
-		useBuffer(buffer);
+		if (std::this_thread::get_id() != threadID)
+		{
+			//copy data
+			void* dataCopy = malloc(size);
 
-		buffer.size = size;
+			memcpy(dataCopy, data, size);
+
+			//create queue and add to renderqueue
+			command_set_buffer_data* renderCommand = new command_set_buffer_data(inBuffer, differentBufferDataPos, size, dataCopy, shaderProgram);
+
+			_renderQueueLock.lock();
+
+			_renderQueue.push(gl_render_command(gl_render_command::COMMAND_SET_BUFFER_DATA, (void*)renderCommand));
+
+			_renderQueueLock.unlock();
+
+			return;
+		}
+
+		shaderProgram->_setBufferData(data, differentBufferDataPos, size, inBuffer);
+	}
+
+	/*
+	* set the buffer by shader
+	* thread-safety: will only call in main thread
+	* made by GM2000
+	*/
+	void bufferData(buffer& inBuffer, const GLsizeiptr& size, const void* data)
+	{
+		useBuffer(inBuffer);
+
+		inBuffer.size = size;
 
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
-	//set part of buffer data
-	void bufferSubData(const buffer& buffer, const GLintptr offset, const GLsizeiptr size, const void* data)
+	/*
+	* set part of buffer data
+	* thread-safety: only can be call in the main thread
+	* made by GM2000
+	*/
+	void bufferSubData(buffer& inBuffer, const GLintptr offset, const GLsizeiptr size, const void* data)
 	{
-		useBuffer(buffer);
+		useBuffer(inBuffer);
 
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 	}
-	//set buffer size
+	/*
+	* set buffer size
+	* thread-safety: only can be call in main thread
+	* made by GM2000
+	*/
 	bool bufferResize(buffer& buffer, const GLsizeiptr size)
 	{
+		if (std::this_thread::get_id() != threadID)
+			return false;
+
 		if (buffer.size == size)
 			return false;
 
@@ -182,14 +247,25 @@ public:
 		return vbo;
 	}
 	//gen buffer
-	buffer genBuffer() const
+	void genBuffer(buffer* inBuffer)
 	{
-		GLuint vao = 0;
-		GLuint vbo = 0;
+		if (std::this_thread::get_id() != threadID)
+		{
+			//create command
+			command_gen_buffer* renderCommand = new command_gen_buffer(*inBuffer);
 
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
-		glGenBuffers(1, &vbo);
+			_renderQueueLock.lock();
+
+			_renderQueue.push(gl_render_command(gl_render_command::COMMAND_GEN_BUFFER, (void*)renderCommand));
+
+			_renderQueueLock.unlock();
+
+			return;
+		}
+
+		glGenVertexArrays(1, &inBuffer->vao);
+		glBindVertexArray(inBuffer->vao);
+		glGenBuffers(1, &inBuffer->vbo);
 
 		//change back
 		if (_enableBuffer.vao != -1)
@@ -197,8 +273,6 @@ public:
 			glBindVertexArray(_enableBuffer.vao);
 			glBindVertexArray(_enableBuffer.vbo);
 		}
-
-		return buffer(vao, vbo);
 	}
 	//draw buffer
 	void draw(const GLint& first,const GLsizei& count)
@@ -240,6 +314,9 @@ public:
 	void useTexture(const texture& texture)
 	{
 		if (_usingTexture == &texture)
+			return;
+
+		if (&texture == nullptr)
 			return;
 
 		//no texture

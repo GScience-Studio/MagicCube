@@ -3,7 +3,7 @@
 
 shader_program* chunkRenderShader;
 
-void chunk_render_shader::setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
+void chunk_render_shader::_setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
 {
 	glInstance.useBuffer(buffer);
 

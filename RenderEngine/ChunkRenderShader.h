@@ -31,9 +31,10 @@ private:
 		_lightPosLocation = glGetUniformLocation(_programID, "lightPos");
 		_eyesPosLocation = glGetUniformLocation(_programID, "eyesPos");
 	}
-public:
 	//create buffer by daat
-	void setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const;
+	void _setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const;
+
+public:
 
 	/*set light pos
 	from the input location to 0,0,0

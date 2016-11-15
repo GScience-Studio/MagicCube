@@ -19,7 +19,6 @@ private:
 		//check all render node
 		for (auto& renderNode : renderNodeList)
 		{
-			renderNode->_refreshData();
 			renderNode->_draw(globalCamera);
 		}
 	}

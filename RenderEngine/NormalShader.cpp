@@ -4,7 +4,7 @@
 shader_program* normal2DShader;
 shader_program* normal3DShader;
 
-void normal_3d_shader::setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
+void normal_3d_shader::_setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
 {
 	glInstance.useBuffer(buffer);
 

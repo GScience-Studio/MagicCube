@@ -1,11 +1,11 @@
 #pragma once
 
-#include <algorithm>
-#include <list>
-
 #include "RenderEngine.h"
 #include "EventPool.h"
 #include "Listener.h"
+
+#include <algorithm>
+#include <list>
 
 class listener_manager: protected event_pool
 {

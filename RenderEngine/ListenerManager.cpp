@@ -10,13 +10,6 @@ listener_manager* listenerManagerInstance;
 */
 void initCallback(GLFWwindow* window);
 
-/*
-unregister listener but don't free memory
-
-thread-safety: can be use in all thread
-
-made by GM2000
-*/
 void listener_manager::unregisterListener(listener* inListener)
 {
 	//whether it is an unable listener
@@ -53,15 +46,6 @@ void listener_manager::unregisterListener(listener* inListener)
 	listenerManagerInstance->lock.unlock();
 }
 
-/*
-unregister listener and free memory
-
-thread-safety: can be use in all thread
-
-warning:make sure that your listener can be delete
-
-made by GM2000
-*/
 void listener_manager::unregisterListenerAndFreeMemory(listener* inListener)
 {
 	unregisterListener(inListener);
@@ -69,13 +53,6 @@ void listener_manager::unregisterListenerAndFreeMemory(listener* inListener)
 	delete(inListener);
 }
 
-/*
-* register an new listener.please use new to allocate memory to listener
-
-* thread-safety: can be use in all thread
-
-* made by GM2000
-*/
 listener* listener_manager::registerListener(listener* inListener)
 {
 	//whether it is an unable listener
@@ -95,13 +72,6 @@ listener* listener_manager::registerListener(listener* inListener)
 	return inListener;
 }
 
-/*
-* remove listener which had been unregister by user
-
-* thread-safety: can be use in all thread
-
-* made by GM2000
-*/
 void listener_manager::_refreshListeners()
 {
 	listenerManagerInstance->lock.lock();
@@ -114,14 +84,6 @@ void listener_manager::_refreshListeners()
 	listenerManagerInstance->lock.unlock();
 }
 
-/*
-* init listener manager(instance and callback)
-
-* warning: user shouldn't call this function except
-* they know what are you doing
-
-* made by GM2000
-*/
 void listener_manager::_initListenerManager(GLFWwindow* window)
 {
 	listenerManagerInstance = this;

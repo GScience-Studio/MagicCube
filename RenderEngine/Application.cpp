@@ -60,6 +60,9 @@ void application::_mainLoop()
 		//clear screen
 		_glInstance.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		//refresh queue
+		_glInstance.refreshQueue();
+
 		//render
 		_tickRefresh(true, false);
 

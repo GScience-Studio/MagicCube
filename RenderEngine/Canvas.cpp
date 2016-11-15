@@ -63,7 +63,7 @@ void canvas::_refreshShape()
 		_lastVectorSize = 0;
 
 	if (_renderData.size() != 0)
-		_getShaderProgram()->setBufferData(&_renderData.at(0), _lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), *_getBuffer());
+		gl_manager::getInstance().bufferData(*_getBuffer(), _lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), &_renderData.at(0), _getShaderProgram());
 
 	_lastVectorSize = _renderData.size();
 }
