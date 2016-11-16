@@ -179,7 +179,7 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 	_perspective = glm::perspective(45.0f, (GLfloat)windowSize.getWidth() / (GLfloat)windowSize.getHeight(), 0.1f, 500.0f);
 
 	//set vertical retrace
-	//glfwSwapInterval(1);
+	glfwSwapInterval(1);
 
 	//init glew
 	glewInit();
@@ -386,4 +386,50 @@ texture* gl_manager::genTexture(const char* fileName[], GLuint count)
 	_textureList.push_front(newTexture);
 
 	return newTexture;
+}
+
+void gl_manager::_refreshQueue()
+{
+	//check weather is zero(no matter if the data it returned is wrong)
+	if (_renderQueue.size() == 0)
+		return;
+
+	_renderQueueLock.lock();
+
+	double startRefreshTime = glfwGetTime();
+
+	//loop to finish task
+	while (glfwGetTime() - startRefreshTime <= 0.016 && _renderQueue.size() != 0)
+	{
+		gl_render_command getRenderCommand = _renderQueue.front();
+
+		switch (getRenderCommand.commandType)
+		{
+		case gl_render_command::COMMAND_GEN_BUFFER:
+		{
+			command_gen_buffer* commandGenBuffer = (command_gen_buffer*)getRenderCommand.data;
+
+			genBuffer(&commandGenBuffer->inBuffer);
+
+			delete(commandGenBuffer);
+
+			break;
+		}
+		case gl_render_command::COMMAND_SET_BUFFER_DATA:
+		{
+			command_set_buffer_data* commandSetBufferData = ((command_set_buffer_data*)getRenderCommand.data);
+
+			bufferData(commandSetBufferData->inBuffer, commandSetBufferData->differentBufferDataPos, commandSetBufferData->size, commandSetBufferData->data, commandSetBufferData->shaderProgram);
+
+			free(commandSetBufferData->data);
+			delete (commandSetBufferData);
+
+			break;
+		}
+		}
+		//remove it
+		_renderQueue.pop();
+	}
+
+	_renderQueueLock.unlock();
 }

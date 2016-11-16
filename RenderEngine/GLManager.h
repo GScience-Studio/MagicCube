@@ -75,52 +75,8 @@ private:
 	* refresh render command queue
 	* made by GM2000
 	*/
-	void refreshQueue()
-	{
-		//check weather is zero(no matter if the data it returned is wrong)
-		if (_renderQueue.size() == 0)
-			return;
+	void _refreshQueue();
 
-		_renderQueueLock.lock();
-
-		double startRefreshTime = glfwGetTime();
-
-		//loop to finish task
-
-		while (glfwGetTime() - startRefreshTime <= 0.016 && _renderQueue.size() != 0)
-		{
-			gl_render_command getRenderCommand = _renderQueue.front();
-
-			switch (getRenderCommand.commandType)
-			{
-			case gl_render_command::COMMAND_GEN_BUFFER:
-			{
-				command_gen_buffer* commandGenBuffer = (command_gen_buffer*)getRenderCommand.data;
-
-				genBuffer(&commandGenBuffer->inBuffer);
-
-				delete(commandGenBuffer);
-
-				break;
-			}
-			case gl_render_command::COMMAND_SET_BUFFER_DATA:
-			{
-				command_set_buffer_data* commandSetBufferData = ((command_set_buffer_data*)getRenderCommand.data);
-
-				bufferData(commandSetBufferData->inBuffer, commandSetBufferData->differentBufferDataPos, commandSetBufferData->size, commandSetBufferData->data, commandSetBufferData->shaderProgram);
-
-				free (commandSetBufferData->data);
-				delete (commandSetBufferData);
-
-				break;
-			}
-			}
-			//remove it
-			_renderQueue.pop();
-		}
-
-		_renderQueueLock.unlock();
-	}
 public:
 	//add shader
 	shader_program* genShader(char* vert, char* frag, shader_program* newShaderProgramClass);

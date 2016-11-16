@@ -61,7 +61,7 @@ void application::_mainLoop()
 		_glInstance.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//refresh queue
-		_glInstance.refreshQueue();
+		_glInstance._refreshQueue();
 
 		//render
 		_tickRefresh(true, false);
@@ -70,7 +70,39 @@ void application::_mainLoop()
 
 		//pool event
 		_glInstance.pollEvent();
+
+		//set mouse
+		if (isCursorEnable)
+			glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		else
+			glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 	//end
 	_glInstance.terminate();
+}
+
+void application::_eventThreadMain()
+{
+	//init application and thread
+	init();
+
+	_initialization = true;
+
+	while (!_isClose)
+	{
+		//get the time to next event call
+		double callNextEventCallTime = glfwGetTime() - _totalTickCount * TICK_TIME - _appRunTime - TICK_TIME;
+		
+		//automatic sleep
+		if (callNextEventCallTime > 0.0f)
+			std::this_thread::sleep_for(std::chrono::milliseconds((unsigned int)(callNextEventCallTime * 1000)));
+		
+		while (glfwGetTime() - _totalTickCount * TICK_TIME - _appRunTime >= TICK_TIME)
+		{
+			_totalTickCount++;
+
+			_tickRefresh(false, true);
+		}
+	}
+	_isClose = false;
 }

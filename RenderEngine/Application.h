@@ -1,5 +1,7 @@
 #pragma once
 
+#define TICK_TIME 0.02
+
 #include "RenderEngine.h"
 #include "SceneNodeManager.h"
 #include "ListenerManager.h"
@@ -54,28 +56,18 @@ private:
 		_windowSize.setHeight(height);
 	}
 
+	//program run time and tick
+	double			_appRunTime = glfwGetTime();
+	unsigned long	_totalTickCount = 0;
 	/*
 	* event thread main
 	* made by GM2000
 	*/
-	void _eventThreadMain()
-	{
-		//init application and thread
-		init();
+	void _eventThreadMain();
 
-		_initialization = true;
-
-		while (!_isClose)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(20));
-
-			_tickRefresh(false, true);
-		}
-		_isClose = false;
-	}
 public:
 	//cursor info
-	bool isCursorEnable = true;
+	std::atomic_bool isCursorEnable = true;
 
 	application(const char* appName, const char* version, const size_vec& windowSize) :_appName(appName), _version(version), _windowSize(windowSize)
 	{
@@ -109,13 +101,9 @@ public:
 	void hideCursor()
 	{
 		isCursorEnable = false;
-
-		glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 	void showCursor()
 	{
 		isCursorEnable = true;
-
-		glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 };

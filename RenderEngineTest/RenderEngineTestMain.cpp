@@ -30,14 +30,18 @@ public:
 	{
 		tick++;
 
-		if (tick % 50 == 0)
+		if (tick <= 1000)
 		{
+			std::cout << (1000 - tick) * 10.0f << "%" << std::endl;
+
 			chunk_render* chunkRendere = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
 
 			chunkRendere->bindTexture(blockTexture);
 
-			chunkRendere->getModelLocation()->getLocation()->setY(tick / 50);
+			chunkRendere->getModelLocation()->getLocation()->setY(tick / 200);
 		}
+		else if (tick == 1001)
+			std::cout << "now there are more than 1000 rendernode,they had been added in 10 seconds" << std::endl;
 	}
 	void keyListener(int key, int action)
 	{
@@ -90,6 +94,8 @@ public:
 	}
 	void init()
 	{
+		bindFPC(&fpController);
+
 		testScene = addScene();
 
 		firstScene = addScene();
@@ -130,6 +136,9 @@ public:
 		float angle = tick * PI / 180;
 
 		logo->getModelLocation()->getAngle()->setPosY(-angle + 180);
+
+		if (tick % 50 == 0)
+			std::cout << tick / 50 << std::endl;
 
 	}
 };

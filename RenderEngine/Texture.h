@@ -28,6 +28,7 @@ private:
 	{
 		return _textureIDList == texture._textureIDList;
 	}
-public:
+
+	//don't all user create texture
 	texture() {}
 };
