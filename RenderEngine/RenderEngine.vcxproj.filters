@@ -11,9 +11,6 @@
     <ClInclude Include="GLManager.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Message.h">
-      <Filter>Message</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
@@ -87,6 +84,9 @@
     <ClInclude Include="GLRenderCommands.h">
       <Filter>RengerEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Message.h">
+      <Filter>Error</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">
@@ -94,9 +94,6 @@
     </Filter>
     <Filter Include="Math">
       <UniqueIdentifier>{e19499be-f131-47ac-ba96-f1a99cd88fde}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Message">
-      <UniqueIdentifier>{adbfa5eb-0c3f-4e33-baa2-644c1b813243}</UniqueIdentifier>
     </Filter>
     <Filter Include="Extension">
       <UniqueIdentifier>{b9002205-0c51-4445-b578-ff2fd4421ce4}</UniqueIdentifier>
@@ -122,6 +119,9 @@
     <Filter Include="EventManager">
       <UniqueIdentifier>{58cd11f6-04b9-4a27-80f0-102c3254f068}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Error">
+      <UniqueIdentifier>{d5ed2345-7411-4d3a-bb33-6fc00e6a093b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -129,9 +129,6 @@
     </ClCompile>
     <ClCompile Include="GLManager.cpp">
       <Filter>RengerEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="Message.cpp">
-      <Filter>Message</Filter>
     </ClCompile>
     <ClCompile Include="NormalShader.cpp">
       <Filter>Extension\Shader</Filter>
@@ -162,6 +159,12 @@
     </ClCompile>
     <ClCompile Include="EventPool.cpp">
       <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Error.cpp">
+      <Filter>Error</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
+      <Filter>Error</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

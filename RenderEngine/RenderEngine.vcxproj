@@ -22,6 +22,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Callbacks.cpp" />
     <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="Error.cpp" />
     <ClCompile Include="EventPool.cpp" />
     <ClCompile Include="FPC.cpp" />
     <ClCompile Include="ListenerManager.cpp" />

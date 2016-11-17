@@ -10,9 +10,15 @@ application* applicationInstance;
 //tick listener
 void tickListenerRefresh();
 
+//exception
+void initExceptionCallback();
+
 //run program
 void application::run()
 {
+	//init exception
+	initExceptionCallback();
+
 	//load window
 	_glInstance._loadWindow(_windowSize,_appName);
 
@@ -65,7 +71,7 @@ void application::_mainLoop()
 		double getTime = glfwGetTime();
 
 		//get pass tick
-		uint16_t passTickCount = (getTime - _appStartTime - _totalTickCount * TICK_TIME) / TICK_TIME;
+		uint16_t passTickCount = (uint16_t)((getTime - _appStartTime - _totalTickCount * TICK_TIME) / TICK_TIME);
 
 		//has tick?
 		if (passTickCount != 0)
