@@ -7,6 +7,8 @@
 #include "ListenerManager.h"
 #include "ExtensionManager.h"
 
+#include <condition_variable>
+
 //app instance
 class	application;
 extern	application* applicationInstance;
@@ -31,14 +33,20 @@ protected:
 	size_vec	_windowSize;
 
 private:
-	//thread
+	//thread and lock
 	std::thread _eventThread;
+	std::mutex  _eventThreadLock;
+
+	std::condition_variable _tickEnableFlag;
+
+	//tick call time
+	std::atomic_uint16_t _tickCallTime = 0;
 
 	//whether the program is end
-	volatile bool _isClose = false;
+	volatile std::atomic_bool _isClose = false;
 
 	//has init the game
-	volatile bool _initialization = false;
+	volatile std::atomic_bool _initialization = false;
 
 	//gl instance
 	gl_manager& _glInstance = gl_manager::getInstance();
@@ -57,8 +65,9 @@ private:
 	}
 
 	//program run time and tick
-	double			_appRunTime = glfwGetTime();
+	double			_appStartTime = glfwGetTime();
 	unsigned long	_totalTickCount = 0;
+
 	/*
 	* event thread main
 	* made by GM2000
@@ -100,10 +109,10 @@ public:
 	//set cursor input mode
 	void hideCursor()
 	{
-		isCursorEnable = false;
+		isCursorEnable.store(false);
 	}
 	void showCursor()
 	{
-		isCursorEnable = true;
+		isCursorEnable.store(true);
 	}
 };

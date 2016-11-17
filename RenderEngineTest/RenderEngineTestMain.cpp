@@ -30,18 +30,18 @@ public:
 	{
 		tick++;
 
-		if (tick <= 1000)
+		if (tick <= 1)
 		{
-			std::cout << (1000 - tick) * 10.0f << "%" << std::endl;
+			std::cout << (1 - tick) * 10.0f << "%" << std::endl;
 
 			chunk_render* chunkRendere = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
 
 			chunkRendere->bindTexture(blockTexture);
 
-			chunkRendere->getModelLocation()->getLocation()->setY(tick / 200);
+			chunkRendere->getModelLocation()->getLocation()->setY(tick / 1);
 		}
-		else if (tick == 1001)
-			std::cout << "now there are more than 1000 rendernode,they had been added in 10 seconds" << std::endl;
+		else if (tick == 2)
+			std::cout << "now there are more than 2 rendernode,they had been added in 10 seconds" << std::endl;
 	}
 	void keyListener(int key, int action)
 	{
@@ -71,7 +71,7 @@ public:
 	void keyListener(int key, int action)
 	{
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-			if (isCursorEnable)
+			if (isCursorEnable.load())
 			{
 				//bind fpc
 				bindFPC(&fpController);

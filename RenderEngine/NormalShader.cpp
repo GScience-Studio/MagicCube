@@ -8,7 +8,7 @@ void normal_3d_shader::_setBufferData(const void* bufferData, const unsigned int
 {
 	glInstance.useBuffer(buffer);
 
-	if (buffer.size >= size)
+	if (buffer.getSize() >= size)
 	{
 		glInstance.bufferSubData(buffer, differentBufferDataPos, size, bufferData);
 	}
@@ -16,9 +16,9 @@ void normal_3d_shader::_setBufferData(const void* bufferData, const unsigned int
 	{
 		glInstance.bufferData(buffer, size, bufferData);
 	}
-	if (!buffer.hasInit)
+	if (!buffer.hasInit())
 	{
-		buffer.hasInit = true;
+		buffer.setInitFinish();
 
 		//location data
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);

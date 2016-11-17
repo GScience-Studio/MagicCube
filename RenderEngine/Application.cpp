@@ -30,15 +30,17 @@ void application::run()
 	_eventThread = std::thread(&application::_eventThreadMain, this);
 	_eventThread.detach();
 
-	while (!_initialization);
+	while (!_initialization.load());
 
 	//main loop
 	_mainLoop();
 
 	//wait for thread end
-	_isClose = true;
+	_isClose.store(true);
 
-	while (_isClose);
+	_tickEnableFlag.notify_one();
+
+	while (_isClose.load());
 }
 //tick call
 void application::_tickRefresh(bool draw, bool refresh)
@@ -59,7 +61,21 @@ void application::_mainLoop()
 	{
 		//clear screen
 		_glInstance.clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+		double getTime = glfwGetTime();
 
+		//get pass tick
+		uint16_t passTickCount = (getTime - _appStartTime - _totalTickCount * TICK_TIME) / TICK_TIME;
+
+		//has tick?
+		if (passTickCount != 0)
+		{
+			_totalTickCount += passTickCount;
+			_tickCallTime.store(_tickCallTime.load() + passTickCount);
+
+			//wake up tick thread
+			_tickEnableFlag.notify_all();
+		}
 		//refresh queue
 		_glInstance._refreshQueue();
 
@@ -72,7 +88,7 @@ void application::_mainLoop()
 		_glInstance.pollEvent();
 
 		//set mouse
-		if (isCursorEnable)
+		if (isCursorEnable.load())
 			glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		else
 			glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -86,23 +102,18 @@ void application::_eventThreadMain()
 	//init application and thread
 	init();
 
-	_initialization = true;
+	_initialization.store(true);
 
-	while (!_isClose)
+	while (!_isClose.load())
 	{
-		//get the time to next event call
-		double callNextEventCallTime = glfwGetTime() - _totalTickCount * TICK_TIME - _appRunTime - TICK_TIME;
-		
-		//automatic sleep
-		if (callNextEventCallTime > 0.0f)
-			std::this_thread::sleep_for(std::chrono::milliseconds((unsigned int)(callNextEventCallTime * 1000)));
-		
-		while (glfwGetTime() - _totalTickCount * TICK_TIME - _appRunTime >= TICK_TIME)
+		_tickEnableFlag.wait((std::unique_lock<std::mutex>)_eventThreadLock);
+
+		while (_tickCallTime.load() != 0)
 		{
-			_totalTickCount++;
+			_tickCallTime.store(_tickCallTime.load() - 1);
 
 			_tickRefresh(false, true);
 		}
 	}
-	_isClose = false;
+	_isClose.store(false);
 }

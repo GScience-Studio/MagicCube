@@ -38,23 +38,23 @@ protected:
 	{
 		//is there has a scene?
 		if (_nowScene == nullptr)
-			if (_nextScene != nullptr && _showingScene == true)
+			if (_nextScene != nullptr && _showingScene.load() == true)
 			{
 				_nowScene = _nextScene;
 
-				_showingScene = false;
+				_showingScene.store(false);
 			}
 			else
 				return;
 
-		if (_nextScene != nullptr && _showingScene == true)
+		if (_nextScene != nullptr && _showingScene.load() == true)
 		{
 			//play scene changing
 			_nowScene = _nextScene;
 
 			_nextScene = nullptr;
 
-			_showingScene = false;
+			_showingScene.store(false);
 		}
 
 		if (draw)
@@ -86,11 +86,11 @@ public:
 	//show an scene
 	void showScene(scene_node* scene)
 	{
-		while (_showingScene);
+		while (_showingScene.load());
 
 		_nextScene = scene;
 
-		_showingScene = true;
+		_showingScene.store(true);
 	}
 	~scene_node_manager()
 	{

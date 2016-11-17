@@ -13,7 +13,7 @@ private:
 
 	//these are the thing that about opengl
 	shader_program* _shaderProgram;
-	buffer			_buffer;
+	buffer*			_buffer = new buffer();
 	const texture*	_texture;
 
 protected:
@@ -37,17 +37,17 @@ protected:
 
 	render_node(shader_program* shaderProgram)
 	{
-		_glInstance.genBuffer(&_buffer);
+		_glInstance.genBuffer(_buffer);
 		_shaderProgram = shaderProgram;
 	}
-	render_node(buffer buffer, shader_program* shaderProgram) :_buffer(buffer)
+	render_node(buffer* buffer, shader_program* shaderProgram) :_buffer(buffer)
 	{
 		_shaderProgram = shaderProgram;
 	}
 
 	buffer* _getBuffer()
 	{
-		return &_buffer;
+		return _buffer;
 	}
 
 	shader_program* _getShaderProgram()
@@ -59,7 +59,10 @@ protected:
 	{
 		return _texture;
 	}
-	~render_node() {}
+	~render_node()
+	{
+		delete(_buffer);
+	}
 public:
 	//texture
 	void bindTexture(const texture* texture)

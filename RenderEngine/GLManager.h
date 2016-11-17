@@ -148,7 +148,7 @@ public:
 	{
 		useBuffer(inBuffer);
 
-		inBuffer.size = size;
+		inBuffer._size = size;
 
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	}
@@ -173,12 +173,12 @@ public:
 		if (std::this_thread::get_id() != threadID)
 			return false;
 
-		if (buffer.size == size)
+		if (buffer._size == size)
 			return false;
 
 		useBuffer(buffer);
 
-		buffer.size = size;
+		buffer._size = size;
 
 		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
 
@@ -219,15 +219,15 @@ public:
 			return;
 		}
 
-		glGenVertexArrays(1, &inBuffer->vao);
-		glBindVertexArray(inBuffer->vao);
-		glGenBuffers(1, &inBuffer->vbo);
+		glGenVertexArrays(1, &inBuffer->_vao);
+		glBindVertexArray(inBuffer->_vao);
+		glGenBuffers(1, &inBuffer->_vbo);
 
 		//change back
-		if (_enableBuffer.vao != -1)
+		if (_enableBuffer._vao != -1)
 		{
-			glBindVertexArray(_enableBuffer.vao);
-			glBindVertexArray(_enableBuffer.vbo);
+			glBindVertexArray(_enableBuffer._vao);
+			glBindVertexArray(_enableBuffer._vbo);
 		}
 	}
 	//draw buffer
@@ -238,21 +238,21 @@ public:
 	//if return false it mean it is in use
 	bool useBuffer(const buffer& bufferInfo)
 	{
-		if (bufferInfo.vao != _enableBuffer.vao)
+		if (bufferInfo._vao != _enableBuffer._vao)
 		{
-			glBindVertexArray(bufferInfo.vao);
-			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo.vbo);
+			glBindVertexArray(bufferInfo._vao);
+			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo._vbo);
 
-			_enableBuffer.vao = bufferInfo.vao;
-			_enableBuffer.vbo = bufferInfo.vbo;
+			_enableBuffer._vao = bufferInfo._vao;
+			_enableBuffer._vbo = bufferInfo._vbo;
 
 			return true;
 		}
-		else if (bufferInfo.vbo != _enableBuffer.vbo)
+		else if (bufferInfo._vbo != _enableBuffer._vbo)
 		{
-			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo.vbo);
+			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo._vbo);
 
-			_enableBuffer.vbo = bufferInfo.vbo;
+			_enableBuffer._vbo = bufferInfo._vbo;
 		}
 		return false;
 	}

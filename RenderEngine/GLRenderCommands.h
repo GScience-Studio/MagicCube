@@ -2,27 +2,54 @@
 
 #include "RenderEngine.h"
 
-struct buffer
+class buffer
 {
+	friend class gl_manager;
+	friend class shader_program;
+
+private:
 	//save buffer ID
-	GLuint vao = 0;
-	GLuint vbo = 0;
+	GLuint _vao = 0;
+	GLuint _vbo = 0;
 
 	//buffer size
-	GLsizeiptr	size = 0;
+	GLsizeiptr	_size = 0;
 
 	//has init
-	bool	hasInit = false;
+	bool	_hasInit = false;
 
-	buffer() {}
-
-	buffer(GLuint vaoID, GLuint vboID) :vao(vaoID), vbo(vboID) {}
+	buffer(GLuint vao, GLuint vbo) :_vao(vao), _vbo(vbo) {}
 
 	//is equal
 	bool operator ==(buffer buffer)
 	{
-		return vao == buffer.vao && vbo == buffer.vbo;
+		return _vao == buffer._vao && _vbo == buffer._vbo;
 	}
+
+public:
+	const GLuint getVAO()
+	{
+		return _vao;
+	}
+	const GLuint getVBO()
+	{
+		return _vao;
+	}
+	const GLsizeiptr getSize()
+	{
+		return _size;
+	}
+	bool hasInit()
+	{
+		return _hasInit;
+	}
+	void setInitFinish()
+	{
+		_hasInit = true;
+	}
+
+	//null buffer
+	buffer() {}
 };
 
 //please use new,all funtion there will be called in main thread except the funtion you create

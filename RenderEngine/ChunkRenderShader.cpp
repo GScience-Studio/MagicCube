@@ -7,7 +7,7 @@ void chunk_render_shader::_setBufferData(const void* bufferData, const unsigned 
 {
 	glInstance.useBuffer(buffer);
 
-	if (buffer.size >= size)
+	if (buffer.getSize() >= size)
 	{
 		glInstance.bufferSubData(buffer, differentBufferDataPos, size, bufferData);
 	}
@@ -15,9 +15,9 @@ void chunk_render_shader::_setBufferData(const void* bufferData, const unsigned 
 	{
 		glInstance.bufferData(buffer, size, bufferData);
 	}
-	if (!buffer.hasInit)
+	if (!buffer.hasInit())
 	{
-		buffer.hasInit = true;
+		buffer.setInitFinish();
 
 		//block data
 		glVertexAttribPointer(0, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(GLuint) * 2, 0);
