@@ -19,7 +19,7 @@ private:
 		_getShaderProgram()->setCamera(_golbalCamera + _nodeCamera, _modelLocation);
 
 		//_glInstance.draw(0, 1048576);
-		_glInstance.draw(0, 2500);
+		_glInstance.draw(0, 1048576);
 	}
 public:
 	chunk_render(unsigned char _sight);
