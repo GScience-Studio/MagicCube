@@ -1,9 +1,9 @@
 
 #include "ChunkRenderShader.h"
 
-shader_program* chunkRenderShader;
+render_program* chunkRenderProgram;
 
-void chunk_render_shader::_setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
+void chunk_render_program::_setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
 {
 	glInstance.useBuffer(buffer);
 

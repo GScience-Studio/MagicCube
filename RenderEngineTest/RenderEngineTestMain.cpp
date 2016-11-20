@@ -100,7 +100,7 @@ public:
 
 		firstScene = addScene();
 
-		logo = (canvas*)firstScene->addRenderNode(new canvas(normal3DShader));
+		logo = (canvas*)firstScene->addRenderNode(new canvas(normal3DRenderProgram));
 
 		logo->addShapes(new canvas_shape[2]
 		{

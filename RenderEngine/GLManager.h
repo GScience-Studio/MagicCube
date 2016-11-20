@@ -12,6 +12,75 @@
 //glm
 #include <glm\gtc\type_ptr.hpp>
 
+class buffer
+{
+	friend class gl_manager;
+	friend class render_program;
+
+private:
+	//save buffer ID
+	GLuint _vao = 0;
+	GLuint _vbo = 0;
+
+	//buffer size
+	GLsizeiptr	_size = 0;
+
+	//has init
+	bool	_hasInit = false;
+
+	buffer(GLuint vao, GLuint vbo) :_vao(vao), _vbo(vbo) {}
+
+	//is equal
+	bool operator ==(buffer buffer)
+	{
+		return _vao == buffer._vao && _vbo == buffer._vbo;
+	}
+
+public:
+	const GLuint getVAO()
+	{
+		return _vao;
+	}
+	const GLuint getVBO()
+	{
+		return _vao;
+	}
+	const GLsizeiptr getSize()
+	{
+		return _size;
+	}
+	bool hasInit()
+	{
+		return _hasInit;
+	}
+	void setInitFinish()
+	{
+		_hasInit = true;
+	}
+
+	//null buffer
+	buffer() {}
+};
+
+//please use new,all funtion there will be called in main thread except the funtion you create
+class render_program
+{
+	friend class gl_manager;
+
+protected:
+	void _setCamera(camera& globalCamera, camera& modelLocation);
+
+	virtual void _init() = 0;
+
+	virtual void _setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const = 0;
+
+	GLuint _projection = 0;
+	GLuint _programID = 0;
+
+public:
+	virtual void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera& globalCamera, camera& modelLocation) = 0;
+};
+
 /*
 * rendermanager
 * it is used to do the basic thing
@@ -22,7 +91,7 @@ class gl_manager: public listener
 {
 	//sone function only can be use when the app start run
 	friend class application;
-	friend class shader_program;
+	friend class render_program;
 
 private:
 	//gl instance
@@ -38,7 +107,7 @@ private:
 	buffer _enableBuffer = buffer(-1, -1);
 
 	//save the shader program list
-	std::forward_list<shader_program*> _shaderProgramList;
+	std::forward_list<render_program*> _renderProgramList;
 
 	//save the texture list
 	std::forward_list<texture*> _textureList;
@@ -79,8 +148,8 @@ private:
 
 public:
 	//add shader
-	shader_program* genShader(char* vert, char* frag, shader_program* newShaderProgramClass);
-	shader_program* genShader(char* vert, char* frag, char* gs, shader_program* newShaderProgramClass);
+	render_program* bindShader(char* vert, char* frag, render_program* newShaderProgramClass);
+	render_program* bindShader(char* vert, char* frag, char* gs, render_program* newShaderProgramClass);
 
 	//gen texture
 	texture* genTexture(const char* fileName[], GLuint count);
@@ -115,7 +184,7 @@ public:
 	* thread-safety: can be call in all thread
 	* made by GM2000
 	*/
-	void bufferData(buffer& inBuffer, const unsigned int differentBufferDataPos, const GLsizeiptr& size, const void* data, shader_program* shaderProgram)
+	void bufferData(buffer& inBuffer, const unsigned int differentBufferDataPos, const GLsizeiptr& size, const void* data, render_program* renderProgram)
 	{
 		if (std::this_thread::get_id() != threadID)
 		{
@@ -125,7 +194,7 @@ public:
 			memcpy(dataCopy, data, size);
 
 			//create queue and add to renderqueue
-			command_set_buffer_data* renderCommand = new command_set_buffer_data(inBuffer, differentBufferDataPos, size, dataCopy, shaderProgram);
+			command_set_buffer_data* renderCommand = new command_set_buffer_data(&inBuffer, differentBufferDataPos, size, dataCopy, renderProgram);
 
 			_renderQueueLock.lock();
 
@@ -136,7 +205,7 @@ public:
 			return;
 		}
 
-		shaderProgram->_setBufferData(data, differentBufferDataPos, size, inBuffer);
+		renderProgram->_setBufferData(data, differentBufferDataPos, size, inBuffer);
 	}
 
 	/*
@@ -205,20 +274,6 @@ public:
 	//gen buffer
 	void genBuffer(buffer* inBuffer)
 	{
-		if (std::this_thread::get_id() != threadID)
-		{
-			//create command
-			command_gen_buffer* renderCommand = new command_gen_buffer(*inBuffer);
-
-			_renderQueueLock.lock();
-
-			_renderQueue.push(gl_render_command(gl_render_command::COMMAND_GEN_BUFFER, (void*)renderCommand));
-
-			_renderQueueLock.unlock();
-
-			return;
-		}
-
 		glGenVertexArrays(1, &inBuffer->_vao);
 		glBindVertexArray(inBuffer->_vao);
 		glGenBuffers(1, &inBuffer->_vbo);
@@ -230,14 +285,12 @@ public:
 			glBindVertexArray(_enableBuffer._vbo);
 		}
 	}
-	//draw buffer
-	void draw(const GLint& first,const GLsizei& count)
-	{
-		((shader_program*)_shaderProgram)->_draw(first, count);
-	}
 	//if return false it mean it is in use
-	bool useBuffer(const buffer& bufferInfo)
+	bool useBuffer(buffer& bufferInfo)
 	{
+		if (bufferInfo.getVAO() == 0)
+			genBuffer(&bufferInfo);
+
 		if (bufferInfo._vao != _enableBuffer._vao)
 		{
 			glBindVertexArray(bufferInfo._vao);
@@ -255,16 +308,6 @@ public:
 			_enableBuffer._vbo = bufferInfo._vbo;
 		}
 		return false;
-	}
-	//use program
-	void useShaderProgram(const shader_program& shaderProgram)
-	{
-		if (_shaderProgram == nullptr || ((shader_program*)_shaderProgram)->_programID != shaderProgram._programID)
-		{
-			_shaderProgram = &shaderProgram;
-
-			glUseProgram(shaderProgram._programID);
-		}
 	}
 	//use texture
 	void useTexture(const texture& texture)
@@ -308,7 +351,7 @@ public:
 	//free program list
 	~gl_manager()
 	{
-		for (auto* shaderProgram : _shaderProgramList)
+		for (auto* shaderProgram : _renderProgramList)
 		{
 			delete(shaderProgram);
 		}

@@ -7,18 +7,22 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
 
-extern shader_program* normal2DShader;
-extern shader_program* normal3DShader;
+extern render_program* normal2DRenderProgram;
+extern render_program* normal3DRenderProgram;
 
-class normal_3d_shader :public shader_program
+class normal_3d_render_program :public render_program
 {
 private:
 	gl_manager& glInstance = gl_manager::getInstance();
 
 	//draw
-	void _draw(const GLint first, const GLsizei count) const
+	void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera& globalCamera, camera& modelLocation)
 	{
-		glDrawArrays(GL_TRIANGLES, first, count);
+		_setCamera(globalCamera, modelLocation);
+
+		glInstance.useBuffer(buffer);
+
+		glDrawArrays(GL_POINTS, first, count);
 	}
 	void _init()
 	{
@@ -29,7 +33,7 @@ public:
 	void _setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const;
 };
 
-class normal_2d_shader :public normal_3d_shader
+class normal_2d_render_program :public normal_3d_render_program
 {
 public:
 	void setCamera(camera& globalCamera, camera& modelCamera) const
@@ -37,10 +41,5 @@ public:
 		glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(modelCamera.getLocation()->getX(), modelCamera.getLocation()->getY(), modelCamera.getLocation()->getZ()));
 
 		glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(cameraTranslate));
-	}
-
-	void _draw(const GLint first, const GLsizei count) const
-	{
-		glDrawArrays(GL_TRIANGLES, first, count);
 	}
 };

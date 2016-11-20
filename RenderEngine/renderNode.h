@@ -12,7 +12,7 @@ private:
 	gl_manager&		_glInstance = gl_manager::getInstance();
 
 	//these are the thing that about opengl
-	shader_program* _shaderProgram;
+	render_program* _renderProgram;
 	buffer*			_buffer = new buffer();
 	const texture*	_texture;
 
@@ -31,18 +31,16 @@ protected:
 		{
 			_glInstance.useBuffer(*_getBuffer());
 			_glInstance.useTexture(*_getTexture());
-			_glInstance.useShaderProgram(*_getShaderProgram());
 		}
 	}
 
-	render_node(shader_program* shaderProgram)
+	render_node(render_program* renderProgram)
 	{
-		_glInstance.genBuffer(_buffer);
-		_shaderProgram = shaderProgram;
+		_renderProgram = renderProgram;
 	}
-	render_node(buffer* buffer, shader_program* shaderProgram) :_buffer(buffer)
+	render_node(buffer* buffer, render_program* renderProgram) :_buffer(buffer)
 	{
-		_shaderProgram = shaderProgram;
+		_renderProgram = renderProgram;
 	}
 
 	buffer* _getBuffer()
@@ -50,9 +48,9 @@ protected:
 		return _buffer;
 	}
 
-	shader_program* _getShaderProgram()
+	render_program* _getRenderProgram()
 	{
-		return _shaderProgram;
+		return _renderProgram;
 	}
 
 	const texture* _getTexture()

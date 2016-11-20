@@ -2,9 +2,9 @@
 
 #include "GLManager.h"
 
-extern shader_program* chunkRenderShader;
+extern render_program* chunkRenderProgram;
 
-class chunk_render_shader :public shader_program
+class chunk_render_program :public render_program
 {
 private:
 	gl_manager& glInstance = gl_manager::getInstance();
@@ -15,10 +15,15 @@ private:
 	GLuint _eyesPosLocation;
 
 	//draw
-	void _draw(const GLint first, const GLsizei count) const
+	void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera& globalCamera, camera& modelLocation)
 	{
+		_setCamera(globalCamera, modelLocation);
+
+		glInstance.useBuffer(buffer);
+
 		glDrawArrays(GL_POINTS, first, count);
 	}
+
 	//init
 	void _init()
 	{

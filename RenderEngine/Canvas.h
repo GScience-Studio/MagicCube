@@ -60,7 +60,7 @@ private:
 	void _refreshShape();
 	
 public:
-	canvas(shader_program* shaderProgram) :render_node(shaderProgram) {}
+	canvas(render_program* renderProgram) :render_node(renderProgram) {}
 
 	//add shape
 	void addShapes(canvas_shape* shapeInfo, unsigned int count);

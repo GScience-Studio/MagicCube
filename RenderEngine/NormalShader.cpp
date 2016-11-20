@@ -1,10 +1,10 @@
 
 #include "NormalShader.h"
 
-shader_program* normal2DShader;
-shader_program* normal3DShader;
+render_program* normal2DRenderProgram;
+render_program* normal3DRenderProgram;
 
-void normal_3d_shader::_setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
+void normal_3d_render_program::_setBufferData(const void* bufferData, const unsigned int differentBufferDataPos, const GLsizeiptr size, buffer& buffer) const
 {
 	glInstance.useBuffer(buffer);
 

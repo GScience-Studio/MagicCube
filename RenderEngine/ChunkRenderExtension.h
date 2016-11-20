@@ -13,8 +13,8 @@ public:
 	void init()
 	{
 		//load shader
-		chunkRenderShader = new chunk_render_shader();
+		chunkRenderProgram = new chunk_render_program();
 
-		gl_manager::getInstance().genShader("ChunkRender.vert", "ChunkRender.frag", "ChunkRender.gs", chunkRenderShader);
+		gl_manager::getInstance().bindShader("ChunkRender.vert", "ChunkRender.frag", "ChunkRender.gs", chunkRenderProgram);
 	}
 };

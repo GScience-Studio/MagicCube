@@ -190,7 +190,7 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 	glEnable(GL_CULL_FACE);
 }
 //load shaders
-shader_program* gl_manager::genShader(char* vert, char* frag, shader_program* newShaderProgramClass)
+render_program* gl_manager::bindShader(char* vert, char* frag, render_program* renderProgramClass)
 {
 	shader_info shaderInfo[] = {
 		{ GL_VERTEX_SHADER, vert },
@@ -198,16 +198,16 @@ shader_program* gl_manager::genShader(char* vert, char* frag, shader_program* ne
 		{ GL_NONE, NULL } };
 
 	//load shader
-	newShaderProgramClass->_programID = loadShader(shaderInfo);
-	newShaderProgramClass->_projection = glGetUniformLocation(newShaderProgramClass->_programID, "projection");
+	renderProgramClass->_programID = loadShader(shaderInfo);
+	renderProgramClass->_projection = glGetUniformLocation(renderProgramClass->_programID, "projection");
 
-	newShaderProgramClass->_init();
+	renderProgramClass->_init();
 
-	_shaderProgramList.push_front(newShaderProgramClass);
+	_renderProgramList.push_front(renderProgramClass);
 
-	return newShaderProgramClass;
+	return renderProgramClass;
 }
-shader_program* gl_manager::genShader(char* vert, char* frag, char* gs, shader_program* newShaderProgramClass)
+render_program* gl_manager::bindShader(char* vert, char* frag, char* gs, render_program* renderProgramClass)
 {
 	shader_info shaderInfo[] = {
 		{ GL_VERTEX_SHADER, vert },
@@ -216,23 +216,22 @@ shader_program* gl_manager::genShader(char* vert, char* frag, char* gs, shader_p
 		{ GL_NONE, NULL } };
 
 	//load shader
-	newShaderProgramClass->_programID = loadShader(shaderInfo);
-	newShaderProgramClass->_projection = glGetUniformLocation(newShaderProgramClass->_programID, "projection");
+	renderProgramClass->_programID = loadShader(shaderInfo);
+	renderProgramClass->_projection = glGetUniformLocation(renderProgramClass->_programID, "projection");
 
-	newShaderProgramClass->_init();
+	renderProgramClass->_init();
 
-	_shaderProgramList.push_front(newShaderProgramClass);
+	_renderProgramList.push_front(renderProgramClass);
 
-	return newShaderProgramClass;
+	return renderProgramClass;
 }
-void shader_program::setCamera(camera& globalCamera,camera& modelLocation) const
+void render_program::_setCamera(camera& globalCamera,camera& modelLocation)
 {
 	glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(-globalCamera.getLocation()->getX(), -globalCamera.getLocation()->getY(), -globalCamera.getLocation()->getZ()));
 	glm::mat4 cameraRotate = glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
 
 	glm::mat4 cameraModelTranslate = glm::translate(glm::mat4(), glm::vec3(modelLocation.getLocation()->getX(), modelLocation.getLocation()->getY(), modelLocation.getLocation()->getZ()));
 	glm::mat4 cameraModelRotate = glm::rotate(glm::mat4(), modelLocation.getAngle()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), modelLocation.getAngle()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
-
 
 	glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(gl_manager::getInstance()._perspective * cameraRotate * cameraTranslate * cameraModelTranslate * cameraModelRotate));
 }
@@ -405,21 +404,11 @@ void gl_manager::_refreshQueue()
 
 		switch (getRenderCommand.commandType)
 		{
-		case gl_render_command::COMMAND_GEN_BUFFER:
-		{
-			command_gen_buffer* commandGenBuffer = (command_gen_buffer*)getRenderCommand.data;
-
-			genBuffer(&commandGenBuffer->inBuffer);
-
-			delete(commandGenBuffer);
-
-			break;
-		}
 		case gl_render_command::COMMAND_SET_BUFFER_DATA:
 		{
 			command_set_buffer_data* commandSetBufferData = ((command_set_buffer_data*)getRenderCommand.data);
 
-			bufferData(commandSetBufferData->inBuffer, commandSetBufferData->differentBufferDataPos, commandSetBufferData->size, commandSetBufferData->data, commandSetBufferData->shaderProgram);
+			bufferData(*commandSetBufferData->inBuffer, commandSetBufferData->differentBufferDataPos, commandSetBufferData->size, commandSetBufferData->data, commandSetBufferData->shaderProgram);
 
 			free(commandSetBufferData->data);
 			delete (commandSetBufferData);

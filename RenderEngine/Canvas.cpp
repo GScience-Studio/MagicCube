@@ -39,8 +39,6 @@ void canvas::clear()
 }
 void canvas::_draw(camera _golbalCamera)
 {
-	_glInstance.useBuffer(*_getBuffer());
-	_glInstance.useShaderProgram(*_getShaderProgram());
 	_glInstance.useTexture(*_getTexture());
 
 	if (_hasChange)
@@ -53,9 +51,7 @@ void canvas::_draw(camera _golbalCamera)
 	if (_renderData.size() == 0)
 		return;
 
-	_getShaderProgram()->setCamera(_golbalCamera + _nodeCamera, _modelLocation);
-
-	_glInstance.draw(0, _renderData.size() / 8);
+	_getRenderProgram()->drawBuffer(0, _renderData.size() / 8, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
 }
 void canvas::_refreshShape()
 {
@@ -63,7 +59,7 @@ void canvas::_refreshShape()
 		_lastVectorSize = 0;
 
 	if (_renderData.size() != 0)
-		gl_manager::getInstance().bufferData(*_getBuffer(), _lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), &_renderData.at(0), _getShaderProgram());
+		gl_manager::getInstance().bufferData(*_getBuffer(), _lastVectorSize * sizeof(GLfloat), _renderData.size() * sizeof(GLfloat), &_renderData.at(0), _getRenderProgram());
 
 	_lastVectorSize = _renderData.size();
 }

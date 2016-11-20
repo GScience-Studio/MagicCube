@@ -12,14 +12,9 @@ private:
 
 	void _draw(camera _golbalCamera)
 	{
-		_glInstance.useBuffer(*_getBuffer());
 		_glInstance.useTexture(*_getTexture());
-		_glInstance.useShaderProgram(*_getShaderProgram());
-
-		_getShaderProgram()->setCamera(_golbalCamera + _nodeCamera, _modelLocation);
-
-		//_glInstance.draw(0, 1048576);
-		_glInstance.draw(0, 1048576);
+		
+		_getRenderProgram()->drawBuffer(0, 1048576, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
 	}
 public:
 	chunk_render(unsigned char _sight);
@@ -30,10 +25,10 @@ public:
 	*/
 	void setLight(float x, float y, float z)
 	{
-		((chunk_render_shader*)_getShaderProgram())->setLight(x, y, z);
+		((chunk_render_program*)_getRenderProgram())->setLight(x, y, z);
 	}
 	void setEyes(float x, float y, float z)
 	{
-		((chunk_render_shader*)_getShaderProgram())->setEyes(x, y, z);
+		((chunk_render_program*)_getRenderProgram())->setEyes(x, y, z);
 	}
 };
