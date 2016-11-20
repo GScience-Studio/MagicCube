@@ -20,9 +20,10 @@ private:
 	{
 		_setCamera(globalCamera, modelLocation);
 
+		glInstance.useShaderProgram(_programID);
 		glInstance.useBuffer(buffer);
 
-		glDrawArrays(GL_POINTS, first, count);
+		glDrawArrays(GL_TRIANGLES, first, count);
 	}
 	void _init()
 	{

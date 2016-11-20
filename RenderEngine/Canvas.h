@@ -4,6 +4,8 @@
 #include "RenderNode.h"
 #include "Camera.h"
 
+#include <atomic>
+
 class color :public vec<GLfloat, 3>
 {
 public:
@@ -48,7 +50,7 @@ private:
 	std::vector<GLfloat> _renderData;
 
 	//weather has change
-	bool _hasChange = false;
+	std::atomic_bool _hasChange = false;
 
 	//last vector size
 	unsigned int _lastVectorSize = 0;

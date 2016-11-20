@@ -20,6 +20,7 @@ private:
 		_setCamera(globalCamera, modelLocation);
 
 		glInstance.useBuffer(buffer);
+		glInstance.useShaderProgram(_programID);
 
 		glDrawArrays(GL_POINTS, first, count);
 	}

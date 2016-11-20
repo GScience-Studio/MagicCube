@@ -7,7 +7,7 @@ void canvas::addShapes(const void* data, unsigned int size)
 	for (unsigned int i = 0; i < size; i++)
 		_renderData.push_back(((GLfloat*)data)[i]);
 
-	_hasChange = true;
+	_hasChange.store(true);
 }
 void canvas::addShapes(canvas_shape* shapeInfo, unsigned int count)
 {
@@ -27,7 +27,7 @@ void canvas::addShapes(canvas_shape* shapeInfo, unsigned int count)
 			_renderData.push_back(shapeInfo[i].points[j].texturePosData.get(1));
 		}
 
-	_hasChange = true;
+	_hasChange.store(true);
 }
 void canvas::clear()
 {
@@ -41,9 +41,9 @@ void canvas::_draw(camera _golbalCamera)
 {
 	_glInstance.useTexture(*_getTexture());
 
-	if (_hasChange)
+	if (_hasChange.load())
 	{
-		_hasChange = false;
+		_hasChange.store(false);
 
 		_refreshShape();
 	}

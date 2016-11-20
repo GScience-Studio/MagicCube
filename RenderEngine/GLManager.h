@@ -113,7 +113,7 @@ private:
 	std::forward_list<texture*> _textureList;
 
 	//save the shader programid that is in use
-	const void* _shaderProgram = nullptr;
+	GLuint _shaderProgramID = 0;
 
 	//the texture that now is in use
 	const texture* _usingTexture;
@@ -179,6 +179,24 @@ public:
 	{
 		return glfwWindowShouldClose(_window) == 1;
 	}
+	//use shader
+	void useShaderProgram(const GLuint programID)
+	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return;
+		}
+#endif
+		if (_shaderProgramID == programID)
+			return;
+
+		_shaderProgramID = programID;
+
+		glUseProgram(_shaderProgramID);
+	}
 	/*
 	* set buffer data
 	* thread-safety: can be call in all thread
@@ -215,6 +233,15 @@ public:
 	*/
 	void bufferData(buffer& inBuffer, const GLsizeiptr& size, const void* data)
 	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return;
+		}
+#endif
+
 		useBuffer(inBuffer);
 
 		inBuffer._size = size;
@@ -228,6 +255,15 @@ public:
 	*/
 	void bufferSubData(buffer& inBuffer, const GLintptr offset, const GLsizeiptr size, const void* data)
 	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return;
+		}
+#endif
+
 		useBuffer(inBuffer);
 
 		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
@@ -239,8 +275,14 @@ public:
 	*/
 	bool bufferResize(buffer& buffer, const GLsizeiptr size)
 	{
+#ifdef _DEBUG
 		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
 			return false;
+		}
+#endif
 
 		if (buffer._size == size)
 			return false;
@@ -256,6 +298,15 @@ public:
 	//genVAO
 	GLuint genVAO() const
 	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return -1;
+		}
+#endif
+
 		GLuint vao = 0;
 
 		glGenVertexArrays(1, &vao);
@@ -265,6 +316,15 @@ public:
 	//genVBO
 	GLuint genVBO() const
 	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return -1;
+		}
+#endif
+
 		GLuint vbo = 0;
 
 		glGenBuffers(1, &vbo);
@@ -274,6 +334,15 @@ public:
 	//gen buffer
 	void genBuffer(buffer* inBuffer)
 	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return;
+		}
+#endif
+
 		glGenVertexArrays(1, &inBuffer->_vao);
 		glBindVertexArray(inBuffer->_vao);
 		glGenBuffers(1, &inBuffer->_vbo);
@@ -288,6 +357,15 @@ public:
 	//if return false it mean it is in use
 	bool useBuffer(buffer& bufferInfo)
 	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return false;
+		}
+#endif
+
 		if (bufferInfo.getVAO() == 0)
 			genBuffer(&bufferInfo);
 
@@ -312,6 +390,15 @@ public:
 	//use texture
 	void useTexture(const texture& texture)
 	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return;
+		}
+#endif
+
 		if (_usingTexture == &texture)
 			return;
 

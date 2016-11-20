@@ -34,11 +34,11 @@ public:
 		{
 			std::cout << (1 - tick) * 10.0f << "%" << std::endl;
 
-			chunk_render* chunkRendere = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
+			//chunk_render* chunkRendere = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
 
-			chunkRendere->bindTexture(blockTexture);
+			//chunkRendere->bindTexture(blockTexture);
 
-			chunkRendere->getModelLocation()->getLocation()->setY(tick / 1);
+			//chunkRendere->getModelLocation()->getLocation()->setY(tick / 1);
 		}
 		else if (tick == 2)
 			std::cout << "now there are more than 2 rendernode,they had been added in 10 seconds" << std::endl;
