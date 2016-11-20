@@ -23,11 +23,11 @@ void application::run()
 	_glInstance._loadWindow(_windowSize,_appName);
 
 	//init listener
-	_initListenerManager(_glInstance._window);
+	_initInputCallbackManager(_glInstance._window);
 
 	//register listeners
-	registerListener(&_glInstance);
-	registerListener(this);
+	registerInputCallback(&_glInstance);
+	registerInputCallback(this);
 
 	//init resources
 	initResources();
@@ -114,12 +114,16 @@ void application::_eventThreadMain()
 	{
 		_tickEnableFlag.wait((std::unique_lock<std::mutex>)_eventThreadLock);
 
+		//tick call
 		while (_tickCallTime.load() != 0)
 		{
 			_tickCallTime.store(_tickCallTime.load() - 1);
 
 			_tickRefresh(false, true);
 		}
+
+		//refresh event
+		refreshEvent();
 	}
 	_isClose.store(false);
 }

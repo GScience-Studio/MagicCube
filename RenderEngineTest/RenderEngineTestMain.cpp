@@ -13,7 +13,7 @@ scene_node* firstScene;
 
 canvas* logo;
 
-class testListener:public listener
+class testListener:public input_callback
 {
 	int ID;
 	unsigned int tick = 0;
@@ -45,7 +45,7 @@ public:
 	void keyListener(int key, int action)
 	{
 		if (key == GLFW_KEY_Q)
-			application::getInstance().unregisterListener(this);
+			application::getInstance().unregisterInputCallback(this);
 
 		if (ID == 0)
 			std::cout << "[Listener: " << ID << "]" << key << std::endl;
@@ -91,7 +91,7 @@ public:
 		logoTexture = genTexture({ "Logo.png" }, 1);
 		blockTexture = genTexture({ "BlockTexture.png", "BlockTextureNormal.png" }, 2);
 
-		glClearColor(0.1, 0.4, 0.6, 0.0);
+		glClearColor(0.1f, 0.4f, 0.6f, 0.0f);
 	}
 	void init()
 	{
@@ -124,7 +124,7 @@ public:
 
 		showScene(firstScene);
 
-		registerListener(new testListener(1));
+		registerInputCallback(new testListener(1));
 	}
 	unsigned int tick = 0;
 

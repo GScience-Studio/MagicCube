@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RenderEngine.h"
-#include "Listener.h"
+#include "InputCallback.h"
 #include "Texture.h"
 #include "Camera.h"
 #include "GLRenderCommands.h"
@@ -87,7 +87,7 @@ public:
 with opengl such as create an window
 or create vao,vbo
 */
-class gl_manager: public listener
+class gl_manager: public input_callback
 {
 	//sone function only can be use when the app start run
 	friend class application;

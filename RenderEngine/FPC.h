@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ListenerManager.h"
+#include "InputCallback.h"
 #include "Camera.h"
 
 //第一人称控制器
-class fpc :public listener
+class fpc :public input_callback
 {
 	friend void bindFPC(fpc*);
 
@@ -32,6 +32,7 @@ private:
 	//简化相机信息
 	location<double>&	_location	= *_camera->getLocation();
 	angle&				_angle		= *_camera->getAngle();
+
 public:
 	fpc(camera* camera) :_camera(camera) {}
 	

@@ -4,7 +4,7 @@
 
 #include "RenderEngine.h"
 #include "SceneNodeManager.h"
-#include "ListenerManager.h"
+#include "InputCallbackManager.h"
 #include "ExtensionManager.h"
 
 #include <condition_variable>
@@ -21,7 +21,7 @@ So in there you can add your own listener function and register or unregister li
 And it's also a scene manager witch can add and remove scene.
 You can add more thing by extension such as shader and new kind of render node(some of them it's not necessary to add by extension manager)
 */
-class application :public scene_node_manager, public listener_manager, protected extension_manager, public listener
+class application :public scene_node_manager, public input_callback_manager, protected extension_manager, public input_callback
 {
 	friend class listener_manager;
 

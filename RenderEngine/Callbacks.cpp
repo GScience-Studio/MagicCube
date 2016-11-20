@@ -1,9 +1,9 @@
 
 #include "RenderEngine.h"
-#include "ListenerManager.h"
+#include "InputCallbackManager.h"
 
 //only can use in listener manager and callback
-extern listener_manager* listenerManagerInstance;
+extern input_callback_manager* inputCallbackManagerInstance;
 
 /*
 * keyboard callback
@@ -11,21 +11,7 @@ extern listener_manager* listenerManagerInstance;
 */
 void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	//lock and copy the list
-	listenerManagerInstance->lock.lock();
-	std::list<listener*> listenerList = listenerManagerInstance->_listenerList;
-	listenerManagerInstance->lock.unlock();
-
-	for (listener* getListener : listenerList)
-	{
-		if (getListener == nullptr)
-			continue;
-
-		getListener->keyListener(key, action);
-	}
-
-	//refresh listeners
-	listenerManagerInstance->_refreshListeners();
+	inputCallbackManagerInstance->addEvent(KEYBOARD_EVENT, new keyboard_event(key, action));
 }
 
 /*
@@ -34,21 +20,7 @@ void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int
 */
 void windowsSizeChangeCallback(GLFWwindow* window, int width, int height)
 {
-	//lock and copy the list
-	listenerManagerInstance->lock.lock();
-	std::list<listener*> listenerList = listenerManagerInstance->_listenerList;
-	listenerManagerInstance->lock.unlock();
-
-	for (listener* getListener : listenerList)
-	{
-		if (getListener == nullptr)
-			continue;
-
-		getListener->windowsSizeChangeListener(width, height);
-	}
-
-	//refresh listeners
-	listenerManagerInstance->_refreshListeners();
+	
 }
 
 /*
@@ -57,21 +29,24 @@ void windowsSizeChangeCallback(GLFWwindow* window, int width, int height)
 */
 void tickListenerRefresh()
 {
-	//lock and copy the list
-	listenerManagerInstance->lock.lock();
-	std::list<listener*> listenerList = listenerManagerInstance->_listenerList;
-	listenerManagerInstance->lock.unlock();
+	inputCallbackManagerInstance->lock.lock();
 
-	for (listener* getListener : listenerList)
+	//refresh input callback
+	inputCallbackManagerInstance->_refreshInputCallbacks();
+
+	//copy input callback
+	std::list<input_callback*> inputCallbackList = inputCallbackManagerInstance->_inputCallbackList;
+
+	inputCallbackManagerInstance->lock.unlock();
+
+	//tick call
+	for (input_callback* getInputCallback : inputCallbackList)
 	{
-		if (getListener == nullptr)
+		if (getInputCallback == nullptr)
 			continue;
 
-		getListener->tickListener();
+		getInputCallback->tickListener();
 	}
-
-	//refresh listeners
-	listenerManagerInstance->_refreshListeners();
 }
 
 //save the last cursor location
@@ -85,24 +60,10 @@ double lastPosY = 0;
 */
 void cursorCallback(GLFWwindow* window, double posX, double posY)
 {
-	//lock and copy the list
-	listenerManagerInstance->lock.lock();
-	std::list<listener*> listenerList = listenerManagerInstance->_listenerList;
-	listenerManagerInstance->lock.unlock();
-
-	for (listener* getListener : listenerList)
-	{
-		if (getListener == nullptr)
-			continue;
-
-		getListener->cursorListener(lastPosX, lastPosY, posX, posY);
-	}
+	inputCallbackManagerInstance->addEvent(CURSOR_MOVE_EVENT, new cursor_move_event(posX, posY, lastPosX, lastPosY));
 
 	lastPosX = posX;
 	lastPosY = posY;
-
-	//refresh listeners
-	listenerManagerInstance->_refreshListeners();
 }
 
 /*

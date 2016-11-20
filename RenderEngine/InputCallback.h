@@ -10,13 +10,9 @@
 
 made by GM2000
 */
-class listener
+class input_callback
 {
 	friend class listener_manager;
-
-private:
-	//save the thread ID to automatic call events
-	std::thread::id _threadID;
 
 public:
 	//keyboard function
@@ -30,7 +26,4 @@ public:
 
 	//window size change listener function
 	virtual void windowsSizeChangeListener(int width, int height) {}
-
-	//destructor
-	virtual ~listener() {}
 };

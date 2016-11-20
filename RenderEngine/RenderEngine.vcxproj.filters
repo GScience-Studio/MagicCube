@@ -68,15 +68,6 @@
     <ClInclude Include="SceneNodeManager.h">
       <Filter>Node</Filter>
     </ClInclude>
-    <ClInclude Include="Listener.h">
-      <Filter>EventManager</Filter>
-    </ClInclude>
-    <ClInclude Include="ListenerManager.h">
-      <Filter>EventManager</Filter>
-    </ClInclude>
-    <ClInclude Include="EventPool.h">
-      <Filter>EventManager</Filter>
-    </ClInclude>
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="Camera.h">
       <Filter>Math</Filter>
@@ -86,6 +77,15 @@
     </ClInclude>
     <ClInclude Include="Message.h">
       <Filter>Error</Filter>
+    </ClInclude>
+    <ClInclude Include="EventQueue.h">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="InputCallbackManager.h">
+      <Filter>EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="InputCallback.h">
+      <Filter>EventManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -151,13 +151,7 @@
     <ClCompile Include="ChunkRenderShader.cpp">
       <Filter>Extension\ChunkRender</Filter>
     </ClCompile>
-    <ClCompile Include="ListenerManager.cpp">
-      <Filter>EventManager</Filter>
-    </ClCompile>
     <ClCompile Include="Callbacks.cpp">
-      <Filter>EventManager</Filter>
-    </ClCompile>
-    <ClCompile Include="EventPool.cpp">
       <Filter>EventManager</Filter>
     </ClCompile>
     <ClCompile Include="Error.cpp">
@@ -165,6 +159,12 @@
     </ClCompile>
     <ClCompile Include="Message.cpp">
       <Filter>Error</Filter>
+    </ClCompile>
+    <ClCompile Include="EventQueue.cpp">
+      <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="InputCallbackManager.cpp">
+      <Filter>EventManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

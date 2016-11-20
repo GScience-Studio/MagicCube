@@ -13,7 +13,7 @@ void bindFPC(fpc* fpc)
 		if (bindedFPSController == nullptr)
 			return;
 
-		application::getInstance().unregisterListener(bindedFPSController);
+		application::getInstance().unregisterInputCallback(bindedFPSController);
 
 		//解绑
 		bindedFPSController = fpc;
@@ -26,13 +26,13 @@ void bindFPC(fpc* fpc)
 	
 	//是否原来绑定过控制器？
 	if (bindedFPSController != nullptr)
-		application::getInstance().unregisterListener(bindedFPSController);
+		application::getInstance().unregisterInputCallback(bindedFPSController);
 	else
 		application::getInstance().hideCursor();
 
 	bindedFPSController = fpc;
 
-	application::getInstance().registerListener(bindedFPSController);
+	application::getInstance().registerInputCallback(bindedFPSController);
 }
 
 //监听鼠标

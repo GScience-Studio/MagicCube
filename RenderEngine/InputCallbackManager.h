@@ -1,13 +1,12 @@
 #pragma once
 
 #include "RenderEngine.h"
-#include "EventPool.h"
-#include "Listener.h"
+#include "EventQueue.h"
+#include "InputCallback.h"
 
-#include <algorithm>
 #include <list>
 
-class listener_manager: protected event_pool
+class input_callback_manager : protected event_queue
 {
 	//key callback
 	friend void keyboardCallback(GLFWwindow*, int, int, int, int);
@@ -21,27 +20,25 @@ class listener_manager: protected event_pool
 	//tick refresh
 	friend void tickListenerRefresh();
 
+	friend class event_queue;
 private:
 	//listener list
-	std::list<listener*> _listenerList;
+	std::list<input_callback*> _inputCallbackList;
 
 	//has refreshing listener?
-	std::forward_list<std::list<listener*>::iterator> _unregisterListenerList;
+	std::forward_list<std::list<input_callback*>::iterator> _unregisterInputCallbackList;
 
 	//is refreshing listener?
 	bool _isCallingListener = false;
 
-	//thread ID(to automatic register thread)
-	const std::thread::id mainThreadID = std::this_thread::get_id();
-
 	/*
 	* remove listener which had been unregister by user
 
-	* thread-safety: can be use in any thread
+	* thread-safety: can be use in any thread but you should look
 
 	* made by GM2000
 	*/
-	void _refreshListeners();
+	void _refreshInputCallbacks();
 
 protected:
 	/*
@@ -51,11 +48,12 @@ protected:
 
 	* made by GM2000
 	*/
-	void _initListenerManager(GLFWwindow* window);
+	void _initInputCallbackManager(GLFWwindow* window);
 
+public:
 	//thread lock
 	std::mutex lock;
-public:
+
 	/*
 	* register an new listener.please use new to allocate memory to listener
 
@@ -63,18 +61,7 @@ public:
 
 	* made by GM2000
 	*/
-	listener* registerListener(listener* inListener);
-
-	/*
-	* unregister listener and free memory
-
-	* thread-safety:c an be use in all thread
-
-	* warning:make sure that your listener can be delete
-
-	* made by GM2000
-	*/
-	void unregisterListenerAndFreeMemory(listener* inListener);
+	input_callback* registerInputCallback(input_callback* inListener);
 
 	/*
 	* unregister listener but don't free memory
@@ -83,5 +70,5 @@ public:
 
 	* made by GM2000
 	*/
-	void unregisterListener(listener* inListener);
+	void unregisterInputCallback(input_callback* inListener);
 };
