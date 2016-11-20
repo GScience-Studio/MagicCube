@@ -19,6 +19,8 @@ void chunk_render_program::_setBufferData(const void* bufferData, const unsigned
 	{
 		buffer.setInitFinish();
 
+		glInstance.useShaderProgram(_programID);
+
 		//block data
 		glVertexAttribPointer(0, 1, GL_UNSIGNED_INT, GL_FALSE, sizeof(GLuint) * 2, 0);
 		glEnableVertexAttribArray(0);

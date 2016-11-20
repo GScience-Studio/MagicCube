@@ -16,8 +16,8 @@ void  main()
 	vs_out.texturePos.y = blockID / 32u;
 	vs_out.texturePos.x = blockID - vs_out.texturePos.y * 32u;
 	
-	uint posX = blockLocation / 1024u;
-	uint posZ = blockLocation - posX * 1024u;
+	uint posX = blockLocation / 10u;
+	uint posZ = blockLocation - posX * 10u;
 	uint posY = 0u;
 	
 	gl_Position = uvec4(posX,posY,posZ,1.0f);

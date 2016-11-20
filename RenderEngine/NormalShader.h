@@ -18,10 +18,10 @@ private:
 	//draw
 	void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera& globalCamera, camera& modelLocation)
 	{
-		_setCamera(globalCamera, modelLocation);
-
-		glInstance.useShaderProgram(_programID);
 		glInstance.useBuffer(buffer);
+		glInstance.useShaderProgram(_programID);
+
+		_setCamera(globalCamera, modelLocation);
 
 		glDrawArrays(GL_TRIANGLES, first, count);
 	}

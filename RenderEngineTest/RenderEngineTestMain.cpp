@@ -7,7 +7,6 @@
 #include "../RenderEngine/CanvasExtension.h"
 #include "../RenderEngine/NormalShader.h"
 
-scene_node* testScene;
 texture* logoTexture;
 texture* blockTexture;
 scene_node* firstScene;
@@ -30,7 +29,7 @@ public:
 	{
 		tick++;
 
-		if (tick <= 1)
+		if (tick % 50 == 0)
 		{
 			std::cout << (1 - tick) * 10.0f << "%" << std::endl;
 
@@ -38,7 +37,7 @@ public:
 
 			//chunkRendere->bindTexture(blockTexture);
 
-			//chunkRendere->getModelLocation()->getLocation()->setY(tick / 1);
+			//chunkRendere->getModelLocation()->getLocation()->setY(tick / 50);
 		}
 		else if (tick == 2)
 			std::cout << "now there are more than 2 rendernode,they had been added in 10 seconds" << std::endl;
@@ -91,34 +90,34 @@ public:
 		
 		logoTexture = genTexture({ "Logo.png" }, 1);
 		blockTexture = genTexture({ "BlockTexture.png", "BlockTextureNormal.png" }, 2);
+
+		glClearColor(0.1, 0.4, 0.6, 0.0);
 	}
 	void init()
 	{
 		bindFPC(&fpController);
 
-		testScene = addScene();
-
 		firstScene = addScene();
-
+		
 		logo = (canvas*)firstScene->addRenderNode(new canvas(normal3DRenderProgram));
 
 		logo->addShapes(new canvas_shape[2]
 		{
 			canvas_shape
 			(
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f)),
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, 1.0f, 0.0f), texture_pos(0.0f, 0.0f)),
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f))
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, -1.0f), texture_pos(1.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, 1.0f, -1.0f), texture_pos(0.0f, 0.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, -1.0f), texture_pos(0.0f, 1.0f))
 			)
 			,
 			canvas_shape
 			(
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, 0.0f), texture_pos(0.0f, 1.0f)),
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, -1.0f, 0.0f), texture_pos(1.0f, 1.0f)),
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, 0.0f), texture_pos(1.0f, 0.0f))
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, -1.0f), texture_pos(0.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, -1.0f, -1.0f), texture_pos(1.0f, 1.0f)),
+				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, -1.0f), texture_pos(1.0f, 0.0f))
 			)
 		}, 2);
-
+		
 		firstScene->addRenderNode(new chunk_render(10))->bindTexture(blockTexture);
 
 		logo->bindTexture(logoTexture);
@@ -132,10 +131,6 @@ public:
 	void tickListener()
 	{
 		tick++;
-
-		float angle = tick * PI / 180;
-
-		logo->getModelLocation()->getAngle()->setPosY(-angle + 180);
 
 		if (tick % 50 == 0)
 			std::cout << tick / 50 << std::endl;

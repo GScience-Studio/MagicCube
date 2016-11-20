@@ -227,6 +227,8 @@ render_program* gl_manager::bindShader(char* vert, char* frag, char* gs, render_
 }
 void render_program::_setCamera(camera& globalCamera,camera& modelLocation)
 {
+	gl_manager::getInstance().useShaderProgram(_programID);
+
 	glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(-globalCamera.getLocation()->getX(), -globalCamera.getLocation()->getY(), -globalCamera.getLocation()->getZ()));
 	glm::mat4 cameraRotate = glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
 
