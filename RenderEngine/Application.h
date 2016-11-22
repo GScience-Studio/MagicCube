@@ -30,7 +30,7 @@ protected:
 	const char*		_appName;
 	const char*		_version;
 
-	size_vec	_windowSize;
+	const size_vec	_windowSize;
 
 private:
 	//thread and lock
@@ -56,13 +56,6 @@ private:
 
 	//refresh(a tick is 0.01s)
 	void _tickRefresh(bool draw, bool refresh);
-
-	//size change event
-	void windowsSizeChangeListener(int width, int height) final
-	{
-		_windowSize.setWidth(width);
-		_windowSize.setHeight(height);
-	}
 
 	//program run time and tick
 	double			_appStartTime = glfwGetTime();

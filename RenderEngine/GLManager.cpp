@@ -153,7 +153,13 @@ GLuint loadShader(shader_info* Shaders)
 //windows size change event
 void gl_manager::windowsSizeChangeListener(int width, int height)
 {
+	std::cout << width << "," << height << std::endl;
+
+	_perspectiveLock.lock();
+
 	_perspective = glm::perspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 1448.0f);
+
+	_perspectiveLock.unlock();
 }
 
 //create window
@@ -235,7 +241,13 @@ void render_program::_setCamera(camera& globalCamera,camera& modelLocation)
 	glm::mat4 cameraModelTranslate = glm::translate(glm::mat4(), glm::vec3(modelLocation.getLocation()->getX(), modelLocation.getLocation()->getY(), modelLocation.getLocation()->getZ()));
 	glm::mat4 cameraModelRotate = glm::rotate(glm::mat4(), modelLocation.getAngle()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), modelLocation.getAngle()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
 
+	//lock
+	gl_manager::getInstance()._perspectiveLock.lock();
+
 	glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(gl_manager::getInstance()._perspective * cameraRotate * cameraTranslate * cameraModelTranslate * cameraModelRotate));
+
+	//unlock
+	gl_manager::getInstance()._perspectiveLock.unlock();
 }
 
 bool loadPNG(const char *filepath, image_info& image)

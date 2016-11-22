@@ -124,7 +124,9 @@ private:
 	//save window
 	GLFWwindow* _window;
 
-	//projection
+	//perspective lock
+	std::mutex _perspectiveLock;
+
 	glm::mat4 _perspective;
 
 	//windows size change event

@@ -2,9 +2,11 @@
 
 #include "RenderEngine.h"
 
+#include <queue>
+
 enum event_type
 {
-	CURSOR_MOVE_EVENT, WINDOWS_SIZE_CHANGE_EVENT, TICK_EVENT, KEYBOARD_EVENT
+	CURSOR_MOVE_EVENT, WINDOWS_SIZE_CHANGE_EVENT, KEYBOARD_EVENT, WINDOW_RESIZE_EVENT
 };
 
 class event_queue
@@ -12,7 +14,7 @@ class event_queue
 private:
 	std::mutex _lock;
 
-	std::forward_list<std::pair<event_type, void*>> _eventQueue;
+	std::queue<std::pair<event_type, void*>> _eventQueue;
 
 public:
 	/*
@@ -36,13 +38,20 @@ struct keyboard_event
 
 	keyboard_event(int key, int action) :key(key), action(action) {}
 };
+struct window_resize_event
+{
+	int width;
+	int height;
+
+	window_resize_event(int width, int height) :width(width), height(height) {}
+};
 struct cursor_move_event
 {
-	int posX;
-	int posY;
+	double posX;
+	double posY;
 
-	int lastPosX;
-	int lastPosY;
+	double lastPosX;
+	double lastPosY;
 
-	cursor_move_event(int posX, int posY, int lastPosX, int lastPosY) :posX(posX), posY(posY), lastPosX(lastPosX), lastPosY(lastPosY) {}
+	cursor_move_event(double posX, double posY, double lastPosX, double lastPosY) :posX(posX), posY(posY), lastPosX(lastPosX), lastPosY(lastPosY) {}
 };

@@ -8,22 +8,28 @@ void event_queue::addEvent(event_type eventType, void* data)
 {
 	_lock.lock();
 
-	_eventQueue.push_front({ eventType ,data });
+	_eventQueue.push({ eventType ,data });
 
 	_lock.unlock();
 }
 void event_queue::refreshEvent()
 {
+	//copy and clear the queue
 	_lock.lock();
 
-	std::forward_list<std::pair<event_type, void*>> eventQueue = _eventQueue;
-
-	_eventQueue.clear();
+	std::queue<std::pair<event_type, void*>> eventQueue = _eventQueue;
+	_eventQueue.swap(std::queue<std::pair<event_type, void*>>());
 
 	_lock.unlock();
 
-	for (auto getEvent : eventQueue)
+	while (eventQueue.size() != 0)
 	{
+		//read one event
+		auto getEvent = eventQueue.front();
+
+		eventQueue.pop();
+
+		//callback
 		switch (getEvent.first)
 		{
 		case KEYBOARD_EVENT:
@@ -79,6 +85,34 @@ void event_queue::refreshEvent()
 			}
 			//free memory
 			delete (cursorMoveEvent);
+
+			break;
+		}
+		case WINDOW_RESIZE_EVENT:
+		{
+			//lock and copy the callback list
+			inputCallbackManagerInstance->lock.lock();
+
+			//refresh listeners
+			inputCallbackManagerInstance->_refreshInputCallbacks();
+
+			std::list<input_callback*> inputCallbackList = inputCallbackManagerInstance->_inputCallbackList;
+
+			inputCallbackManagerInstance->lock.unlock();
+
+			//get event data
+			window_resize_event* windowResizeEvent = (window_resize_event*)getEvent.second;
+
+			//call
+			for (input_callback* getInputCallback : inputCallbackList)
+			{
+				if (getInputCallback == nullptr)
+					continue;
+
+				getInputCallback->windowsSizeChangeListener(windowResizeEvent->width, windowResizeEvent->height);
+			}
+			//free memory
+			delete (windowResizeEvent);
 
 			break;
 		}

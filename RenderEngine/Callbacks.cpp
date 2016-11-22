@@ -20,7 +20,7 @@ void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int
 */
 void windowsSizeChangeCallback(GLFWwindow* window, int width, int height)
 {
-	
+	inputCallbackManagerInstance->addEvent(WINDOW_RESIZE_EVENT, new window_resize_event(width, height));
 }
 
 /*
