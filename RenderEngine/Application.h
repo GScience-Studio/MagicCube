@@ -55,7 +55,7 @@ private:
 	void _mainLoop();
 
 	//refresh(a tick is 0.01s)
-	void _tickRefresh(bool draw, bool refresh);
+	void _tickRefresh();
 
 	//program run time and tick
 	double			_appStartTime = glfwGetTime();

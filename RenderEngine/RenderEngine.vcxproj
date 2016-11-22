@@ -66,6 +66,9 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vec.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="structure_block.cd" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{819DD47D-474A-4EFC-8B48-82928C505CF4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

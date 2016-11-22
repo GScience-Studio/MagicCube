@@ -49,15 +49,9 @@ void application::run()
 	while (_isClose.load());
 }
 //tick call
-void application::_tickRefresh(bool draw, bool refresh)
+void application::_tickRefresh()
 {
-	if (refresh)
-	{
-		//listener call
-		tickListenerRefresh();
-	}
-	//scene refresh
-	_sceneRefreshAndDraw(draw);
+	tickListenerRefresh();
 }
 //game main loop
 void application::_mainLoop()
@@ -85,8 +79,11 @@ void application::_mainLoop()
 		//refresh queue
 		_glInstance._refreshQueue();
 
+		//scene refresh
+		_sceneRefresh();
+
 		//render
-		_tickRefresh(true, false);
+		_sceneDraw();
 
 		_glInstance.swapBuffers();
 
@@ -119,7 +116,7 @@ void application::_eventThreadMain()
 		{
 			_tickCallTime.store(_tickCallTime.load() - 1);
 
-			_tickRefresh(false, true);
+			_tickRefresh();
 		}
 
 		//refresh event

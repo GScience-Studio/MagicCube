@@ -12,11 +12,11 @@ private:
 	//scene list
 	std::vector<scene_node*> _sceneList;
 
-	scene_node* _nowScene	= nullptr;
-	scene_node* _nextScene	= nullptr;
+	scene_node* _nowScene = nullptr;
+	scene_node* _nextScene = nullptr;
 
 	std::atomic_bool _showingScene = false;
-	
+
 	//get the scene now is shown or will be hide
 	scene_node* _getNowScene() const
 	{
@@ -33,8 +33,8 @@ protected:
 	//gobal screen camera
 	camera _globalCamera;
 
-	//scene refresh and draw
-	void _sceneRefreshAndDraw(bool draw)
+	//scene refresh
+	void _sceneRefresh()
 	{
 		//is there has a scene?
 		if (_nowScene == nullptr)
@@ -56,11 +56,13 @@ protected:
 
 			_showingScene.store(false);
 		}
-
-		if (draw)
-		{
+	}
+	//scene draw
+	void _sceneDraw()
+	{
+		//check whether has an enable scene
+		if (_nowScene != nullptr)
 			_nowScene->_draw(_globalCamera);
-		}
 	}
 
 public:

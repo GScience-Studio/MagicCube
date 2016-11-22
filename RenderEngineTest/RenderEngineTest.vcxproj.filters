@@ -3,4 +3,7 @@
   <ItemGroup>
     <ClCompile Include="RenderEngineTestMain.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>

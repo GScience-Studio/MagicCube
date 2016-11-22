@@ -167,4 +167,7 @@
       <Filter>EventManager</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="structure_block.cd" />
+  </ItemGroup>
 </Project>

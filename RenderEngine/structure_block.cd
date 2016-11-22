@@ -1,0 +1,385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="application" Collapsed="true">
+    <Position X="4.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEEhAAAAAAMgAAAMYEAAAACACAGQYAAAAAIAgAAAA=</HashCode>
+      <FileName>Application.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="buffer" Collapsed="true">
+    <Position X="17" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAIIAAAAABBAAAQAAAEAAAAAAAEBAAAIAAAA=</HashCode>
+      <FileName>GLManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="render_program" Collapsed="true">
+    <Position X="7.25" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAIAAAAAAAAgAAAAAAAAAAAQAAAAgAAAABAA=</HashCode>
+      <FileName>GLManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gl_manager" Collapsed="true">
+    <Position X="3.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EkCAAAIEAiKgUxABFAQAAEAAIiAAAAQQMAAgAIAkBAA=</HashCode>
+      <FileName>GLManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="texture" Collapsed="true">
+    <Position X="18.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAABAAAAQAAAIAAAgAAAAAAAAIAAAA=</HashCode>
+      <FileName>Texture.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="angle" Collapsed="true">
+    <Position X="7" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAQAAAAAAAAAIAAAABgAABGAAA=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="location&lt;T&gt;" Collapsed="true">
+    <Position X="11.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACgAAAWAAACAAAAAAAACAAgAGABAAA=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="camera" Collapsed="true">
+    <Position X="18.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAGAAAgAAAAAAAAAAAAAAAAAAAAAAACAgAAAAAAA=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="vec&lt;T, vecSize&gt;" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACQAQAAAAAEAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Vec.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="size_vec" Collapsed="true">
+    <Position X="2.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAABAAAAAAAAAAAAAAABAAAAAAAQAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Vec.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="extension" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAIAAAAAAAAAAAQAAAAAAAAIAAAEAAAAAAAA=</HashCode>
+      <FileName>ExtensionManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="extension_manager" Collapsed="true">
+    <Position X="1.75" Y="8" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>EAQAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAQAAAgAAA=</HashCode>
+      <FileName>ExtensionManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="normal_3d_render_program" Collapsed="true">
+    <Position X="9.5" Y="9.5" Width="1.5" />
+    <InheritanceLine Type="render_program" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.75" Y="10.312" />
+        <Point X="9.125" Y="10.312" />
+        <Point X="9.125" Y="9.875" />
+        <Point X="9.5" Y="9.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAIAAEAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NormalShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="normal_2d_render_program" Collapsed="true">
+    <Position X="11.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NormalShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="normal_shader_extension" Collapsed="true">
+    <Position X="9" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>NormalShaderExtension.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="canvas_extension" Collapsed="true">
+    <Position X="2.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>CanvasExtension.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tileset_texture" Collapsed="true">
+    <Position X="12" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CanvasTexture.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="color" Collapsed="true">
+    <Position X="4.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Canvas.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="texture_pos" Collapsed="true">
+    <Position X="9.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Canvas.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="canvas" Collapsed="true">
+    <Position X="4.75" Y="10.75" Width="1.5" />
+    <InheritanceLine Type="render_node" FixedFromPoint="true">
+      <Path>
+        <Point X="3.5" Y="11.5" />
+        <Point X="3.875" Y="11.5" />
+        <Point X="3.875" Y="11.096" />
+        <Point X="4.75" Y="11.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAEAAAAACAAAACAAABAQAAAAAAAAQgACA=</HashCode>
+      <FileName>Canvas.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="shape_cube" Collapsed="true">
+    <Position X="17" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ShapeCube.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fpc" Collapsed="true">
+    <Position X="5.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAADAAAAAkAAAAAAIAAAAAAAAAAAAABDAAACAgAAA=</HashCode>
+      <FileName>FPC.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="fpc_extension" Collapsed="true">
+    <Position X="4.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>FPCExtension.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="chunk_render" Collapsed="true">
+    <Position X="4.75" Y="12" Width="1.5" />
+    <InheritanceLine Type="render_node" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="3.5" Y="11.5" />
+        <Point X="3.841" Y="11.5" />
+        <Point X="3.841" Y="12.346" />
+        <Point X="4.75" Y="12.346" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAEAAAACCAAAAAAAAAAAAACAAAAAAAACA=</HashCode>
+      <FileName>ChunkRender.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="chunk_render_extension" Collapsed="true">
+    <Position X="6.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAIAAAAAAAAAAAA=</HashCode>
+      <FileName>ChunkRenderExtension.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="chunk_render_program" Collapsed="true">
+    <Position X="9.5" Y="10.5" Width="1.5" />
+    <InheritanceLine Type="render_program" FixedFromPoint="true">
+      <Path>
+        <Point X="8.75" Y="10.312" />
+        <Point X="9.125" Y="10.312" />
+        <Point X="9.125" Y="10.846" />
+        <Point X="9.5" Y="10.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAIAAEAAAAAgAAAAAgAAAAEAACAAAAAAAACA=</HashCode>
+      <FileName>ChunkRenderShader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="render_node" Collapsed="true">
+    <Position X="2" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAA0ASIAEAAAAECEAAAAAAAAABFAAAAAAAALAAA=</HashCode>
+      <FileName>RenderNode.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="render_node_manager" Collapsed="true">
+    <Position X="1.75" Y="10.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEIAAAAAAIAAAQAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>RenderNodeManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="scene_node" Collapsed="true">
+    <Position X="2" Y="9.5" Width="1.5" />
+    <InheritanceLine Type="render_node_manager" FixedFromPoint="true">
+      <Path>
+        <Point X="2.75" Y="10.5" />
+        <Point X="2.75" Y="10.191" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SceneNode.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="scene_node_manager" Collapsed="true">
+    <Position X="1.75" Y="8.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAARBAAUAAQAAAAABCAABAAAAAAAAIAAgAAAACACAA=</HashCode>
+      <FileName>SceneNodeManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="event_queue" Collapsed="true">
+    <Position X="9.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAQAAAAAAAAAAAAIAEAAAAAAA=</HashCode>
+      <FileName>EventQueue.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="input_callback" Collapsed="true">
+    <Position X="4.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAYAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>InputCallback.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="input_callback_manager" Collapsed="true">
+    <Position X="7" Y="8" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEQAAAAAgAQAAAAAAAAAAABAAAAAAEIAAAAA=</HashCode>
+      <FileName>InputCallbackManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="message" Collapsed="true">
+    <Position X="20.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Message.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="__unnamed_struct_000e_1" Collapsed="true">
+    <Position X="5.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAABAAAA=</HashCode>
+      <FileName>GLManager.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="__unnamed_struct_000e_2" Collapsed="true">
+    <Position X="1.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAwAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GLManager.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="command_set_buffer_data" Collapsed="true">
+    <Position X="20.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAMAAAAAAAAAAAAAAAAAQAAAAgQA=</HashCode>
+      <FileName>GLRenderCommands.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="gl_render_command" Collapsed="true">
+    <Position X="18.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAIAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>GLRenderCommands.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cube_texture" Collapsed="true">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQAAAAEAA=</HashCode>
+      <FileName>CanvasTexture.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="canvas_point_info" Collapsed="true">
+    <Position X="17" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAgAAAFAAAAAA=</HashCode>
+      <FileName>Canvas.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="canvas_shape" Collapsed="true">
+    <Position X="18.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Canvas.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="keyboard_event" Collapsed="true">
+    <Position X="20.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>EventQueue.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="window_resize_event" Collapsed="true">
+    <Position X="17" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAQAAAAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>EventQueue.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="cursor_move_event" Collapsed="true">
+    <Position X="17" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAGAQAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAA=</HashCode>
+      <FileName>EventQueue.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="shader_info" Collapsed="true">
+    <Position X="5.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GLManager.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="image_info" Collapsed="true">
+    <Position X="1.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GLManager.cpp</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="render_node_list" Collapsed="true">
+    <Position X="17" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RenderNodeManager.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="event_type" Collapsed="true">
+    <Position X="17" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAQAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>EventQueue.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="message_type" Collapsed="true">
+    <Position X="18.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAEAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Message.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
