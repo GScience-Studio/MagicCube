@@ -43,10 +43,13 @@ private:
 	std::atomic_uint16_t _tickCallTime = 0;
 
 	//whether the program is end
-	volatile std::atomic_bool _isClose = false;
+	std::atomic_bool _isClose = false;
 
 	//has init the game
-	volatile std::atomic_bool _initialization = false;
+	std::atomic_bool _initialization = false;
+
+	//cursor input mode
+	bool _isCursorEnable = true;
 
 	//gl instance
 	gl_manager& _glInstance = gl_manager::getInstance();
@@ -68,8 +71,7 @@ private:
 	void _eventThreadMain();
 
 public:
-	//cursor info
-	std::atomic_bool isCursorEnable = true;
+	std::atomic_bool isCursorEnableSynch = true;
 
 	application(const char* appName, const char* version, const size_vec& windowSize) :_appName(appName), _version(version), _windowSize(windowSize)
 	{
@@ -96,16 +98,31 @@ public:
 		return *applicationInstance;
 	}
 	
-	//run program
+	/*
+	* enter point of an GS Engine program.
+	* the program will run after you call this function
+	* thread-safety: can called in any thread but only can call once
+	* made by GM2000
+	*/
 	void run();
 
-	//set cursor input mode
+	/*
+	* hide the cursor.
+	* thread-safety: can be called in any thread.
+	* made by GM2000
+	*/
 	void hideCursor()
 	{
-		isCursorEnable.store(false);
+		isCursorEnableSynch.store(false);
 	}
+
+	/*
+	* show the cursor.
+	* thread-safety: can be called in any thread.
+	* made by GM2000
+	*/
 	void showCursor()
 	{
-		isCursorEnable.store(true);
+		isCursorEnableSynch.store(true);
 	}
 };

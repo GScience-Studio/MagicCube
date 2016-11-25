@@ -70,7 +70,7 @@ public:
 	void keyListener(int key, int action)
 	{
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-			if (isCursorEnable.load())
+			if (isCursorEnableSynch.load())
 			{
 				//bind fpc
 				bindFPC(&fpController);

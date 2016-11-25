@@ -13,7 +13,6 @@ void tickListenerRefresh();
 //exception
 void initExceptionCallback();
 
-//run program
 void application::run()
 {
 	//init exception
@@ -90,11 +89,20 @@ void application::_mainLoop()
 		//pool event
 		_glInstance.pollEvent();
 
-		//set mouse
-		if (isCursorEnable.load())
-			glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		else
-			glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		//get cursor input mode
+		bool getCursorNewInputMode = isCursorEnableSynch.load();
+
+		if (_isCursorEnable != getCursorNewInputMode)
+		{
+			//set new mouse input mode
+			_isCursorEnable = getCursorNewInputMode;
+
+			//set mouse
+			if (_isCursorEnable)
+				glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			else
+				glfwSetInputMode(_glInstance._window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
 	}
 	//end
 	_glInstance.terminate();
