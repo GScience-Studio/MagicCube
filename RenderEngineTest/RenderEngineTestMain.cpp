@@ -29,18 +29,6 @@ public:
 
 		testRenderNode->setLight(cos(tick / 20.0f), sin(tick / 20.0f) , 0.1f);
 	}
-	void keyListener(int key, int action)
-	{
-		if (key == GLFW_KEY_Q)
-			application::getInstance().unregisterInputCallback(this);
-
-		if (ID == 0)
-			std::cout << "[Listener: " << ID << "]" << key << std::endl;
-		else if (ID == 1)
-		{
-			std::cout << "[Listener: " << ID << "]" << action << std::endl;
-		}
-	}
 };
 class test_app :public application
 {
