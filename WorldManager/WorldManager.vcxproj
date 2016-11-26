@@ -23,6 +23,9 @@
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ChunkManager.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6924B481-951A-43A9-9E05-594B74811EDC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

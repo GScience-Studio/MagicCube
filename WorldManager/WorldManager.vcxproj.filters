@@ -5,4 +5,7 @@
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ChunkManager.cpp" />
+  </ItemGroup>
 </Project>
