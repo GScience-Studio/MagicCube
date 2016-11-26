@@ -13,6 +13,8 @@ scene_node* firstScene;
 
 canvas* logo;
 
+chunk_render* testRenderNode;
+
 class testListener:public input_callback
 {
 	int ID;
@@ -21,26 +23,11 @@ class testListener:public input_callback
 public:
 	testListener(int ID) :ID(ID) {}
 
-	~testListener()
-	{
-		std::cout << "Listener: " << ID << "has been unregister" << std::endl;
-	}
 	void tickListener()
 	{
 		tick++;
 
-		if (tick % 50 == 0)
-		{
-			std::cout << (1 - tick) * 10.0f << "%" << std::endl;
-
-			//chunk_render* chunkRendere = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
-
-			//chunkRendere->bindTexture(blockTexture);
-
-			//chunkRendere->getModelLocation()->getLocation()->setY(tick / 50);
-		}
-		else if (tick == 2)
-			std::cout << "now there are more than 2 rendernode,they had been added in 10 seconds" << std::endl;
+		testRenderNode->setLight(cos(tick / 20.0f), sin(tick / 20.0f) , 0.1f);
 	}
 	void keyListener(int key, int action)
 	{
@@ -60,8 +47,6 @@ class test_app :public application
 public:
 	canvas* coordinateX;
 	canvas* coordinateZ;
-
-	chunk_render* testRenderNode;
 
 	fpc fpController = fpc(getGlobalCamera());
 
@@ -118,7 +103,8 @@ public:
 			)
 		}, 2);
 		
-		firstScene->addRenderNode(new chunk_render(10))->bindTexture(blockTexture);
+		testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
+		testRenderNode->bindTexture(blockTexture);
 
 		logo->bindTexture(logoTexture);
 

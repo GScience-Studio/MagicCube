@@ -14,6 +14,9 @@ private:
 	//eyes location
 	GLuint _eyesPosLocation;
 
+	//lisht
+	float lightVec[3]{ 0.0,0.0,0.0 };
+
 	//draw
 	void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera& globalCamera, camera& modelLocation)
 	{
@@ -21,6 +24,9 @@ private:
 		glInstance.useShaderProgram(_programID);
 
 		_setCamera(globalCamera, modelLocation);
+
+		//set light
+		glUniform3fv(_lightPosLocation, 1, lightVec);
 
 		glDrawArrays(GL_POINTS, first, count);
 	}
@@ -47,15 +53,8 @@ public:
 	*/
 	void setLight(float x, float y, float z)
 	{
-		float lightVec[]{ x,y,z };
-
-		glUniform3fv(_lightPosLocation, 1, lightVec);
-	}
-
-	void setEyes(float x, float y, float z)
-	{
-		float eyesVec[]{ x,y,z };
-
-		glUniform3fv(_eyesPosLocation, 1, eyesVec);
+		lightVec[0] = x;
+		lightVec[1] = y;
+		lightVec[2] = z;
 	}
 };

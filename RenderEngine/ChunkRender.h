@@ -27,8 +27,4 @@ public:
 	{
 		((chunk_render_program*)_getRenderProgram())->setLight(x, y, z);
 	}
-	void setEyes(float x, float y, float z)
-	{
-		((chunk_render_program*)_getRenderProgram())->setEyes(x, y, z);
-	}
 };
