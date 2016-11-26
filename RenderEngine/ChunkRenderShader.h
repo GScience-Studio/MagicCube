@@ -15,6 +15,8 @@ private:
 	GLuint _eyesPosLocation;
 
 	//lisht
+	std::mutex lightLock;
+
 	float lightVec[3]{ 0.0,0.0,0.0 };
 
 	//draw
@@ -26,7 +28,12 @@ private:
 		_setCamera(globalCamera, modelLocation);
 
 		//set light
-		glUniform3fv(_lightPosLocation, 1, lightVec);
+		if (lightLock.try_lock())
+		{
+			glUniform3fv(_lightPosLocation, 1, lightVec);
+
+			lightLock.unlock();
+		}
 
 		glDrawArrays(GL_POINTS, first, count);
 	}
@@ -53,8 +60,12 @@ public:
 	*/
 	void setLight(float x, float y, float z)
 	{
+		lightLock.lock();
+
 		lightVec[0] = x;
 		lightVec[1] = y;
 		lightVec[2] = z;
+
+		lightLock.unlock();
 	}
 };
