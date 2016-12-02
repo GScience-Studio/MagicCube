@@ -28,6 +28,8 @@ public:
 		tick++;
 
 		testRenderNode->setLight(cos(tick / 20.0f), sin(tick / 20.0f) , 0.1f);
+		logo->getModelLocation()->getLocation()->move(0.0f, 0.0f, 0.01f);
+		logo->getModelLocation()->getAngle()->rotate(0.0f, 0.1f);
 	}
 	void keyListener(int key, int action)
 	{

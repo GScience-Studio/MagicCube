@@ -14,7 +14,7 @@ private:
 	{
 		_glInstance.useTexture(*_getTexture());
 		
-		_getRenderProgram()->drawBuffer(0, 100, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+		_getRenderProgram()->drawBuffer(0, 256, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
 	}
 public:
 	chunk_render(unsigned char _sight);
