@@ -12,7 +12,7 @@ chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chun
 {
 	blockRenderData* block = new blockRenderData[4096];
 
-	std::cout << UINT32_MAX << std::endl;
+	std::vector<blockRenderData> blockRenderList;
 
 	for (unsigned j = 0; j < 4096; j++)
 	{
@@ -41,8 +41,17 @@ chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chun
 
 		if (posX > 0)
 			block[j].nearbyBlockInfo |= HIDE_BACK;
+
+		if (!(
+			(block[j].nearbyBlockInfo && HIDE_RIGHT)==
+			(block[j].nearbyBlockInfo && HIDE_LEFT)	==
+			(block[j].nearbyBlockInfo && HIDE_TOP)	==
+			(block[j].nearbyBlockInfo && HIDE_DOWM)	==
+			(block[j].nearbyBlockInfo && HIDE_FRONT)==
+			(block[j].nearbyBlockInfo && HIDE_BACK)	== 0))
+			blockRenderList.push_back(block[j]);
 	}
-	setBlockRenderDatas(block, 4096);
+	setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
 	delete[]block;
 }

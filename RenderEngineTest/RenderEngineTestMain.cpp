@@ -31,9 +31,15 @@ public:
 		{
 			chunk_render* newChunkRender = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
 
+			unsigned int newChunkLocation = tick / 50;
+
 			newChunkRender->bindTexture(blockTexture);
-			newChunkRender->getModelLocation()->getLocation()->move(tick / 50 / 2 * 16, 0, 0);
+			newChunkRender->getModelLocation()->getLocation()->move((newChunkLocation / 16) * 16, 0, (newChunkLocation - (newChunkLocation / 16) * 16) * 16);
+
+			std::cout << "add new chunk " << tick % 50 << "at:" << (newChunkLocation % 16) * 16 << "," << (newChunkLocation - (newChunkLocation / 16) * 16) * 16 << std::endl;
 		}
+
+		application::getInstance().getGlobalCamera()->getLocation()->moveTo(application::getInstance().getGlobalCamera()->getLocation()->getX(), 20, application::getInstance().getGlobalCamera()->getLocation()->getZ());
 
 		testRenderNode->setLight(cos(tick / 20.0f), sin(tick / 20.0f) , 0.1f);
 		logo->getModelLocation()->getLocation()->move(0.0f, 0.0f, 0.01f);
