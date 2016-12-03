@@ -27,6 +27,14 @@ public:
 	{
 		tick++;
 
+		if (tick % 50 == 0)
+		{
+			chunk_render* newChunkRender = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
+
+			newChunkRender->bindTexture(blockTexture);
+			newChunkRender->getModelLocation()->getLocation()->move(tick / 50 / 2 * 16, 0, 0);
+		}
+
 		testRenderNode->setLight(cos(tick / 20.0f), sin(tick / 20.0f) , 0.1f);
 		logo->getModelLocation()->getLocation()->move(0.0f, 0.0f, 0.01f);
 		logo->getModelLocation()->getAngle()->rotate(0.0f, 0.1f);

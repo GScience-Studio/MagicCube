@@ -3,6 +3,23 @@
 #include "RenderNode.h"
 #include "ChunkRenderShader.h"
 
+struct blockRenderData
+{
+	unsigned int	blockInfo;
+	unsigned int	nearbyBlockInfo;
+
+	void setBlockRenderData(unsigned short blockLocation, unsigned short blockID)
+	{
+#ifdef _DEBUG
+		if (blockLocation >= 4096)
+			message("[Error]Fail to create new block render date because \"blockLocation\" can't large than 4096", msgError, false);
+#endif
+		blockInfo = blockLocation;
+
+		blockInfo += (blockID << 12);
+	}
+};
+
 class chunk_render :public render_node
 {
 private:
@@ -14,7 +31,7 @@ private:
 	{
 		_glInstance.useTexture(*_getTexture());
 		
-		_getRenderProgram()->drawBuffer(0, 256, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+		_getRenderProgram()->drawBuffer(0, 4096, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
 	}
 public:
 	chunk_render(unsigned char _sight);
@@ -27,4 +44,10 @@ public:
 	{
 		((chunk_render_program*)_getRenderProgram())->setLight(x, y, z);
 	}
+
+	/*
+	* set blocks render datas
+	* made by GM2000
+	*/
+	void setBlockRenderDatas(const blockRenderData* blockRenderData, const GLuint blockCount);
 };

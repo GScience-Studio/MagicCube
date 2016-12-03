@@ -6,21 +6,48 @@
 #define HIDE_LEFT		0x04
 #define HIDE_RIGHT		0x08
 #define HIDE_BACK		0x10
-#define HIDE_TOWARD		0x20
+#define HIDE_FRONT		0x20
 
 chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chunkRenderProgram)
 {
-	GLuint* block = new GLuint[256 * 3];
+	blockRenderData* block = new blockRenderData[4096];
 
-	std::cout << sizeof(uint32_t) << std::endl;
+	std::cout << UINT32_MAX << std::endl;
 
-	for (unsigned j = 0; j < 256 * 3; j++)
+	for (unsigned j = 0; j < 4096; j++)
 	{
-		block[j++] = 0;
-		block[j++] = (j + 1) / 3;
-		block[j] = 0xFFFFFF00 | HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_TOWARD;
+		block[j].setBlockRenderData(j, 0);
+
+		block[j].nearbyBlockInfo = 0xFFFFFF00;
+
+		unsigned short posY = j / 256u;
+		unsigned short posX = (j - posY * 256u) / 16u;
+		unsigned short posZ = (j - posY * 256u) - posX * 16u;
+
+		if (posZ < 15)
+			block[j].nearbyBlockInfo |= HIDE_RIGHT;
+
+		if (posZ > 0)
+			block[j].nearbyBlockInfo |= HIDE_LEFT;
+
+		if (posY < 15)
+			block[j].nearbyBlockInfo |= HIDE_TOP;
+
+		if (posY > 0)
+			block[j].nearbyBlockInfo |= HIDE_DOWM;
+
+		if (posX < 15)
+			block[j].nearbyBlockInfo |= HIDE_FRONT;
+
+		if (posX > 0)
+			block[j].nearbyBlockInfo |= HIDE_BACK;
 	}
-	gl_manager::getInstance().bufferData(*_getBuffer(), 0, 256 * 3 * sizeof(GLuint), block, _getRenderProgram());
+	setBlockRenderDatas(block, 4096);
 
 	delete[]block;
+}
+
+void chunk_render::setBlockRenderDatas(const blockRenderData* blockRenderData, const GLuint blockCount)
+{
+	gl_manager::getInstance().bufferData(*_getBuffer(), 0, sizeof(GLuint) * 2 * blockCount, blockRenderData, _getRenderProgram());
 }

@@ -22,15 +22,11 @@ void chunk_render_program::_setBufferData(const void* bufferData, const unsigned
 		glInstance.useShaderProgram(_programID);
 
 		//block data
-		glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(GLuint) * 3, (const void*)(sizeof(GLuint) * 0));
+		glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(GLuint) * 2 , (const void*)(sizeof(GLuint) * 0));
 		glEnableVertexAttribArray(0);
 
-		//block location
-		glVertexAttribIPointer(1, 1, GL_UNSIGNED_INT, sizeof(GLuint) * 3, (const void*)(sizeof(GLuint) * 1));
-		glEnableVertexAttribArray(1);
-
 		//nearby block info
-		glVertexAttribIPointer(2, 1, GL_UNSIGNED_INT, sizeof(GLuint) * 3, (const void*)(sizeof(GLuint) * 2));
-		glEnableVertexAttribArray(2);
+		glVertexAttribIPointer(1, 1, GL_UNSIGNED_INT, sizeof(GLuint) * 2, (const void*)(sizeof(GLuint) * 1));
+		glEnableVertexAttribArray(1);
 	}
 }

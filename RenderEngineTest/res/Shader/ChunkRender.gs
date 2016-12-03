@@ -5,7 +5,7 @@
 #define HIDE_LEFT		0x04u
 #define HIDE_RIGHT		0x08u
 #define HIDE_BACK		0x10u
-#define HIDE_TOWARD		0x20u
+#define HIDE_FRONT		0x20u
 
 uniform mat4 projection;
 
@@ -169,8 +169,8 @@ void renderBlock(vec3 position,float blockTextureID)
 		EndPrimitive();
 	}
 	
-	//toward
-	if ((vs_out[0].nearbyBlockInfo & HIDE_TOWARD) == 0u)
+	//front
+	if ((vs_out[0].nearbyBlockInfo & HIDE_FRONT) == 0u)
 	{
 		vertexNormal_cameraspace = normalize(vec3(0.0,0.0,1.0));
 		vertexTangent_cameraspace = normalize(vec3(0.0,1.0,0.0));
