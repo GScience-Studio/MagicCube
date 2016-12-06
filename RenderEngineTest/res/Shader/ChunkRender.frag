@@ -16,7 +16,7 @@ in GS_OUT
 
 vec3 expand(vec3 v)
 {
-	return (v-0.5) * 2.0;
+	return v;
 }
 
 void main()
@@ -34,7 +34,7 @@ void main()
 	vec3 normalColor = texture2D(normal, texCoords).xyz;
 	vec3 normal = expand(normalColor);
 
-	float diffuse = clamp(dot(normal,gs_out.lightPos), 0.01, 1.0) / 1.0 * 0.7 + 0.3;
+	float diffuse = clamp(dot(normal,gs_out.lightPos), 0.01, 1.0);
 	
 	fColor *= vec4(min(vec3(0.3,0.3,0.3) + gs_out.lightColor * diffuse, vec3(1.0)),1.0);
 }

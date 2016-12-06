@@ -59,7 +59,7 @@ void drawBlockUp(vec3 position, float blockTextureID)
 		vertexNormal_cameraspace
 	));
 		
-	gs_out.lightPos = normalize(lightPos * TBN);
+	gs_out.lightPos = normalize(lightPos) + vec3(0.0,1.0,0.0);
 
 	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
@@ -92,7 +92,7 @@ void drawBlockDown(vec3 position, float blockTextureID)
 		vertexNormal_cameraspace
 	));
 		
-	gs_out.lightPos = normalize(lightPos * TBN);
+	gs_out.lightPos = normalize(lightPos) + vec3(0.0,-1.0,0.0);
 	
 	gl_Position = vec4(position + vec3(0.0f,-1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
@@ -127,7 +127,7 @@ void drawBlockBack(vec3 position, float blockTextureID)
 		vertexNormal_cameraspace
 	));
 		
-	gs_out.lightPos = normalize(lightPos * TBN);
+	gs_out.lightPos = normalize(lightPos);
 
 	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
