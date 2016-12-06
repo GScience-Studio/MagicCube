@@ -117,7 +117,7 @@ void application::_eventThreadMain()
 
 	while (!_isClose.load())
 	{
-		_tickEnableFlag.wait((std::unique_lock<std::mutex>)_eventThreadLock);
+		_tickEnableFlag.wait(std::unique_lock<std::mutex>(_eventThreadLock));
 
 		//tick call
 		while (_tickCallTime.load() != 0)

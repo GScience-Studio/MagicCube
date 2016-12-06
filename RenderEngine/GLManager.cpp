@@ -186,7 +186,7 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 
 #ifndef _DEBUG
 	//set vertical retrace
-	//glfwSwapInterval(1);
+	glfwSwapInterval(1);
 #endif
 
 	//init glew
@@ -195,7 +195,9 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 	//init opengl state
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
+#ifndef _DEBUG
 	glEnable(GL_CULL_FACE);
+#endif
 }
 //load shaders
 render_program* gl_manager::bindShader(char* vert, char* frag, render_program* renderProgramClass)
