@@ -13,7 +13,7 @@ chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chun
 	blockRenderData* block = new blockRenderData[4096];
 
 	std::vector<blockRenderData> blockRenderList;
-
+	/*
 	for (unsigned j = 0; j < 4096; j++)
 	{
 		block[j].setBlockRenderData(j, 0);
@@ -51,7 +51,12 @@ chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chun
 			(block[j].nearbyBlockInfo && HIDE_BACK)	== 0))
 			blockRenderList.push_back(block[j]);
 	}
-	setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
+	*/
+	//setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
+
+	block[0].setBlockRenderData(0, 0);
+
+	setBlockRenderDatas(&block[0], 1);
 
 	delete[]block;
 }
