@@ -42,7 +42,7 @@ public:
 	*/
 	void setLight(float x, float y, float z)
 	{
-		((chunk_render_program*)_getRenderProgram())->setLight(x, y, z);
+		((chunk_render_program*)_getRenderProgram())->setLight(-x, y, -z);
 	}
 
 	/*

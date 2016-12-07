@@ -41,10 +41,11 @@ public:
 
 		//application::getInstance().getGlobalCamera()->getLocation()->moveTo(application::getInstance().getGlobalCamera()->getLocation()->getX(), 17, application::getInstance().getGlobalCamera()->getLocation()->getZ());
 
-		testRenderNode->setLight(1.0, sin(tick / 100.0f),0.0);
-		logo->getModelLocation()->getLocation()->moveTo(8, 17, 8);
+		testRenderNode->setLight(sin(tick / 100.0), cos(tick / 100.0), 0.0);
+		if (cos(tick / 100.0) > 0)
+			std::cout << "light" << std::endl;
 
-		logo->getModelLocation()->getAngle()->rotateTo(1.0, sin(tick / 100.0f));
+		logo->getModelLocation()->getLocation()->moveTo(sin(tick / 100.0) * 17 + 8, cos(tick / 100.0) * 17 + 8, 0.0);
 	}
 	void keyListener(int key, int action)
 	{
@@ -97,7 +98,7 @@ public:
 	}
 	void init()
 	{
-		getGlobalCamera()->getLocation()->moveTo(0.0f, 17.0f, 0.0f);
+		getGlobalCamera()->getLocation()->moveTo(-0.5, -0.9, 0.0);
 
 		bindFPC(&fpController);
 
