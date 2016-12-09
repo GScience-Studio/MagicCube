@@ -66,19 +66,19 @@ void drawBlockUp(vec3 position, float blockTextureID)
 
 	gs_out.lightPos = getLightDir(vec3(0.0,1.0,0.0),vec3(-1.0,0.0,1.0));
 
-	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
 	EmitVertex();
 
-	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,1.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
 	EmitVertex();
 		
-	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,1.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
 	EmitVertex();
 	EndPrimitive();
@@ -89,19 +89,19 @@ void drawBlockDown(vec3 position, float blockTextureID)
 	
 	gs_out.lightPos = getLightDir(vec3(0.0,-1.0,0.0),vec3(1.0,0.0,-1.0));
 	
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
 	EmitVertex();
 		
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
 	EmitVertex();
 		
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
 	EmitVertex();
 		
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
 	EmitVertex();
 	
@@ -114,19 +114,19 @@ void drawBlockBack(vec3 position, float blockTextureID)
 
 	gs_out.lightPos = getLightDir(vec3(1.0,0.0,0.0),vec3(0.0,1.0,-1.0));
 
-	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
 	EmitVertex();
 		
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
 	EmitVertex();
 		
-	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,1.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
 	EmitVertex();
 		
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
 	EmitVertex();
 	EndPrimitive();
@@ -138,19 +138,19 @@ void drawBlockFront(vec3 position, float blockTextureID)
 
 	gs_out.lightPos = getLightDir(vec3(-1.0,0.0,0.0),vec3(0.0,-1.0,1.0));
 
-	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,1.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
 	EmitVertex();
 	
@@ -162,19 +162,19 @@ void drawBlockLeft(vec3 position, float blockTextureID)
 
 	gs_out.lightPos = getLightDir(vec3(0.0,0.0,1.0),vec3(1.0,-1.0,0.0));
 
-	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,0.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
 	EmitVertex();
 	
@@ -187,19 +187,19 @@ void drawBlockRight(vec3 position, float blockTextureID)
 
 	gs_out.lightPos = getLightDir(vec3(0.0,0.0,-1.0),vec3(-1.0,1.0,0.0));
 
-	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,1.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,1.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
 	EmitVertex();
 	
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,1.0f), 1.0f) * projection;
+	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
 	EmitVertex();
 	

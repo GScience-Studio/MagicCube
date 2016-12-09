@@ -7,15 +7,18 @@
 #define HIDE_RIGHT		0x08
 #define HIDE_BACK		0x10
 #define HIDE_FRONT		0x20
+#define NO_ALPHA_BLOCK	0x40
 
-chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chunkRenderProgram)
+chunk_render::chunk_render(): render_node(chunkRenderProgram)
 {
 	blockRenderData* block = new blockRenderData[4096];
 
 	std::vector<blockRenderData> blockRenderList;
-	/*
-	for (unsigned j = 0; j < 4096; j++)
+	
+	for (unsigned short j = 0; j < 1000; j++)
 	{
+		std::cout << "add block at:" << getChunkBlockX(j) << "," << getChunkBlockY(j) << "," << getChunkBlockZ(j) << std::endl;
+
 		block[j].setBlockRenderData(j, 0);
 
 		block[j].nearbyBlockInfo = 0xFFFFFF00;
@@ -23,7 +26,7 @@ chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chun
 		unsigned short posY = j / 256u;
 		unsigned short posX = (j - posY * 256u) / 16u;
 		unsigned short posZ = (j - posY * 256u) - posX * 16u;
-
+		/*
 		if (posZ < 15)
 			block[j].nearbyBlockInfo |= HIDE_RIGHT;
 
@@ -49,14 +52,13 @@ chunk_render::chunk_render(unsigned char sight) :_sight(sight), render_node(chun
 			(block[j].nearbyBlockInfo && HIDE_DOWM)	==
 			(block[j].nearbyBlockInfo && HIDE_FRONT)==
 			(block[j].nearbyBlockInfo && HIDE_BACK)	== 0))
+			*/
 			blockRenderList.push_back(block[j]);
 	}
-	*/
-	//setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
+	
+	setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
-	block[0].setBlockRenderData(0, 0);
-
-	setBlockRenderDatas(&block[0], 1);
+	_blockCount = blockRenderList.size();
 
 	delete[]block;
 }

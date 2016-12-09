@@ -35,6 +35,7 @@
     <ClCompile Include="ModLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ChunkUniversal.h" />
     <ClInclude Include="..\GSRenderEngine.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Camera.h" />

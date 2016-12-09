@@ -87,6 +87,9 @@
     <ClInclude Include="InputCallback.h">
       <Filter>EventManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\ChunkUniversal.h">
+      <Filter>Extension\ChunkRender</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">

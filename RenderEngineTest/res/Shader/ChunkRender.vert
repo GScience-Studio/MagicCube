@@ -1,5 +1,9 @@
 #version 330
 
+#define getChunkBlockX(location) (location << 28 >> 28)
+#define getChunkBlockY(location) (location << 24 >> 28)
+#define getChunkBlockZ(location) (location << 20 >> 28)
+
 layout(location = 0) in uint 	fblockInfo;
 layout(location = 1) in uint 	fnearbyBlockInfo;
 
@@ -19,10 +23,5 @@ void  main()
 	
 	vs_out.nearbyBlockInfo = fnearbyBlockInfo;
 	
-	uint posY = blockLocation / 256u;
-	uint posX = (blockLocation - posY * 256u) / 16u;
-	uint posZ = (blockLocation - posY * 256u) - posX * 16u;
-	
-	gl_Position = uvec4(posX,posY,posZ,1.0f);
-	//gl_Position = uvec4(0.0,0.0,0.0,1.0f);
+	gl_Position = uvec4(getChunkBlockX(blockLocation),getChunkBlockY(blockLocation),getChunkBlockZ(blockLocation),1.0f);
 }

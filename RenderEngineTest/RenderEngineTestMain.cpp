@@ -123,7 +123,7 @@ public:
 			)
 		}, 2);
 		
-		testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
+		testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render());
 		testRenderNode->bindTexture(blockTexture);
 
 		logo->bindTexture(logoTexture);
@@ -136,6 +136,8 @@ public:
 
 	void tickListener()
 	{
+		std::cout << (int)fpController.getCamera()->getLocation()->getX() << "," << (int)fpController.getCamera()->getLocation()->getY() << "," << (int)fpController.getCamera()->getLocation()->getZ() << "," << std::endl;
+
 		tick++;
 
 		if (tick % 50 == 0)

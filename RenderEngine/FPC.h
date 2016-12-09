@@ -37,7 +37,7 @@ public:
 	fpc(camera* camera) :_camera(camera) {}
 	
 	//ªÒ»°Œª÷√
-	camera* getLocation()
+	camera* getCamera()
 	{
 		return _camera;
 	}

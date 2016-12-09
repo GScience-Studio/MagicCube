@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../ChunkUniversal.h"
 #include "RenderNode.h"
 #include "ChunkRenderShader.h"
 
@@ -25,16 +26,16 @@ class chunk_render :public render_node
 private:
 	gl_manager& _glInstance = gl_manager::getInstance();
 
-	unsigned char	_sight = 0;
+	unsigned short	_blockCount = 0;
 
 	void _draw(camera _golbalCamera)
 	{
 		_glInstance.useTexture(*_getTexture());
 		
-		_getRenderProgram()->drawBuffer(0, 4096, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+		_getRenderProgram()->drawBuffer(0, _blockCount, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
 	}
 public:
-	chunk_render(unsigned char _sight);
+	chunk_render();
 
 	/*
 	* set light pos
