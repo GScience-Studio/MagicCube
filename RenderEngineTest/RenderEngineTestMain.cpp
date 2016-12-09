@@ -45,6 +45,8 @@ public:
 
 		testRenderNode->getModelCamera()->getLocation()->moveTo(((_tick / 5u) << 20 >> 28) * 16, ((_tick / 5u) << 24 >> 24) * 16, ((_tick / 5u) << 16 >> 28) * 16);
 
+		testRenderNode->bindTexture(blockTexture);
+
 		delete[](testBlockRenderDataList);
 	}
 	void initResources()
@@ -60,8 +62,6 @@ public:
 		bindFPC(&fpController);
 
 		firstScene = addScene();
-
-		testRenderNode->bindTexture(blockTexture);
 
 		showScene(firstScene);
 	}
