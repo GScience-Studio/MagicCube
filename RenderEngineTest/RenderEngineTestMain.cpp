@@ -38,7 +38,9 @@ public:
 		if (_tick % 5 != 0)
 			return;
 
-		std::cout << "add a new chunk,now there are " << _tick / 5 << "chunks" << std::endl;
+		if (_tick % 50 == 0)
+			std::cout << "add a new chunk,now there are " << _tick / 5 << "chunks," << 2032 * _tick / 5 << " blocks," << 2032 * _tick / 5 * 6 << "cubes." << std::endl;
+		
 		blockRenderData* testBlockRenderDataList = new blockRenderData[4096];
 
 		chunk_render* testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(testBlockRenderDataList));
@@ -64,6 +66,8 @@ public:
 		firstScene = addScene();
 
 		showScene(firstScene);
+
+		fpController.getCamera()->getLocation()->moveTo(8, 25, 8);
 	}
 };
 
