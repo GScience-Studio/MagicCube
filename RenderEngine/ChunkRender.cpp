@@ -9,58 +9,31 @@
 #define HIDE_FRONT		0x20
 #define NO_ALPHA_BLOCK	0x40
 
-chunk_render::chunk_render(): render_node(chunkRenderProgram)
+chunk_render::chunk_render(blockRenderData* block): render_node(chunkRenderProgram)
 {
-	blockRenderData* block = new blockRenderData[4096];
-
 	std::vector<blockRenderData> blockRenderList;
 	
-	for (unsigned short j = 0; j < 1000; j++)
+	for (unsigned short j = 0; j < 4096; j++)
 	{
-		std::cout << "add block at:" << getChunkBlockX(j) << "," << getChunkBlockY(j) << "," << getChunkBlockZ(j) << std::endl;
-
 		block[j].setBlockRenderData(j, 0);
 
-		block[j].nearbyBlockInfo = 0xFFFFFF00;
+		uint8_t posX = getChunkBlockX(j);
+		uint8_t posY = getChunkBlockY(j);
+		uint8_t posZ = getChunkBlockZ(j);
+		
+		if (j != blockChunkLocationToShort(posX, posY, posZ))
+		{
+			return;
+		}
+		block[j].setNearbyBlockLight(posZ, posZ, posZ, posZ, posZ, posZ);
 
-		unsigned short posY = j / 256u;
-		unsigned short posX = (j - posY * 256u) / 16u;
-		unsigned short posZ = (j - posY * 256u) - posX * 16u;
-		/*
-		if (posZ < 15)
-			block[j].nearbyBlockInfo |= HIDE_RIGHT;
-
-		if (posZ > 0)
-			block[j].nearbyBlockInfo |= HIDE_LEFT;
-
-		if (posY < 15)
-			block[j].nearbyBlockInfo |= HIDE_TOP;
-
-		if (posY > 0)
-			block[j].nearbyBlockInfo |= HIDE_DOWM;
-
-		if (posX < 15)
-			block[j].nearbyBlockInfo |= HIDE_FRONT;
-
-		if (posX > 0)
-			block[j].nearbyBlockInfo |= HIDE_BACK;
-
-		if (!(
-			(block[j].nearbyBlockInfo && HIDE_RIGHT)==
-			(block[j].nearbyBlockInfo && HIDE_LEFT)	==
-			(block[j].nearbyBlockInfo && HIDE_TOP)	==
-			(block[j].nearbyBlockInfo && HIDE_DOWM)	==
-			(block[j].nearbyBlockInfo && HIDE_FRONT)==
-			(block[j].nearbyBlockInfo && HIDE_BACK)	== 0))
-			*/
+		if ((posY % 2 != 0 || (posX == 15) || (posZ == 15)) && posX != 14 && posZ != 14)
 			blockRenderList.push_back(block[j]);
 	}
 	
 	setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
-	_blockCount = blockRenderList.size();
-
-	delete[]block;
+	_blockCount = (unsigned short)blockRenderList.size();
 }
 
 void chunk_render::setBlockRenderDatas(const blockRenderData* blockRenderData, const GLuint blockCount)

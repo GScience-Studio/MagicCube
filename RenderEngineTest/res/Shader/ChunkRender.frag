@@ -16,11 +16,13 @@ in GS_OUT
 
 vec3 expand(vec3 v)
 {
-	return v;
+	return (v-0.5f) * 2.0f;
 }
 
 void main()
 {
+	vec3 lightColor = min((1.0f - gs_out.lightColor) * 0.3f + gs_out.lightColor, vec3(1.0f));
+	
 	vec2 texCoords = gs_out.texturePos;
 	
 	fColor = texture2D(texture,texCoords);
@@ -31,10 +33,15 @@ void main()
 		
 		return;
 	}
+	
+	fColor *= vec4(lightColor, 1.0f);
+	/*
 	vec3 normalColor = texture2D(normal, texCoords).xyz;
 	vec3 normal = expand(normalColor);
 
-	float diffuse = clamp(dot(normal,gs_out.lightPos), 0.01, 1.0);
+	float diffuse = clamp(dot(normal,gs_out.lightPos), 0.01f, 1.0f);
 	
-	fColor *= vec4(min(vec3(0.3,0.3,0.3) + gs_out.lightColor * diffuse, vec3(1.0)),1.0);
+	fColor *= vec4(min(lightColor * 0.6 + lightColor * diffuse, vec3(1.0f)),1.0f);
+	*/
+	//fColor = vec4(lightColor, 1.0f);
 }

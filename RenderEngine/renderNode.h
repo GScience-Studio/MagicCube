@@ -73,7 +73,7 @@ public:
 		return &_nodeCamera;
 	}
 	//model camera
-	camera* getModelLocation()
+	camera* getModelCamera()
 	{
 		return &_modelLocation;
 	}

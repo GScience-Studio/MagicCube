@@ -6,10 +6,10 @@
 
 struct blockRenderData
 {
-	unsigned int	blockInfo;
-	unsigned int	nearbyBlockInfo;
+	unsigned int	blockInfo = 0;
+	unsigned int	nearbyBlockInfo = 0;
 
-	void setBlockRenderData(unsigned short blockLocation, unsigned short blockID)
+	void setBlockRenderData(uint16_t blockLocation, uint16_t blockID)
 	{
 #ifdef _DEBUG
 		if (blockLocation >= 4096)
@@ -18,6 +18,10 @@ struct blockRenderData
 		blockInfo = blockLocation;
 
 		blockInfo += (blockID << 12);
+	}
+	void setNearbyBlockLight(uint8_t blockUp, uint8_t blockDown, uint8_t blockLeft, uint8_t blockRight, uint8_t blockFront, uint8_t blockBack)
+	{
+		nearbyBlockInfo = (blockUp + (blockDown << 4) + (blockLeft << 8) + (blockRight << 12) + (blockFront << 16) + (blockBack << 20)) << 8;
 	}
 };
 
@@ -35,11 +39,18 @@ private:
 		_getRenderProgram()->drawBuffer(0, _blockCount, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
 	}
 public:
-	chunk_render();
+	chunk_render() : render_node(chunkRenderProgram) {}
+
+	/*
+	* create chunk render by a list of block render data
+	* made by GM2000
+	*/
+	chunk_render(blockRenderData* block);
 
 	/*
 	* set light pos
 	* from the input location to 0,0,0
+	* this function might bu remove
 	*/
 	void setLight(float x, float y, float z)
 	{

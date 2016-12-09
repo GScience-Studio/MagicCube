@@ -7,6 +7,13 @@
 #define HIDE_BACK		0x10u
 #define HIDE_FRONT		0x20u
 
+#define GET_LIGHT_UP float(vs_out[0].nearbyBlockInfo << 20 >> 28) / 15.0f
+#define GET_LIGHT_DOWN float(vs_out[0].nearbyBlockInfo << 16 >> 28) / 15.0f
+#define GET_LIGHT_LEFT float(vs_out[0].nearbyBlockInfo << 12 >> 28) / 15.0f
+#define GET_LIGHT_RIGHT float(vs_out[0].nearbyBlockInfo << 8 >> 28) / 15.0f
+#define GET_LIGHT_FRONT float(vs_out[0].nearbyBlockInfo << 4 >> 28) / 15.0f
+#define GET_LIGHT_BACK float(vs_out[0].nearbyBlockInfo >> 28) / 15.0f
+
 uniform mat4 projection;
 
 layout(points) in ;
@@ -63,8 +70,10 @@ vec4 getTexturePos(float blockTextureID)
 void drawBlockUp(vec3 position, float blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
+	
+	gs_out.lightColor = vec3(GET_LIGHT_UP,GET_LIGHT_UP,GET_LIGHT_UP);
 
-	gs_out.lightPos = getLightDir(vec3(0.0,1.0,0.0),vec3(-1.0,0.0,1.0));
+	gs_out.lightPos = getLightDir(vec3(0.0,1.0,0.0),vec3(0.0,0.0,-1.0));
 
 	gl_Position = vec4(position + vec3(0.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
@@ -87,7 +96,9 @@ void drawBlockDown(vec3 position, float blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 	
-	gs_out.lightPos = getLightDir(vec3(0.0,-1.0,0.0),vec3(1.0,0.0,-1.0));
+	gs_out.lightColor = vec3(GET_LIGHT_DOWN,GET_LIGHT_DOWN,GET_LIGHT_DOWN) * 0.7;
+	
+	gs_out.lightPos = getLightDir(vec3(0.0,-1.0,0.0),vec3(0.0,0.0,1.0));
 	
 	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
@@ -112,7 +123,9 @@ void drawBlockBack(vec3 position, float blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
-	gs_out.lightPos = getLightDir(vec3(1.0,0.0,0.0),vec3(0.0,1.0,-1.0));
+	gs_out.lightColor = vec3(GET_LIGHT_BACK,GET_LIGHT_BACK,GET_LIGHT_BACK);
+	
+	gs_out.lightPos = getLightDir(vec3(1.0,0.0,0.0),vec3(0.0,0.0,1.0));
 
 	gl_Position = vec4(position + vec3(0.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
@@ -136,7 +149,9 @@ void drawBlockFront(vec3 position, float blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
-	gs_out.lightPos = getLightDir(vec3(-1.0,0.0,0.0),vec3(0.0,-1.0,1.0));
+	gs_out.lightColor = vec3(GET_LIGHT_FRONT,GET_LIGHT_FRONT,GET_LIGHT_FRONT) * 0.7;
+	
+	gs_out.lightPos = getLightDir(vec3(-1.0,0.0,0.0),vec3(0.0,0.0,-1.0));
 
 	gl_Position = vec4(position + vec3(1.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
@@ -160,7 +175,9 @@ void drawBlockLeft(vec3 position, float blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
-	gs_out.lightPos = getLightDir(vec3(0.0,0.0,1.0),vec3(1.0,-1.0,0.0));
+	gs_out.lightColor = vec3(GET_LIGHT_LEFT,GET_LIGHT_LEFT,GET_LIGHT_LEFT);
+	
+	gs_out.lightPos = getLightDir(vec3(0.0,0.0,1.0),vec3(-1.0,1.0,0.0));
 
 	gl_Position = vec4(position + vec3(0.0f,1.0f,0.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
@@ -185,7 +202,9 @@ void drawBlockRight(vec3 position, float blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
-	gs_out.lightPos = getLightDir(vec3(0.0,0.0,-1.0),vec3(-1.0,1.0,0.0));
+	gs_out.lightColor = vec3(GET_LIGHT_RIGHT,GET_LIGHT_RIGHT,GET_LIGHT_RIGHT) * 0.7;
+	
+	gs_out.lightPos = getLightDir(vec3(0.0,0.0,-1.0),vec3(1.0,-1.0,0.0));
 
 	gl_Position = vec4(position + vec3(0.0f,1.0f,1.0f), 1.0f) * projection;
 	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
@@ -247,7 +266,7 @@ void renderBlock(vec3 position,float blockTextureID)
 void main()
 {
     gl_PointSize = gl_in[0].gl_PointSize;
-		
+	
 	vec3 position = vec3(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z);
 	
     renderBlock(position,3);
