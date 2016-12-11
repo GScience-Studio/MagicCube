@@ -34,7 +34,7 @@ public:
 	void tickListener()
 	{
 		_tick++;
-
+		/*
 		if (_tick % 5 != 0)
 			return;
 
@@ -50,6 +50,7 @@ public:
 		testRenderNode->bindTexture(blockTexture);
 
 		delete[](testBlockRenderDataList);
+		*/
 	}
 	void initResources()
 	{
@@ -67,7 +68,22 @@ public:
 
 		showScene(firstScene);
 
-		fpController.getCamera()->getLocation()->moveTo(8, 25, 8);
+		//load chunks
+
+		for (int i = 0; i < 32; i++)
+			for (int j = 0; j < 32; j++)
+			{
+				blockRenderData* testBlockRenderDataList = new blockRenderData[4096];
+
+				chunk_render* testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(testBlockRenderDataList));
+
+				testRenderNode->getModelCamera()->getLocation()->moveTo(i * 16, 0 * 16, j * 16);
+
+				testRenderNode->bindTexture(blockTexture);
+
+				delete[](testBlockRenderDataList);
+			}
+		fpController.getCamera()->getLocation()->moveTo(16 * 16, 25, 16 * 16);
 	}
 };
 

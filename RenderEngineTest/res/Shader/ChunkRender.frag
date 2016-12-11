@@ -9,8 +9,8 @@ out vec4 fColor;
 in GS_OUT
 {
 	vec2 texturePos;
-	vec2 textureSizeLimit[2];
-	vec3 lightPos;
+	//vec2 textureSizeLimit[2];
+	//vec3 lightPos;
 	vec3 lightColor;
 }gs_out;
 

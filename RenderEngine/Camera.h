@@ -152,6 +152,7 @@ public:
 	{
 		return &_angle;
 	}
+
 	camera(location<double> location, angle angle) :_location(location), _angle(angle) {}
 	camera(double x, double y, double z, float posX, float posY) :_location(x, y, z), _angle(posX, posY) {}
 	camera() :camera(0.0, 0.0, 0.0, 0.0f, 0.0f) {}
@@ -164,5 +165,18 @@ public:
 	camera operator -(const camera& inCamera)
 	{
 		return camera(_location - inCamera._location, _angle - inCamera._angle);
+	}
+
+	bool operator != (camera& inCamera)
+	{
+		return !(*this == inCamera);
+	}
+	bool operator == (camera& inCamera)
+	{
+		return this->getLocation()->getX() == inCamera.getLocation()->getX() &&
+			this->getLocation()->getY() == inCamera.getLocation()->getY() &&
+			this->getLocation()->getZ() == inCamera.getLocation()->getZ() &&
+			this->getAngle()->getPosX() == inCamera.getAngle()->getPosX() &&
+			this->getAngle()->getPosY() == inCamera.getAngle()->getPosY();
 	}
 };

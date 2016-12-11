@@ -13,24 +13,19 @@ chunk_render::chunk_render(blockRenderData* block): render_node(chunkRenderProgr
 {
 	std::vector<blockRenderData> blockRenderList;
 	
-	for (unsigned short j = 0; j < 4096; j++)
+	for (int i = 0; i < 16; i++)
 	{
-		block[j].setBlockRenderData(j, 0);
-
-		uint8_t posX = getChunkBlockX(j);
-		uint8_t posY = getChunkBlockY(j);
-		uint8_t posZ = getChunkBlockZ(j);
-		
-		if (j != blockChunkLocationToShort(posX, posY, posZ))
+		for (int j = 0; j < 16; j++)
 		{
-			return;
-		}
-		block[j].setNearbyBlockLight(posZ, posZ, posZ, posZ, posZ, posZ);
+			uint16_t blockLocation = blockChunkLocationToShort(i, 0, j);
 
-		if ((posY % 2 != 0 || (posX == 15) || (posZ == 15)) && posX != 14 && posZ != 14)
-			blockRenderList.push_back(block[j]);
+			block[blockLocation].setBlockRenderData(blockLocation, 0);
+			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
+			block[blockLocation].setNearbyBlockLight(15, 0, 0, 0, 0, 0);
+
+			blockRenderList.push_back(block[blockLocation]);
+		}
 	}
-	
 	setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
 	_blockCount = (unsigned short)blockRenderList.size();
