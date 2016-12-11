@@ -175,8 +175,14 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 		message("Couldn't load the window", msgError,true);
 	}
 
+	glfwWindowHint(GL_MAJOR_VERSION, 3);
+	glfwWindowHint(GL_MINOR_VERSION, 2);
+
 	//set context
 	glfwMakeContextCurrent(_window);
+
+	if (_window == nullptr)
+		message("[Error]Can't load an OpenGL window!Program will exit.", msgError, true);
 
 	//set view port
 	glViewport(0, 0, windowSize.getWidth(), windowSize.getHeight());
@@ -245,13 +251,7 @@ void render_program::_setCamera(camera& globalCamera,camera& modelLocation)
 	glm::mat4 cameraModelTranslate = glm::translate(glm::mat4(), glm::vec3(modelLocation.getLocation()->getX(), modelLocation.getLocation()->getY(), modelLocation.getLocation()->getZ()));
 	glm::mat4 cameraModelRotate = glm::rotate(glm::mat4(), modelLocation.getAngle()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), modelLocation.getAngle()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
 
-	//lock
-	gl_manager::getInstance()._perspectiveLock.lock();
-
-	glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(gl_manager::getInstance()._perspective * cameraRotate * cameraTranslate * cameraModelTranslate * cameraModelRotate));
-
-	//unlock
-	gl_manager::getInstance()._perspectiveLock.unlock();
+	glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(gl_manager::getInstance().getPerspective() * cameraRotate * cameraTranslate * cameraModelTranslate * cameraModelRotate));
 }
 
 bool loadPNG(const char *filepath, image_info& image)

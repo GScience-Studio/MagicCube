@@ -156,6 +156,14 @@ public:
 	//gen texture
 	texture* genTexture(const char* fileName[], GLuint count);
 
+	//get perspective
+	glm::mat4 getPerspective()
+	{
+		std::lock_guard<std::mutex> perspectiveLockGuard(_perspectiveLock);
+
+		return _perspective;
+	}
+
 	//treate event
 	void pollEvent() const
 	{
