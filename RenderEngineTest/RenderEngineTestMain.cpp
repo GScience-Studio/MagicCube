@@ -75,15 +75,15 @@ public:
 			{
 				blockRenderData* testBlockRenderDataList = new blockRenderData[4096];
 
-				chunk_render* testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(testBlockRenderDataList));
+				chunk_render* testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(firstScene, testBlockRenderDataList));
 
-				testRenderNode->getModelCamera()->getLocation()->moveTo(i * 16, 0 * 16, j * 16);
+				testRenderNode->setChunkLocation(i, 0, j);
 
 				testRenderNode->bindTexture(blockTexture);
 
 				delete[](testBlockRenderDataList);
 			}
-		fpController.getCamera()->getLocation()->moveTo(16 * 16, 25, 16 * 16);
+		fpController.getCamera()->getLocation()->moveTo(16 * 16, 2, 16 * 16);
 	}
 };
 

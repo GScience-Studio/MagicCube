@@ -1,8 +1,12 @@
 #pragma once
 
+#define CHUNK_RENDER_PRIORITY 0.001f
+#define CHUNK_HALF_ALPHA_BLOCK_RENDER_PRIORITY 0.0f
+
 #include "../ChunkUniversal.h"
 #include "RenderNode.h"
 #include "ChunkRenderShader.h"
+#include "SceneNode.h"
 
 struct blockRenderData
 {
@@ -25,27 +29,65 @@ struct blockRenderData
 	}
 };
 
-class chunk_render :public render_node
+class chunk_render : public render_node
 {
 private:
+	//add a half-alpha block render node
+	chunk_render() : render_node(chunkRenderProgram) {}
+
+	chunk_render* _halfAlphaBlockRenderNode = nullptr;
+
 	gl_manager& _glInstance = gl_manager::getInstance();
 
 	unsigned short	_blockCount = 0;
 
+	//draw chunk
 	void _draw(camera _golbalCamera)
 	{
-		_glInstance.useTexture(*_getTexture());
-		
-		_getRenderProgram()->drawBuffer(0, _blockCount, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+		//is alpha block render node?
+		if (_halfAlphaBlockRenderNode == nullptr)
+		{
+			_glInstance.useTexture(*_getTexture());
+			_getRenderProgram()->drawBuffer(0, _blockCount, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+		}
+		else
+		{
+			_glInstance.useTexture(*_getTexture());
+			_getRenderProgram()->drawBuffer(0, _blockCount, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+		}
 	}
 public:
-	chunk_render() : render_node(chunkRenderProgram) {}
+	//add a chunk render
+	chunk_render(scene_node* chunkSceneNode) : render_node(chunkRenderProgram)
+	{
+		//add half-alpha render node
+		_halfAlphaBlockRenderNode = new chunk_render();
+
+		//set priority
+		_priority = CHUNK_RENDER_PRIORITY;
+		
+		_halfAlphaBlockRenderNode->_priority = CHUNK_HALF_ALPHA_BLOCK_RENDER_PRIORITY;
+
+		chunkSceneNode->addRenderNode(_halfAlphaBlockRenderNode);
+	}
+
+	/*
+	* set chunk location
+	* made by GM2000
+	*/
+	void setChunkLocation(int x, int y, int z)
+	{
+		getModelCamera()->getLocation()->moveTo(x * 16, y * 16, z * 16);
+
+		if (_halfAlphaBlockRenderNode != nullptr)
+			_halfAlphaBlockRenderNode->getModelCamera()->getLocation()->moveTo(x * 16, y * 16, z * 16);
+	}
 
 	/*
 	* create chunk render by a list of block render data
 	* made by GM2000
 	*/
-	chunk_render(blockRenderData* block);
+	chunk_render(scene_node* chunkSceneNode, blockRenderData* block);
 
 	/*
 	* set light pos

@@ -24,8 +24,8 @@ uniform vec3 eyesPos;
 
 in VS_OUT
 {
-	uvec2 texturePos;
 	uint  nearbyBlockInfo;
+	uint  blockID;
 }vs_out[];
 
 out GS_OUT
@@ -51,10 +51,10 @@ vec3 getLightDir(vec3 normal,vec3 tangent)
 	return normalize(v);
 }
 
-vec4 getTexturePos(float blockTextureID)
+vec4 getTexturePos(uint blockTextureID)
 {
-	float texturePosX = float(vs_out[0].texturePos.x);
-	float texturePosY = float(vs_out[0].texturePos.y);
+	float texturePosY = float(blockTextureID / 32u);
+	float texturePosX = float(blockTextureID - texturePosY * 32u);
 	
 	float texturePosY2 = texturePosY + 1;
 	float texturePosX2 = texturePosX + 1;
@@ -67,7 +67,7 @@ vec4 getTexturePos(float blockTextureID)
 	
 	return vec4(texturePosX,texturePosY,texturePosX2,texturePosY2);
 }
-void drawBlockUp(vec3 position, float blockTextureID)
+void drawBlockUp(vec3 position, uint blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 	
@@ -92,7 +92,7 @@ void drawBlockUp(vec3 position, float blockTextureID)
 	EmitVertex();
 	EndPrimitive();
 }
-void drawBlockDown(vec3 position, float blockTextureID)
+void drawBlockDown(vec3 position, uint blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 	
@@ -119,7 +119,7 @@ void drawBlockDown(vec3 position, float blockTextureID)
 	EndPrimitive();
 }
 
-void drawBlockBack(vec3 position, float blockTextureID)
+void drawBlockBack(vec3 position, uint blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
@@ -145,7 +145,7 @@ void drawBlockBack(vec3 position, float blockTextureID)
 	EndPrimitive();
 }
 
-void drawBlockFront(vec3 position, float blockTextureID)
+void drawBlockFront(vec3 position, uint blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
@@ -171,7 +171,7 @@ void drawBlockFront(vec3 position, float blockTextureID)
 	
 	EndPrimitive();
 }
-void drawBlockLeft(vec3 position, float blockTextureID)
+void drawBlockLeft(vec3 position, uint blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
@@ -198,7 +198,7 @@ void drawBlockLeft(vec3 position, float blockTextureID)
 	EndPrimitive();
 }
 
-void drawBlockRight(vec3 position, float blockTextureID)
+void drawBlockRight(vec3 position, uint blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
@@ -225,7 +225,7 @@ void drawBlockRight(vec3 position, float blockTextureID)
 	EndPrimitive();
 }
 
-void renderBlock(vec3 position,float blockTextureID)
+void renderBlock(vec3 position,uint blockTextureID)
 {
 	//up
 	if ((vs_out[0].nearbyBlockInfo & HIDE_TOP) == 0u)
@@ -269,5 +269,5 @@ void main()
 	
 	vec3 position = vec3(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z);
 	
-    renderBlock(position,3);
+    renderBlock(position,vs_out[0].blockID);
 }

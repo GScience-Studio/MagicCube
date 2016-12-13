@@ -9,17 +9,14 @@ layout(location = 1) in uint 	fnearbyBlockInfo;
 
 out VS_OUT
 {
-   uvec2 texturePos;
    uint  nearbyBlockInfo;
+   uint	 blockID;
 }vs_out;
 
 void  main()
 {
 	uint blockLocation 	= fblockInfo << 20 >> 20;
-	uint blockID 		= fblockInfo >> 12;
-	
-	vs_out.texturePos.y = blockID / 32u;
-	vs_out.texturePos.x = blockID - vs_out.texturePos.y * 32u;
+	vs_out.blockID 		= fblockInfo >> 12;
 	
 	vs_out.nearbyBlockInfo = fnearbyBlockInfo;
 	

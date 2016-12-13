@@ -29,19 +29,10 @@ void main()
 	
 	if (fColor.a < 0.5f)
 	{
-		discard;
+		//discard;
 		
-		return;
+		//return;
 	}
 	
 	fColor *= vec4(lightColor, 1.0f);
-	/*
-	vec3 normalColor = texture2D(normal, texCoords).xyz;
-	vec3 normal = expand(normalColor);
-
-	float diffuse = clamp(dot(normal,gs_out.lightPos), 0.01f, 1.0f);
-	
-	fColor *= vec4(min(lightColor * 0.6 + lightColor * diffuse, vec3(1.0f)),1.0f);
-	*/
-	//fColor = vec4(lightColor, 1.0f);
 }

@@ -9,17 +9,42 @@ class render_node
 	friend class render_node_manager;
 
 private:
+	bool operator < (const render_node& renderNode) const
+	{
+		return _priority < renderNode._priority;
+	}
+	bool operator <= (const render_node& renderNode) const
+	{
+		return _priority <= renderNode._priority;
+	}
+	bool operator > (const render_node& renderNode) const
+	{
+		return _priority > renderNode._priority;
+	}
+	bool operator >= (const render_node& renderNode) const
+	{
+		return _priority >= renderNode._priority;
+	}
+	bool operator == (const render_node& renderNode) const
+	{
+		return renderNode._priority == _priority;
+	}
+
 	gl_manager&		_glInstance = gl_manager::getInstance();
 
 	//these are the thing that about opengl
 	render_program* _renderProgram;
 	buffer*			_buffer = new buffer();
+
 	const texture*	_texture;
 
 protected:
 	//node camera
 	camera			_nodeCamera;
 	camera			_modelLocation;
+	
+	//node priority(0.0 to 1.0),0.0 is lowest and 1.0 is highest
+	float _priority = 0.0;
 
 	//is the render_node can draw
 	bool _isEnable = false;

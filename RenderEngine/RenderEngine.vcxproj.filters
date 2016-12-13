@@ -113,9 +113,6 @@
     <Filter Include="Extension\ModLoader">
       <UniqueIdentifier>{0bf76644-3626-499a-ad6d-ef659b62e996}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Extension\ChunkRender">
-      <UniqueIdentifier>{6fdd1cf8-9a3c-41dd-93bc-d5b4f821cbc5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Node">
       <UniqueIdentifier>{6dc52b16-6eb4-4566-b43c-00c9ec4f9e51}</UniqueIdentifier>
     </Filter>
@@ -124,6 +121,9 @@
     </Filter>
     <Filter Include="Error">
       <UniqueIdentifier>{d5ed2345-7411-4d3a-bb33-6fc00e6a093b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extension\ChunkRender">
+      <UniqueIdentifier>{6fdd1cf8-9a3c-41dd-93bc-d5b4f821cbc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

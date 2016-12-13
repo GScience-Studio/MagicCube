@@ -9,7 +9,7 @@
 #define HIDE_FRONT		0x20
 #define NO_ALPHA_BLOCK	0x40
 
-chunk_render::chunk_render(blockRenderData* block): render_node(chunkRenderProgram)
+chunk_render::chunk_render(scene_node* chunkSceneNode, blockRenderData* block): chunk_render(chunkSceneNode)
 {
 	std::vector<blockRenderData> blockRenderList;
 	
@@ -26,9 +26,39 @@ chunk_render::chunk_render(blockRenderData* block): render_node(chunkRenderProgr
 			blockRenderList.push_back(block[blockLocation]);
 		}
 	}
+	uint16_t blockLocation = blockChunkLocationToShort(0, 5, 0);
+
+	block[blockLocation].setBlockRenderData(blockLocation, 0);
+	block[blockLocation].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+
+	blockRenderList.push_back(block[blockLocation]);
+
 	setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
 	_blockCount = (unsigned short)blockRenderList.size();
+
+	if (_halfAlphaBlockRenderNode == nullptr)
+		return;
+
+	blockRenderList.clear();
+
+	for (int i = 0; i < 16; i++)
+	{
+		for (int j = 0; j < 16; j++)
+		{
+			uint16_t blockLocation = blockChunkLocationToShort(i, 3, j);
+
+			block[blockLocation].setBlockRenderData(blockLocation, 1);
+			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
+			block[blockLocation].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+
+			blockRenderList.push_back(block[blockLocation]);
+		}
+	}
+
+	_halfAlphaBlockRenderNode->setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
+
+	_halfAlphaBlockRenderNode->_blockCount = (unsigned short)blockRenderList.size();
 }
 
 void chunk_render::setBlockRenderDatas(const blockRenderData* blockRenderData, const GLuint blockCount)
