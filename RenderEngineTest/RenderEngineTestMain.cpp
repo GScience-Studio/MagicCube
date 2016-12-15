@@ -70,20 +70,22 @@ public:
 
 		//load chunks
 
-		for (int i = 0; i < 32; i++)
-			for (int j = 0; j < 32; j++)
+		for (int i = 0; i < 64; i++)
+			for (int j = 0; j < 64; j++)
 			{
 				blockRenderData* testBlockRenderDataList = new blockRenderData[4096];
 
-				chunk_render* testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(firstScene, testBlockRenderDataList));
+				chunk_render chunk1 = chunk_render(firstScene, blockTexture);
+				
+				chunk1.setChunkLocation(i, 0, j);
 
-				testRenderNode->setChunkLocation(i, 0, j);
+				blockRenderData* testBlockDatas = new blockRenderData[4096];
 
-				testRenderNode->bindTexture(blockTexture);
+				chunk1.setBlockRenderDatas(testBlockDatas);
 
-				delete[](testBlockRenderDataList);
+				delete[](testBlockDatas);
 			}
-		fpController.getCamera()->getLocation()->moveTo(16 * 16, 2, 16 * 16);
+		fpController.getCamera()->getLocation()->moveTo(32 * 16, 2, 32 * 16);
 	}
 };
 

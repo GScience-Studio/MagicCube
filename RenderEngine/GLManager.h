@@ -68,7 +68,7 @@ class render_program
 	friend class gl_manager;
 
 protected:
-	void _setCamera(camera& globalCamera, camera& modelLocation);
+	void _setCamera(camera_synchronize& globalCamera, camera_synchronize& modelLocation);
 
 	virtual void _init() = 0;
 
@@ -78,7 +78,7 @@ protected:
 	GLuint _programID = 0;
 
 public:
-	virtual void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera& globalCamera, camera& modelLocation) = 0;
+	virtual void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera_synchronize& globalCamera, camera_synchronize& modelLocation) = 0;
 };
 
 /*

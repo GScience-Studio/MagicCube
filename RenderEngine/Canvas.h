@@ -56,7 +56,7 @@ private:
 	unsigned int _lastVectorSize = 0;
 
 	//draw canvas
-	void _draw(camera _golbalCamera);
+	void _draw(camera_synchronize _golbalCamera);
 
 	//refresh shape
 	void _refreshShape();

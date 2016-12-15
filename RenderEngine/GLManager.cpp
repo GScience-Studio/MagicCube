@@ -244,7 +244,7 @@ render_program* gl_manager::bindShader(char* vert, char* frag, char* gs, render_
 
 	return renderProgramClass;
 }
-void render_program::_setCamera(camera& globalCamera,camera& modelLocation)
+void render_program::_setCamera(camera_synchronize& globalCamera, camera_synchronize& modelLocation)
 {
 	gl_manager::getInstance().useShaderProgram(_programID);
 

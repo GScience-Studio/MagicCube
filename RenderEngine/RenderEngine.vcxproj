@@ -25,6 +25,7 @@
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="EventQueue.cpp" />
     <ClCompile Include="FPC.cpp" />
+    <ClCompile Include="Fusum.cpp" />
     <ClCompile Include="InputCallbackManager.cpp" />
     <ClCompile Include="ChunkRender.cpp" />
     <ClCompile Include="ChunkRenderShader.cpp" />
@@ -41,7 +42,9 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CanvasExtension.h" />
     <ClInclude Include="CanvasTexture.h" />
+    <ClInclude Include="ChunkGlobalRender.h" />
     <ClInclude Include="EventQueue.h" />
+    <ClInclude Include="Fusum.h" />
     <ClInclude Include="GLRenderCommands.h" />
     <ClInclude Include="InputCallback.h" />
     <ClInclude Include="ChunkRender.h" />

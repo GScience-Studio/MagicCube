@@ -37,7 +37,7 @@ void canvas::clear()
 
 	_hasChange = true;
 }
-void canvas::_draw(camera _golbalCamera)
+void canvas::_draw(camera_synchronize _golbalCamera)
 {
 	_glInstance.useTexture(*_getTexture());
 

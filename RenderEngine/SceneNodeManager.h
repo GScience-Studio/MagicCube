@@ -31,7 +31,7 @@ private:
 
 protected:
 	//gobal screen camera
-	camera _globalCamera;
+	camera_synchronize _globalCamera;
 
 	//scene refresh
 	void _sceneRefresh()
@@ -81,7 +81,7 @@ public:
 		return _sceneList.back();
 	}
 	//get camera
-	camera* getGlobalCamera()
+	camera_synchronize* getGlobalCamera()
 	{
 		return &_globalCamera;
 	}
