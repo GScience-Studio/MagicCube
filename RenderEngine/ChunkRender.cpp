@@ -24,26 +24,45 @@ chunk_render::chunk_render(scene_node* sceneNode, texture* blockTexture)
 void chunk_render::setBlockRenderDatas(blockRenderData* block)
 {
 	std::vector<blockRenderData> blockRenderList;
-	
-	for (int i = 0; i < 16; i++)
+
+	for (int i = 0; i < 13; i++)
 	{
-		for (int j = 0; j < 16; j++)
+		for (int j = 0; j < 13; j++)
 		{
 			uint16_t blockLocation = blockChunkLocationToShort(i, 0, j);
 
 			block[blockLocation].setBlockRenderData(blockLocation, 0);
 			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
-			block[blockLocation].setNearbyBlockLight(15, 0, 0, 0, 0, 0);
+			block[blockLocation].setNearbyBlockLight((i * j) / 144.0 * 15, 15, 15, 15, 15, 15);
 
 			blockRenderList.push_back(block[blockLocation]);
 		}
 	}
 
+	for (int i = 0; i < 14; i++)
+	{
+		for (int j = 0; j < 14; j++)
+		{
+			uint16_t blockLocation = blockChunkLocationToShort(i, 15, j);
+
+			block[blockLocation].setBlockRenderData(blockLocation, 0);
+			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
+			block[blockLocation].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+
+			blockRenderList.push_back(block[blockLocation]);
+		}
+	}
+
+	chunkGlobalRender->_blockStart = 0;
+	chunkGlobalRender->_blockEnd = (unsigned short)blockRenderList.size();
+
+	chunkHalfAlphaBlockRender->_blockStart = (unsigned short)blockRenderList.size();
+
 	for (int i = 0; i < 16; i++)
 	{
 		for (int j = 0; j < 16; j++)
 		{
-			uint16_t blockLocation = blockChunkLocationToShort(i, 3, j);
+			uint16_t blockLocation = blockChunkLocationToShort(i, 8, j);
 
 			block[blockLocation].setBlockRenderData(blockLocation, 1);
 			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
@@ -54,9 +73,5 @@ void chunk_render::setBlockRenderDatas(blockRenderData* block)
 	}
 	chunkGlobalRender->setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
-	chunkGlobalRender->_blockStart = 0;
-	chunkGlobalRender->_blockCount = (unsigned short)blockRenderList.size() / 2;
-
-	chunkHalfAlphaBlockRender->_blockStart = (unsigned short)blockRenderList.size() / 2;
-	chunkHalfAlphaBlockRender->_blockCount = (unsigned short)blockRenderList.size();
+	chunkHalfAlphaBlockRender->_blockEnd = (unsigned short)blockRenderList.size();
 }

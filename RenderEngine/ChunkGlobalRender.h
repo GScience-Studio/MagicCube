@@ -11,18 +11,29 @@ class chunk_global_render : public render_node
 private:
 	gl_manager& _glInstance = gl_manager::getInstance();
 
-	unsigned short	_blockCount = 0;
+	unsigned short	_blockEnd	= 0;
 	unsigned short	_blockStart = 0;
 
 	//draw chunk
 	void _draw(camera_synchronize _golbalCamera)
 	{
-		if (_blockCount - _blockStart == 0)
+		if (_blockEnd - _blockStart <= 0)
 			return;
 
 		_glInstance.useTexture(*_getTexture());
 
-		_getRenderProgram()->drawBuffer(_blockStart, _blockCount, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+		if (_priority == CHUNK_HALF_ALPHA_BLOCK_RENDER_PRIORITY)
+		{
+			glDepthMask(GL_FALSE);
+
+			_getRenderProgram()->drawBuffer(_blockStart, _blockEnd - _blockStart, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+
+			glDepthMask(GL_TRUE);
+		}
+		else if (_priority == CHUNK_RENDER_PRIORITY)
+		{
+			_getRenderProgram()->drawBuffer(_blockStart, _blockEnd - _blockStart, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+		}
 	}
 public:
 	//add a normal chunk render and auto gen buffer

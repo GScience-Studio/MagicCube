@@ -28,17 +28,20 @@ private:
 
 	float lightVec[3]{ 0.0,0.0,0.0 };
 
-	void _setCamera(camera_synchronize& globalCamera, camera_synchronize& modelLocation)
+	void _setCamera(camera_synchronize& globalCamera, camera_synchronize& modelCamera)
 	{
-		gl_manager::getInstance().useShaderProgram(_programID);
+		camera totalCamera = (camera)modelCamera - (camera)globalCamera;
+		location<double> modelLocation = *modelCamera.getLocation();
 
-		glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(modelLocation.getLocation()->getX() -globalCamera.getLocation()->getX(), modelLocation.getLocation()->getY() -globalCamera.getLocation()->getY(), modelLocation.getLocation()->getZ() -globalCamera.getLocation()->getZ()));
-		glm::mat4 cameraRotate = glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
-
-		isInSight = isCubeInFrustum((float)modelLocation.getLocation()->getX(), (float)modelLocation.getLocation()->getY(), (float)modelLocation.getLocation()->getZ(), (float)modelLocation.getLocation()->getX() + 16.0f, (float)modelLocation.getLocation()->getY() + 16.0f, (float)modelLocation.getLocation()->getZ() + 16.0f);
+		isInSight = isCubeInFrustum((float)modelLocation.getX(), (float)modelLocation.getY(), (float)modelLocation.getZ(), (float)modelLocation.getX() + 16.0f, (float)modelLocation.getY() + 16.0f, (float)modelLocation.getZ() + 16.0f);
 
 		if (!isInSight)
 			return;
+
+		gl_manager::getInstance().useShaderProgram(_programID);
+
+		glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(totalCamera.getLocation()->getX(), totalCamera.getLocation()->getY(), totalCamera.getLocation()->getZ()));
+		glm::mat4 cameraRotate = glm::rotate(glm::mat4(), -totalCamera.getAngle()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), -totalCamera.getAngle()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
 
 		glm::mat4 projection = gl_manager::getInstance().getPerspective() * cameraRotate * cameraTranslate;
 
@@ -49,18 +52,6 @@ private:
 	void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera_synchronize& globalCamera, camera_synchronize& modelLocation)
 	{
 		_setCamera(globalCamera, modelLocation);
-
-		//check whether the chunk is in player's sight
-		
-		//set light(can't use now)
-		/*
-		if (lightLock.try_lock())
-		{
-			glUniform3fv(_lightPosLocation, 1, lightVec);
-
-			lightLock.unlock();
-		}
-		*/
 
 		if (isInSight)
 		{

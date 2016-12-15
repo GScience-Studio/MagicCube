@@ -101,12 +101,22 @@ public:
 
 	angle_synchronize operator +(angle_synchronize inRotate)
 	{
+		std::lock_guard<std::mutex> lockGuard(_lock);
+
 		return angle_synchronize(inRotate.get(0) + get(0), inRotate.get(1) + get(1));
 	}
 
 	angle_synchronize operator -(angle_synchronize inRotate)
 	{
+		std::lock_guard<std::mutex> lockGuard(_lock);
+
 		return angle_synchronize(inRotate.get(0) - get(0), inRotate.get(1) - get(1));
+	}
+	operator angle()
+	{
+		std::lock_guard<std::mutex> lockGuard(_lock);
+
+		return angle(get(0), get(1));
 	}
 };
 /*
@@ -123,7 +133,7 @@ public:
 	}
 	location operator -(location loc)
 	{
-		return location<T>(-get(0), -get(1), -get(2));
+		return location<T>(get(0) - loc.get(0), get(1) - loc.get(1), get(2) - loc.get(2));
 	}
 	location(T x, T y, T z) :vec<T, 3>({ x, y, z }) {}
 	location(const location& inLocation) :vec<T, 3>({ inLocation.get(0), inLocation.get(1), inLocation.get(2) }) {}
@@ -178,15 +188,26 @@ private:
 public:
 	location_synchronize operator +(location_synchronize loc)
 	{
+		std::lock_guard<std::mutex> lockGuard(_lock);
+
 		return location_synchronize<T>(get(0) + loc[0], get(1) + loc[1], get(2) + loc[2]);
 	}
 	location_synchronize operator -(location_synchronize loc)
 	{
-		return location_synchronize<T>(-get(0), -get(1), -get(2));
+		std::lock_guard<std::mutex> lockGuard(_lock);
+		std::lock_guard<std::mutex> inLockGuard(loc._lock);
+		
+		return location_synchronize<T>(get(0) - loc.get(0), get(1) - loc.get(1), get(2) - loc.get(2));
 	}
 	location_synchronize(T x, T y, T z) :vec<T, 3>({ x, y, z }) {}
 	location_synchronize(const location_synchronize& inLocation) :vec<T, 3>({ inLocation.get(0), inLocation.get(1), inLocation.get(2) }) {}
 
+	operator location<T>()
+	{
+		std::lock_guard<std::mutex> lockGuard(_lock);
+
+		return location<T>(get(0), get(1), get(2));
+	}
 	T getX()
 	{
 		std::lock_guard<std::mutex> lockGuard(_lock);
@@ -241,6 +262,50 @@ public:
 	}
 }; 
 
+class camera
+{
+private:
+	location<double>	_location;
+	angle				_angle;
+
+public:
+	location<double>* getLocation()
+	{
+		return &_location;
+	}
+	angle* getAngle()
+	{
+		return &_angle;
+	}
+
+	camera(location<double> location, angle angle) :_location(location), _angle(angle) {}
+	camera(double x, double y, double z, float posX, float posY) :_location(x, y, z), _angle(posX, posY) {}
+	camera() :camera(0.0, 0.0, 0.0, 0.0f, 0.0f) {}
+
+	camera operator +(const camera& inCamera)
+	{
+		return camera(_location + inCamera._location, _angle + inCamera._angle);
+	}
+
+	camera operator -(const camera& inCamera)
+	{
+		return camera(_location - inCamera._location, _angle - inCamera._angle);
+	}
+
+	bool operator != (camera& inCamera)
+	{
+		return !(*this == inCamera);
+	}
+	bool operator == (camera& inCamera)
+	{
+		return this->getLocation()->getX() == inCamera.getLocation()->getX() &&
+			this->getLocation()->getY() == inCamera.getLocation()->getY() &&
+			this->getLocation()->getZ() == inCamera.getLocation()->getZ() &&
+			this->getAngle()->getPosX() == inCamera.getAngle()->getPosX() &&
+			this->getAngle()->getPosY() == inCamera.getAngle()->getPosY();
+	}
+};
+
 class camera_synchronize
 {
 private:
@@ -271,55 +336,15 @@ public:
 		return camera_synchronize(_location - inCamera._location, _angle - inCamera._angle);
 	}
 
+	operator camera()
+	{
+		return camera(_location, _angle);
+	}
 	bool operator != (camera_synchronize& inCamera)
 	{
 		return !(*this == inCamera);
 	}
 	bool operator == (camera_synchronize& inCamera)
-	{
-		return this->getLocation()->getX() == inCamera.getLocation()->getX() &&
-			this->getLocation()->getY() == inCamera.getLocation()->getY() &&
-			this->getLocation()->getZ() == inCamera.getLocation()->getZ() &&
-			this->getAngle()->getPosX() == inCamera.getAngle()->getPosX() &&
-			this->getAngle()->getPosY() == inCamera.getAngle()->getPosY();
-	}
-};
-
-class camera
-{
-private:
-	location<double>	_location;
-	angle				_angle;
-
-public:
-	location<double>* getLocation()
-	{
-		return &_location;
-	}
-	angle* getAngle()
-	{
-		return &_angle;
-	}
-
-	camera(location<double> location, angle angle) :_location(location), _angle(angle) {}
-	camera(double x, double y, double z, float posX, float posY) :_location(x, y, z), _angle(posX, posY) {}
-	camera() :camera(0.0, 0.0, 0.0, 0.0f, 0.0f) {}
-	
-	camera operator +(const camera& inCamera)
-	{
-		return camera(_location + inCamera._location, _angle + inCamera._angle);
-	}
-
-	camera operator -(const camera& inCamera)
-	{
-		return camera(_location - inCamera._location, _angle - inCamera._angle);
-	}
-
-	bool operator != (camera& inCamera)
-	{
-		return !(*this == inCamera);
-	}
-	bool operator == (camera& inCamera)
 	{
 		return this->getLocation()->getX() == inCamera.getLocation()->getX() &&
 			this->getLocation()->getY() == inCamera.getLocation()->getY() &&
