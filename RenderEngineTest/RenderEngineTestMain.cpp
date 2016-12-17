@@ -70,8 +70,8 @@ public:
 
 		//load chunks
 		
-		for (int i = 0; i < 64; i++)
-			for (int j = 0; j < 64; j++)
+		for (int i = 0; i < 32; i++)
+			for (int j = 0; j < 32; j++)
 				for (int k = 0; k < 2; k++)
 				{
 					blockRenderData* testBlockRenderDataList = new blockRenderData[4096];
@@ -86,7 +86,7 @@ public:
 
 					delete[](testBlockDatas);
 				}
-		fpController.getCamera()->getLocation()->moveTo(64 * 16 + 1875000 * 16, 10, 64 * 16);
+		fpController.getCamera()->getLocation()->moveTo(256 + 1875000 * 16, 10, 256);
 	}
 };
 
