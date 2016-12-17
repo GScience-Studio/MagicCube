@@ -11,6 +11,8 @@ class chunk_global_render : public render_node
 private:
 	gl_manager& _glInstance = gl_manager::getInstance();
 
+	std::mutex lock;
+
 	unsigned short	_blockEnd	= 0;
 	unsigned short	_blockStart = 0;
 
@@ -19,7 +21,14 @@ private:
 	//draw chunk
 	void _draw(camera _golbalCamera)
 	{
-		if (_blockEnd - _blockStart <= 0)
+		lock.lock();
+
+		unsigned short bufferStart = _blockStart;
+		unsigned short bufferEnd = _blockEnd - _blockStart;
+
+		lock.unlock();
+
+		if (bufferEnd <= 0)
 			return;
 
 		_glInstance.useTexture(*_getTexture());
@@ -28,13 +37,13 @@ private:
 		{
 			glDepthMask(GL_FALSE);
 
-			_getRenderProgram()->drawBuffer(_blockStart, _blockEnd - _blockStart, *_getBuffer(), camera(), _modelLocation);
+			_getRenderProgram()->drawBuffer(bufferStart, _blockEnd - _blockStart, *_getBuffer(), camera(), _modelLocation);
 
 			glDepthMask(GL_TRUE);
 		}
 		else
 		{
-			_getRenderProgram()->drawBuffer(_blockStart, _blockEnd - _blockStart, *_getBuffer(), camera(), _modelLocation);
+			_getRenderProgram()->drawBuffer(bufferStart, _blockEnd - _blockStart, *_getBuffer(), camera(), _modelLocation);
 		}
 	}
 public:
@@ -64,13 +73,22 @@ public:
 	/*
 	* set light pos
 	* from the input location to 0,0,0
-	* this function might bu remove
+	* this function might be remove
 	*/
 	void setLight(float x, float y, float z)
 	{
 		((chunk_render_program*)_getRenderProgram())->setLight(-x, y, -z);
 	}
 
+	void setBufferUseInfo(unsigned short start, unsigned short end)
+	{
+		lock.lock();
+
+		_blockStart = start;
+		_blockEnd	= end;
+
+		lock.unlock();
+	}
 	/*
 	* set blocks render datas
 	* made by GM2000

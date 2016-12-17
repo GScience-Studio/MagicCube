@@ -49,6 +49,14 @@ private:
 			glInstance.useBuffer(buffer);
 			glInstance.useShaderProgram(_programID);
 
+			//block data
+			glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(GLuint) * 2, (const void*)(sizeof(GLuint) * 0));
+			glEnableVertexAttribArray(0);
+
+			//nearby block info
+			glVertexAttribIPointer(1, 1, GL_UNSIGNED_INT, sizeof(GLuint) * 2, (const void*)(sizeof(GLuint) * 1));
+			glEnableVertexAttribArray(1);
+
 			glDrawArrays(GL_POINTS, first, count);
 		}
 	}

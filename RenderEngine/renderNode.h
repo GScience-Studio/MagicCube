@@ -38,6 +38,8 @@ private:
 
 	const texture*	_texture;
 
+	bool _isBufferOwner = false;
+
 protected:
 	//node camera
 	camera_synchronize		_nodeCamera;
@@ -61,11 +63,13 @@ protected:
 
 	render_node(render_program* renderProgram)
 	{
+		_isBufferOwner = true;
 		_buffer = new buffer();
 		_renderProgram = renderProgram;
 	}
 	render_node(buffer* buffer, render_program* renderProgram) :_buffer(buffer)
 	{
+		_isBufferOwner = false;
 		_renderProgram = renderProgram;
 	}
 
@@ -85,11 +89,9 @@ protected:
 	}
 	~render_node()
 	{
-		if (_buffer != nullptr)
+		if (_isBufferOwner)
 		{
 			delete(_buffer);
-
-			_buffer = nullptr;
 		}
 	}
 public:

@@ -28,6 +28,8 @@ struct blockRenderData
 	{
 		nearbyBlockInfo += (blockUp + (blockDown << 4) + (blockLeft << 8) + (blockRight << 12) + (blockFront << 16) + (blockBack << 20)) << 8;
 	}
+	void setAlpha(bool hasAlpha);
+	void setNearbyBlockAlpha(bool top, bool down, bool left, bool right, bool front, bool back);
 };
 
 class chunk_render
@@ -36,7 +38,7 @@ class chunk_render
 	chunk_global_render* chunkHalfAlphaBlockRender;
 
 public:
-	void setBlockRenderDatas(blockRenderData* block);
+	void setBlockRenderDatas(blockRenderData* block, unsigned short count);
 
 	void setChunkLocation(int x, int y, int z)
 	{

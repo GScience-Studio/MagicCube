@@ -65,7 +65,7 @@ vec4 getTexturePos(uint blockTextureID)
 	texturePosX2 /= 32.0f;
 	texturePosY2 /= 32.0f;
 	
-	return vec4(texturePosX,texturePosY,texturePosX2,texturePosY2);
+	return vec4(texturePosX,texturePosY2,texturePosX2,texturePosY);
 }
 void drawBlockUp(vec3 position, uint blockTextureID)
 {

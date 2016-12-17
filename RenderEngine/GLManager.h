@@ -391,6 +391,8 @@ public:
 			glBindVertexArray(_enableBuffer._vao);
 			glBindVertexArray(_enableBuffer._vbo);
 		}
+		else
+			glBindVertexArray(0);
 	}
 	//if return false it mean it is in use
 	bool useBuffer(buffer& bufferInfo)
@@ -424,6 +426,8 @@ public:
 			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo._vbo);
 
 			_enableBuffer._vbo = bufferInfo._vbo;
+
+			return true;
 		}
 		return false;
 	}

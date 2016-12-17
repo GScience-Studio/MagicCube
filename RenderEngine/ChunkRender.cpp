@@ -1,6 +1,8 @@
 
 #include "ChunkRender.h"
 
+#include <list>
+
 #define HIDE_TOP			0x01
 #define HIDE_DOWM			0x02
 #define HIDE_LEFT			0x04
@@ -21,56 +23,61 @@ chunk_render::chunk_render(scene_node* sceneNode, texture* blockTexture)
 	sceneNode->addRenderNode(chunkHalfAlphaBlockRender);
 }
 
-void chunk_render::setBlockRenderDatas(blockRenderData* block)
+void chunk_render::setBlockRenderDatas(blockRenderData* block, unsigned short count)
 {
-	std::vector<blockRenderData> blockRenderList;
+	std::vector<blockRenderData> blockRenderList(count);
 
-	for (int i = 0; i < 16; i++)
+	unsigned short alphaBlockCount		= 0;
+	unsigned short noAlphaBlockCount	= 0;
+
+	for (unsigned short i = 0; i < count; i++)
 	{
-		for (int j = 0; j < 16; j++)
+		if (block[i].nearbyBlockInfo & HALF_ALPHA_BLOCK)
 		{
-			uint16_t blockLocation = blockChunkLocationToShort(i, 0, j);
+			alphaBlockCount++;
 
-			block[blockLocation].setBlockRenderData(blockLocation, 0);
-			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
-			block[blockLocation].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+			blockRenderList[count - alphaBlockCount] = block[i];
+		}
+		else
+		{
+			blockRenderList[noAlphaBlockCount] = block[i];
 
-			blockRenderList.push_back(block[blockLocation]);
+			noAlphaBlockCount++;
 		}
 	}
-	for (int i = 0; i < 16; i++)
-	{
-		for (int j = 0; j < 16; j++)
-		{
-			uint16_t blockLocation = blockChunkLocationToShort(i, 14, j);
-
-			block[blockLocation].setBlockRenderData(blockLocation, 0);
-			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
-			block[blockLocation].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
-
-			blockRenderList.push_back(block[blockLocation]);
-		}
-	}
-	chunkGlobalRender->_blockStart = 0;
-	chunkGlobalRender->_blockEnd = (unsigned short)blockRenderList.size();
-
-	chunkHalfAlphaBlockRender->_blockStart = (unsigned short)blockRenderList.size();
-
-	for (int i = 0; i < 16; i++)
-	{
-		for (int j = 0; j < 16; j++)
-		{
-			uint16_t blockLocation = blockChunkLocationToShort(i, 8, j);
-
-			block[blockLocation].setBlockRenderData(blockLocation, 32);
-			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
-			block[blockLocation].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
-
-			blockRenderList.push_back(block[blockLocation]);
-		}
-	}
-
 	chunkGlobalRender->setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
-	chunkHalfAlphaBlockRender->_blockEnd = (unsigned short)blockRenderList.size();
+	chunkGlobalRender->setBufferUseInfo(0, noAlphaBlockCount);
+	chunkHalfAlphaBlockRender->setBufferUseInfo(noAlphaBlockCount, count);
+}
+
+void blockRenderData::setAlpha(bool hasAlpha)
+{
+	if (hasAlpha)
+		nearbyBlockInfo |= HALF_ALPHA_BLOCK;
+	else if(nearbyBlockInfo & HALF_ALPHA_BLOCK)
+		nearbyBlockInfo ^= HALF_ALPHA_BLOCK;
+}
+
+void blockRenderData::setNearbyBlockAlpha(bool top, bool down, bool left, bool right, bool front, bool back)
+{
+	nearbyBlockInfo = nearbyBlockInfo >> 6 << 6;
+
+	if (!top)
+		nearbyBlockInfo |= HIDE_TOP;
+
+	if (!down)
+		nearbyBlockInfo |= HIDE_DOWM;
+
+	if (!left)
+		nearbyBlockInfo |= HIDE_LEFT;
+
+	if (!right)
+		nearbyBlockInfo |= HIDE_RIGHT;
+
+	if (!front)
+		nearbyBlockInfo |= HIDE_FRONT;
+
+	if (!back)
+		nearbyBlockInfo |= HIDE_BACK;
 }
