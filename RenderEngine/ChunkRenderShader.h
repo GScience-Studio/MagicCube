@@ -23,38 +23,28 @@ private:
 	//eyes location
 	GLuint _eyesPosLocation;
 
-	//is in player sight?
-	bool isInSight = false;
-
 	float lightVec[3]{ 0.0,0.0,0.0 };
 
-	void _setCamera(camera globalCamera, camera modelCamera)
+	bool _setCameraAndCheckIsInSight(camera modelCamera)
 	{
 		location<double> modelLocation = *modelCamera.getLocation();
 
-		isInSight = isCubeInFrustum((float)modelLocation.getX(), (float)modelLocation.getY(), (float)modelLocation.getZ(), (float)modelLocation.getX() + 16.0f, (float)modelLocation.getY() + 16.0f, (float)modelLocation.getZ() + 16.0f);
-
-		if (!isInSight)
-			return;
+		if (!isCubeInFrustum(modelLocation.getX(), modelLocation.getY(), modelLocation.getZ(), modelLocation.getX() + 16.0f, modelLocation.getY() + 16.0f, modelLocation.getZ() + 16.0f))
+			return false;
 
 		gl_manager::getInstance().useShaderProgram(_programID);
 
-		glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(modelCamera.getLocation()->getX(), modelCamera.getLocation()->getY(), modelCamera.getLocation()->getZ()));
+		glm::dmat4 cameraTranslate = glm::translate<double>(glm::dmat4(), glm::dvec3(modelCamera.getLocation()->getX(), modelCamera.getLocation()->getY(), modelCamera.getLocation()->getZ()));
 
-		glm::mat4 projection = glm::mat4(globalMatrix[0], globalMatrix[1], globalMatrix[2], globalMatrix[3],
-			globalMatrix[4], globalMatrix[5], globalMatrix[6], globalMatrix[7],
-			globalMatrix[8], globalMatrix[9], globalMatrix[10], globalMatrix[11],
-			globalMatrix[12], globalMatrix[13], globalMatrix[14], globalMatrix[15]);
+		glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(glm::mat4(globalMatrix * cameraTranslate)));
 
-		glUniformMatrix4fv(_projection, 1, GL_TRUE, glm::value_ptr(projection * cameraTranslate));
+		return true;
 	}
 
 	//draw
 	void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera globalCamera, camera modelLocation)
 	{
-		_setCamera(globalCamera, modelLocation);
-
-		if (isInSight)
+		if (_setCameraAndCheckIsInSight(modelLocation))
 		{
 			glInstance.useBuffer(buffer);
 			glInstance.useShaderProgram(_programID);

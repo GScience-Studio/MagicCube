@@ -27,11 +27,11 @@ void main()
 	
 	fColor = texture2D(texture,texCoords);
 	
-	if (fColor.a < 0.5f)
+	if (fColor.a == 0.0f)
 	{
-		//discard;
+		discard;
 		
-		//return;
+		return;
 	}
 	
 	fColor *= vec4(lightColor, 1.0f);

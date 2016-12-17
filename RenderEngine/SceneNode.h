@@ -7,7 +7,7 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
 
-void calculateFrustumPlanes(glm::mat4& modleVerMatrix);
+void calculateFrustumPlanes(glm::dmat4& modleVerMatrix);
 
 //scene
 class scene_node :public render_node_manager
@@ -20,8 +20,8 @@ private:
 	{
 		camera globalCamera = inGlobalCamera;
 
-		glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(-globalCamera.getLocation()->getX(), -globalCamera.getLocation()->getY(), -globalCamera.getLocation()->getZ()));
-		glm::mat4 cameraRotate = glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosX(), glm::vec3(1.0, 0.0, 0.0)) * glm::rotate(glm::mat4(), -globalCamera.getAngle()->getPosY(), glm::vec3(0.0, 1.0, 0.0));
+		glm::dmat4 cameraTranslate = glm::translate<double>(glm::dmat4(), glm::dvec3(-globalCamera.getLocation()->getX(), -globalCamera.getLocation()->getY(), -globalCamera.getLocation()->getZ()));
+		glm::dmat4 cameraRotate = glm::rotate<double>(glm::dmat4(), -globalCamera.getAngle()->getPosX(), glm::dvec3(1.0, 0.0, 0.0)) * glm::rotate<double>(glm::dmat4(), -globalCamera.getAngle()->getPosY(), glm::dvec3(0.0, 1.0, 0.0));
 
 		calculateFrustumPlanes(cameraRotate * cameraTranslate);
 

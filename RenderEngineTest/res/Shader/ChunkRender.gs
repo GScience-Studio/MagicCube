@@ -123,7 +123,7 @@ void drawBlockBack(vec3 position, uint blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
-	gs_out.lightColor = vec3(GET_LIGHT_BACK,GET_LIGHT_BACK,GET_LIGHT_BACK);
+	gs_out.lightColor = vec3(GET_LIGHT_BACK,GET_LIGHT_BACK,GET_LIGHT_BACK) * 0.7;
 	
 	//gs_out.lightPos = getLightDir(vec3(1.0,0.0,0.0),vec3(0.0,0.0,1.0));
 
@@ -202,7 +202,7 @@ void drawBlockRight(vec3 position, uint blockTextureID)
 {
 	vec4 texturePos = getTexturePos(blockTextureID);
 
-	gs_out.lightColor = vec3(GET_LIGHT_RIGHT,GET_LIGHT_RIGHT,GET_LIGHT_RIGHT) * 0.7;
+	gs_out.lightColor = vec3(GET_LIGHT_RIGHT,GET_LIGHT_RIGHT,GET_LIGHT_RIGHT);
 	
 	//gs_out.lightPos = getLightDir(vec3(0.0,0.0,-1.0),vec3(1.0,-1.0,0.0));
 

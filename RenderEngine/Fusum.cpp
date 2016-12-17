@@ -6,23 +6,23 @@
 #include <glm\gtc\type_ptr.hpp>
 
 //frustum planes
-float g_frustumPlanes[6][4];
+double g_frustumPlanes[6][4];
 
 //golbal matrix
-float globalMatrix[16];
+glm::dmat4 globalMatrix;
 
-void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
+void calculateFrustumPlanes(glm::dmat4& modleVerMatrix)
 {
-	const float* p;   // projection matrix
-	const float* mv;  // model-view matrix
-	float mvp[16]; // model-view-projection matrix
-	float t;
+	const double* p;   // projection matrix
+	const double* mv;  // model-view matrix
+	double mvp[16]; // model-view-projection matrix
+	double t;
 
-	p = glm::value_ptr(gl_manager::getInstance().getPerspective());
+	p = glm::value_ptr(glm::dmat4(gl_manager::getInstance().getPerspective()));
 	mv = glm::value_ptr(modleVerMatrix);
 	
 	//copy data
-	memcpy(globalMatrix, glm::value_ptr(gl_manager::getInstance().getPerspective() * modleVerMatrix), sizeof(globalMatrix));
+	globalMatrix = glm::dmat4(gl_manager::getInstance().getPerspective()) * modleVerMatrix;
 
 	//
 	// Concatenate the projection matrix and the model-view matrix to produce
@@ -58,7 +58,7 @@ void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 	g_frustumPlanes[0][2] = mvp[11] - mvp[8];
 	g_frustumPlanes[0][3] = mvp[15] - mvp[12];
 
-	t = (float)sqrt(g_frustumPlanes[0][0] * g_frustumPlanes[0][0] +
+	t = sqrt(g_frustumPlanes[0][0] * g_frustumPlanes[0][0] +
 		g_frustumPlanes[0][1] * g_frustumPlanes[0][1] +
 		g_frustumPlanes[0][2] * g_frustumPlanes[0][2]);
 
@@ -76,7 +76,7 @@ void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 	g_frustumPlanes[1][2] = mvp[11] + mvp[8];
 	g_frustumPlanes[1][3] = mvp[15] + mvp[12];
 
-	t = (float)sqrt(g_frustumPlanes[1][0] * g_frustumPlanes[1][0] +
+	t = sqrt(g_frustumPlanes[1][0] * g_frustumPlanes[1][0] +
 		g_frustumPlanes[1][1] * g_frustumPlanes[1][1] +
 		g_frustumPlanes[1][2] * g_frustumPlanes[1][2]);
 
@@ -96,7 +96,7 @@ void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 	g_frustumPlanes[2][2] = mvp[11] + mvp[9];
 	g_frustumPlanes[2][3] = mvp[15] + mvp[13];
 
-	t = (float)sqrt(g_frustumPlanes[2][0] * g_frustumPlanes[2][0] +
+	t = sqrt(g_frustumPlanes[2][0] * g_frustumPlanes[2][0] +
 		g_frustumPlanes[2][1] * g_frustumPlanes[2][1] +
 		g_frustumPlanes[2][2] * g_frustumPlanes[2][2]);
 
@@ -114,7 +114,7 @@ void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 	g_frustumPlanes[3][2] = mvp[11] - mvp[9];
 	g_frustumPlanes[3][3] = mvp[15] - mvp[13];
 
-	t = (float)sqrt(g_frustumPlanes[3][0] * g_frustumPlanes[3][0] +
+	t = sqrt(g_frustumPlanes[3][0] * g_frustumPlanes[3][0] +
 		g_frustumPlanes[3][1] * g_frustumPlanes[3][1] +
 		g_frustumPlanes[3][2] * g_frustumPlanes[3][2]);
 
@@ -134,7 +134,7 @@ void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 	g_frustumPlanes[4][2] = mvp[11] - mvp[10];
 	g_frustumPlanes[4][3] = mvp[15] - mvp[14];
 
-	t = (float)sqrt(g_frustumPlanes[4][0] * g_frustumPlanes[4][0] +
+	t = sqrt(g_frustumPlanes[4][0] * g_frustumPlanes[4][0] +
 		g_frustumPlanes[4][1] * g_frustumPlanes[4][1] +
 		g_frustumPlanes[4][2] * g_frustumPlanes[4][2]);
 
@@ -152,7 +152,7 @@ void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 	g_frustumPlanes[5][2] = mvp[11] + mvp[10];
 	g_frustumPlanes[5][3] = mvp[15] + mvp[14];
 
-	t = (float)sqrt(g_frustumPlanes[5][0] * g_frustumPlanes[5][0] +
+	t = sqrt(g_frustumPlanes[5][0] * g_frustumPlanes[5][0] +
 		g_frustumPlanes[5][1] * g_frustumPlanes[5][1] +
 		g_frustumPlanes[5][2] * g_frustumPlanes[5][2]);
 
@@ -162,7 +162,7 @@ void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 	g_frustumPlanes[5][3] /= t;
 }
 
-bool isCubeInFrustum(float x1, float y1, float z1, float x2, float y2, float z2)
+bool isCubeInFrustum(double x1, double y1, double z1, double x2, double y2, double z2)
 {
 	for (int i = 0; i < 4; i++)
 	{
