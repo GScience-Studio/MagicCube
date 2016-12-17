@@ -29,7 +29,7 @@ void chunk_render::setBlockRenderDatas(blockRenderData* block)
 	{
 		for (int j = 0; j < 16; j++)
 		{
-			uint16_t blockLocation = blockChunkLocationToShort(i, 2, j);
+			uint16_t blockLocation = blockChunkLocationToShort(i, 0, j);
 
 			block[blockLocation].setBlockRenderData(blockLocation, 0);
 			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
@@ -38,11 +38,37 @@ void chunk_render::setBlockRenderDatas(blockRenderData* block)
 			blockRenderList.push_back(block[blockLocation]);
 		}
 	}
+	for (int i = 0; i < 16; i++)
+	{
+		for (int j = 0; j < 16; j++)
+		{
+			uint16_t blockLocation = blockChunkLocationToShort(i, 14, j);
 
+			block[blockLocation].setBlockRenderData(blockLocation, 0);
+			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
+			block[blockLocation].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+
+			blockRenderList.push_back(block[blockLocation]);
+		}
+	}
 	chunkGlobalRender->_blockStart = 0;
 	chunkGlobalRender->_blockEnd = (unsigned short)blockRenderList.size();
 
 	chunkHalfAlphaBlockRender->_blockStart = (unsigned short)blockRenderList.size();
+
+	for (int i = 0; i < 16; i++)
+	{
+		for (int j = 0; j < 16; j++)
+		{
+			uint16_t blockLocation = blockChunkLocationToShort(i, 8, j);
+
+			block[blockLocation].setBlockRenderData(blockLocation, 32);
+			block[blockLocation].nearbyBlockInfo = HIDE_LEFT | HIDE_RIGHT | HIDE_BACK | HIDE_FRONT;
+			block[blockLocation].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+
+			blockRenderList.push_back(block[blockLocation]);
+		}
+	}
 
 	chunkGlobalRender->setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 

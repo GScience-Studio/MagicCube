@@ -72,7 +72,7 @@ public:
 		
 		for (int i = 0; i < 32; i++)
 			for (int j = 0; j < 32; j++)
-				for (int k = 0; k < 1; k++)
+				for (int k = 0; k < 2; k++)
 				{
 					blockRenderData* testBlockRenderDataList = new blockRenderData[4096];
 
