@@ -31,6 +31,7 @@ private:
 
 protected:
 	//gobal screen camera
+	
 	camera_synchronize _globalCamera;
 
 	//scene refresh

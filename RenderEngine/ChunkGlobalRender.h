@@ -14,37 +14,39 @@ private:
 	unsigned short	_blockEnd	= 0;
 	unsigned short	_blockStart = 0;
 
+	bool _hasHalfAlpha = false;
+
 	//draw chunk
-	void _draw(camera_synchronize _golbalCamera)
+	void _draw(camera _golbalCamera)
 	{
 		if (_blockEnd - _blockStart <= 0)
 			return;
 
 		_glInstance.useTexture(*_getTexture());
 
-		if (_priority == CHUNK_HALF_ALPHA_BLOCK_RENDER_PRIORITY)
+		if (_hasHalfAlpha)
 		{
 			glDepthMask(GL_FALSE);
 
-			_getRenderProgram()->drawBuffer(_blockStart, _blockEnd - _blockStart, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+			_getRenderProgram()->drawBuffer(_blockStart, _blockEnd - _blockStart, *_getBuffer(), camera(), _modelLocation);
 
 			glDepthMask(GL_TRUE);
 		}
-		else if (_priority == CHUNK_RENDER_PRIORITY)
+		else
 		{
-			_getRenderProgram()->drawBuffer(_blockStart, _blockEnd - _blockStart, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
+			_getRenderProgram()->drawBuffer(_blockStart, _blockEnd - _blockStart, *_getBuffer(), camera(), _modelLocation);
 		}
 	}
 public:
 	//add a normal chunk render and auto gen buffer
-	chunk_global_render(float priority) : render_node(chunkRenderProgram)
+	chunk_global_render(float priority, bool hasHalfAlpha) : render_node(chunkRenderProgram), _hasHalfAlpha(hasHalfAlpha)
 	{
 		//set priority
 		_priority = priority;
 	}
 
 	//add a normal chunk render and set buffer by user
-	chunk_global_render(float priority, buffer* buffer) : render_node(buffer, chunkRenderProgram)
+	chunk_global_render(float priority, bool hasHalfAlpha, buffer* buffer) : render_node(buffer, chunkRenderProgram), _hasHalfAlpha(hasHalfAlpha)
 	{
 		//set priority
 		_priority = priority;

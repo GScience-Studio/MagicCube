@@ -50,7 +50,7 @@ protected:
 	bool _isEnable = false;
 
 	//each node must can be draw
-	virtual void _draw(camera_synchronize _golbalCamera)
+	virtual void _draw(camera _golbalCamera)
 	{
 		if (_isEnable)
 		{

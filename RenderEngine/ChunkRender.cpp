@@ -11,8 +11,8 @@
 
 chunk_render::chunk_render(scene_node* sceneNode, texture* blockTexture)
 {
-	chunkGlobalRender = new chunk_global_render(CHUNK_RENDER_PRIORITY);
-	chunkHalfAlphaBlockRender = new chunk_global_render(CHUNK_HALF_ALPHA_BLOCK_RENDER_PRIORITY, chunkGlobalRender->_getBuffer());
+	chunkGlobalRender = new chunk_global_render(CHUNK_RENDER_PRIORITY, false);
+	chunkHalfAlphaBlockRender = new chunk_global_render(CHUNK_HALF_ALPHA_BLOCK_RENDER_PRIORITY, true, chunkGlobalRender->_getBuffer());
 
 	chunkGlobalRender->bindTexture(blockTexture);
 	chunkHalfAlphaBlockRender->bindTexture(blockTexture);

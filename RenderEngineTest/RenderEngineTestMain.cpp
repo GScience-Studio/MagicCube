@@ -69,7 +69,7 @@ public:
 		showScene(firstScene);
 
 		//load chunks
-
+		
 		for (int i = 0; i < 64; i++)
 			for (int j = 0; j < 64; j++)
 				for (int k = 0; k < 2; k++)
@@ -86,7 +86,7 @@ public:
 
 					delete[](testBlockDatas);
 				}
-		fpController.getCamera()->getLocation()->moveTo(8 * 16, 2, 8 * 16);
+		fpController.getCamera()->getLocation()->moveTo(0, 1, 0);
 	}
 };
 

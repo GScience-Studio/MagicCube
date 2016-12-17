@@ -8,6 +8,9 @@
 //frustum planes
 float g_frustumPlanes[6][4];
 
+//golbal matrix
+float globalMatrix[16];
+
 void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 {
 	const float* p;   // projection matrix
@@ -17,6 +20,9 @@ void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 
 	p = glm::value_ptr(gl_manager::getInstance().getPerspective());
 	mv = glm::value_ptr(modleVerMatrix);
+	
+	//copy data
+	memcpy(globalMatrix, glm::value_ptr(gl_manager::getInstance().getPerspective() * modleVerMatrix), sizeof(globalMatrix));
 
 	//
 	// Concatenate the projection matrix and the model-view matrix to produce
@@ -158,9 +164,6 @@ void calculateFrustumPlanes(glm::mat4& modleVerMatrix)
 
 bool isCubeInFrustum(float x1, float y1, float z1, float x2, float y2, float z2)
 {
-	y1 = -y1;
-	y2 = -y2;
-
 	for (int i = 0; i < 4; i++)
 	{
 		if ((g_frustumPlanes[i][0] * x1 + g_frustumPlanes[i][1] * y1 + g_frustumPlanes[i][2] * z1 + g_frustumPlanes[i][3] <= 0.0F) &&

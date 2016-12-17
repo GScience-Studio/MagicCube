@@ -16,7 +16,7 @@ private:
 	gl_manager& glInstance = gl_manager::getInstance();
 
 	//draw
-	void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera_synchronize& globalCamera, camera_synchronize& modelLocation)
+	void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera globalCamera, camera modelLocation)
 	{
 		glInstance.useBuffer(buffer);
 		glInstance.useShaderProgram(_programID);
@@ -37,7 +37,7 @@ public:
 class normal_2d_render_program :public normal_3d_render_program
 {
 public:
-	void setCamera(camera_synchronize& globalCamera, camera_synchronize& modelCamera) const
+	void setCamera(camera globalCamera, camera modelCamera) const
 	{
 		glm::mat4 cameraTranslate = glm::translate(glm::mat4(), glm::vec3(modelCamera.getLocation()->getX(), modelCamera.getLocation()->getY(), modelCamera.getLocation()->getZ()));
 

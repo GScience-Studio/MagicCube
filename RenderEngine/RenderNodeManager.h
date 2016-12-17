@@ -48,7 +48,7 @@ public:
 				return renderNode;
 			}
 		}
-		_renderNodeList.emplace_after(_renderNodeList.cbefore_begin(), renderNode);
+		_renderNodeList.emplace_after(lastRenderNode, renderNode);
 
 		return renderNode;
 	}
