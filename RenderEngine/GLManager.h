@@ -129,6 +129,9 @@ private:
 
 	glm::mat4 _perspective;
 
+	//global vao
+	GLuint _globalVAO = 0;
+
 	//windows size change event
 	void windowsSizeChangeListener(int width, int height);
 
@@ -342,7 +345,7 @@ public:
 		return vbo;
 	}
 	//gen buffer
-	void genBuffer(buffer* inBuffer)
+	void genBufferAndVAO(buffer* inBuffer)
 	{
 #ifdef _DEBUG
 		if (std::this_thread::get_id() != threadID)
@@ -355,6 +358,31 @@ public:
 
 		glGenVertexArrays(1, &inBuffer->_vao);
 		glBindVertexArray(inBuffer->_vao);
+		glGenBuffers(1, &inBuffer->_vbo);
+
+		//change back
+		if (_enableBuffer._vao != -1)
+		{
+			glBindVertexArray(_enableBuffer._vao);
+			glBindVertexArray(_enableBuffer._vbo);
+		}
+	}
+	void genBuffer(buffer* inBuffer)
+	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return;
+		}
+#endif
+		if (_globalVAO == 0)
+			_globalVAO = genVAO();
+
+		inBuffer->_vao = _globalVAO;
+
+		glBindVertexArray(_globalVAO);
 		glGenBuffers(1, &inBuffer->_vbo);
 
 		//change back
@@ -377,7 +405,9 @@ public:
 #endif
 
 		if (bufferInfo.getVAO() == 0)
+		{
 			genBuffer(&bufferInfo);
+		}
 
 		if (bufferInfo._vao != _enableBuffer._vao)
 		{
