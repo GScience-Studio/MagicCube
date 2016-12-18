@@ -70,43 +70,41 @@ public:
 
 		//load chunks
 		
-		chunk_render* chunk[32 * 32];
+		chunk_render* chunk[64 * 64];
 
-		for (int i = 0; i < 32; i++)
-			for (int j = 0; j < 32; j++)
-				for (int k = 0; k < 2; k++)
+		for (int i = 0; i < 64; i++)
+			for (int j = 0; j < 64; j++)
+				for (int k = 0; k < 1; k++)
 				{
-					chunk[i + 32 * k] = new chunk_render(firstScene, blockTexture);
+					chunk[i + 64 * j] = new chunk_render(firstScene, blockTexture);
 
-					chunk[i + 32 * k]->setChunkLocation(i, k, j);
+					chunk[i + 64 * j]->setChunkLocation(i, k, j);
 
-					blockRenderData testBlockDatas[257];
-
-					if (i == 16 && j == 16)
-					{
-						testBlockDatas[0].setBlockRenderData(blockChunkLocationToShort(0, 4, 0), 32);
-						testBlockDatas[0].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
-						testBlockDatas[0].setAlpha(true);
-
-						chunk[i + 32 * k]->setBlockRenderDatas(testBlockDatas, 257);
-					}
+					blockRenderData testBlockDatas[512];
 
 					for (unsigned short i2 = 0; i2 < 16; i2++)
 					{
 						for (unsigned short j2 = 0; j2 < 16; j2++)
 						{
-							testBlockDatas[i2 + j2 * 16 + 1].setBlockRenderData(blockChunkLocationToShort(i2, rand() % 2, j2), 1);
-							testBlockDatas[i2 + j2 * 16 + 1].setNearbyBlockAlpha(true, true, true, true, true, true);
-							testBlockDatas[i2 + j2 * 16 + 1].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+							testBlockDatas[i2 + j2 * 16].setBlockRenderData(blockChunkLocationToShort(i2, 0, j2), 32);
+							testBlockDatas[i2 + j2 * 16].setNearbyBlockAlpha(true, true, false, false, false, false);
+							testBlockDatas[i2 + j2 * 16].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+							testBlockDatas[i2 + j2 * 16].setAlpha(true);
 						}
 					}
-					testBlockDatas[0].setBlockRenderData(blockChunkLocationToShort(0, 4, 0), 32);
-					testBlockDatas[0].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
-					testBlockDatas[0].setAlpha(true);
+					for (unsigned short i2 = 0; i2 < 16; i2++)
+					{
+						for (unsigned short j2 = 0; j2 < 16; j2++)
+						{
+							testBlockDatas[i2 + j2 * 16 + 256].setBlockRenderData(blockChunkLocationToShort(i2, 1, j2), 1);
+							testBlockDatas[i2 + j2 * 16 + 256].setNearbyBlockAlpha(true, true, false, false, false, false);
+							testBlockDatas[i2 + j2 * 16 + 256].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+						}
+					}
 
-					chunk[i + 32 * k]->setBlockRenderDatas(testBlockDatas, 257);
+					chunk[i + 64 * j]->setBlockRenderDatas(testBlockDatas, 512);
 				}
-		fpController.getCamera()->getLocation()->moveTo(256, 10, 256);
+		fpController.getCamera()->getLocation()->moveTo(32 * 16, 10, 32 * 16);
 	}
 };
 

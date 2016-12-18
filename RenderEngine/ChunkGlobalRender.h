@@ -28,7 +28,7 @@ private:
 
 		lock.unlock();
 
-		if (bufferEnd <= 0)
+		if (bufferEnd <= 0 || _getBuffer()->getSize() < bufferEnd || _getBuffer()->getSize() < bufferStart)
 			return;
 
 		_glInstance.useTexture(*_getTexture());
