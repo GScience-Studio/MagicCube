@@ -3,6 +3,8 @@
 #include "../RenderEngine/ChunkRenderExtension.h"
 #include "../RenderEngine/FPCExtension.h"
 
+#define SIGHT 16
+
 class test_app :public application
 {
 private:
@@ -70,23 +72,25 @@ public:
 
 		//load chunks
 		
-		chunk_render* chunk[64 * 64];
+		chunk_render* chunk[SIGHT * SIGHT * 4];
 
-		for (int i = 0; i < 64; i++)
-			for (int j = 0; j < 64; j++)
+		double startTime = glfwGetTime();
+
+		for (int i = 0; i < SIGHT * 2; i++)
+			for (int j = 0; j < SIGHT * 2; j++)
 				for (int k = 0; k < 1; k++)
 				{
-					chunk[i + 64 * j] = new chunk_render(firstScene, blockTexture);
+					chunk[i + SIGHT * 2 * j] = new chunk_render(firstScene, blockTexture);
 
-					chunk[i + 64 * j]->setChunkLocation(i, k, j);
+					chunk[i + SIGHT * 2 * j]->setChunkLocation(i, k, j);
 
-					blockRenderData testBlockDatas[512];
+					blockRenderData testBlockDatas[4096];
 
 					for (unsigned short i2 = 0; i2 < 16; i2++)
 					{
 						for (unsigned short j2 = 0; j2 < 16; j2++)
 						{
-							testBlockDatas[i2 + j2 * 16].setBlockRenderData(blockChunkLocationToShort(i2, 0, j2), 32);
+							testBlockDatas[i2 + j2 * 16].setBlockRenderData(blockChunkLocationToShort(i2, 4, j2), 32);
 							testBlockDatas[i2 + j2 * 16].setNearbyBlockAlpha(true, true, false, false, false, false);
 							testBlockDatas[i2 + j2 * 16].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
 							testBlockDatas[i2 + j2 * 16].setAlpha(true);
@@ -96,15 +100,27 @@ public:
 					{
 						for (unsigned short j2 = 0; j2 < 16; j2++)
 						{
-							testBlockDatas[i2 + j2 * 16 + 256].setBlockRenderData(blockChunkLocationToShort(i2, 1, j2), 1);
+							testBlockDatas[i2 + j2 * 16 + 256].setBlockRenderData(blockChunkLocationToShort(i2, 0, j2), 0);
 							testBlockDatas[i2 + j2 * 16 + 256].setNearbyBlockAlpha(true, true, false, false, false, false);
 							testBlockDatas[i2 + j2 * 16 + 256].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
 						}
 					}
 
-					chunk[i + 64 * j]->setBlockRenderDatas(testBlockDatas, 512);
+					testBlockDatas[512].setBlockRenderData(blockChunkLocationToShort(0, 10, 0), 1);
+					testBlockDatas[512].setNearbyBlockAlpha(true, true, true, true, true, true);
+					testBlockDatas[512].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+
+					testBlockDatas[513].setBlockRenderData(blockChunkLocationToShort(10, 10, 10), 0);
+					testBlockDatas[513].setNearbyBlockAlpha(false, false, false, false, false, false);
+
+					chunk[i + SIGHT * 2 * j]->setBlockRenderDatas(testBlockDatas, 4096);
 				}
-		fpController.getCamera()->getLocation()->moveTo(32 * 16, 10, 32 * 16);
+
+		double finishTime = glfwGetTime();
+
+		std::cout << "add " << SIGHT * SIGHT * 2 << " chunks use " << finishTime - startTime << "s" << std::endl;
+
+		fpController.getCamera()->getLocation()->moveTo(SIGHT * 16, 10, SIGHT * 16);
 	}
 };
 

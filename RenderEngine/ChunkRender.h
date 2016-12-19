@@ -14,6 +14,10 @@ struct blockRenderData
 	unsigned int	blockInfo = 0;
 	unsigned int	nearbyBlockInfo = 0;
 
+	blockRenderData()
+	{
+		setNearbyBlockAlpha(false, false, false, false, false, false);
+	}
 	void setBlockRenderData(uint16_t blockLocation, uint16_t blockID)
 	{
 #ifdef _DEBUG

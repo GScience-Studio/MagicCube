@@ -32,6 +32,14 @@ void chunk_render::setBlockRenderDatas(blockRenderData* block, unsigned short co
 
 	for (unsigned short i = 0; i < count; i++)
 	{
+		if ((block[i].nearbyBlockInfo & HIDE_TOP) && 
+			(block[i].nearbyBlockInfo & HIDE_DOWM) && 
+			(block[i].nearbyBlockInfo & HIDE_LEFT) && 
+			(block[i].nearbyBlockInfo & HIDE_RIGHT) && 
+			(block[i].nearbyBlockInfo & HIDE_BACK) && 
+			(block[i].nearbyBlockInfo & HIDE_FRONT))
+			continue;
+
 		if (block[i].nearbyBlockInfo & HALF_ALPHA_BLOCK)
 		{
 			alphaBlockCount++;
@@ -45,10 +53,13 @@ void chunk_render::setBlockRenderDatas(blockRenderData* block, unsigned short co
 			noAlphaBlockCount++;
 		}
 	}
+	//remove empty block
+	blockRenderList.erase(blockRenderList.begin() + noAlphaBlockCount, blockRenderList.begin() + count - noAlphaBlockCount - alphaBlockCount);
+
 	chunkGlobalRender->setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
 	chunkGlobalRender->setBufferUseInfo(0, noAlphaBlockCount);
-	chunkHalfAlphaBlockRender->setBufferUseInfo(noAlphaBlockCount, count);
+	chunkHalfAlphaBlockRender->setBufferUseInfo(noAlphaBlockCount, blockRenderList.size());
 }
 
 void blockRenderData::setAlpha(bool hasAlpha)
