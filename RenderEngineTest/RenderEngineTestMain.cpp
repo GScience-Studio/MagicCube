@@ -5,6 +5,46 @@
 
 #define SIGHT 16
 
+void buildMap(int chunkX, int chunkZ, unsigned int* chunkData);
+
+scene_node* firstScene;
+texture*	blockTexture;
+
+class testChunk
+{
+public:
+	unsigned int blockData[4096]{ 0 };
+
+	chunk_render* chunkRender;
+
+	void buildChunk(int chunkX,int chunkZ)
+	{
+		buildMap(chunkX, chunkZ, blockData);
+
+		chunkRender = new chunk_render(firstScene, blockTexture);
+
+		chunkRender->setChunkLocation(chunkX, 0, chunkZ);
+	}
+
+	void refreshChunkRenderData()
+	{
+		block_render_data blockRenderData[4096];
+
+		for (unsigned short i = 0; i < 4096; i++)
+		{
+			blockRenderData[i].setBlockRenderData(i, blockData[i]);
+			blockRenderData[i].setNearbyBlockAlpha(true, true, true, true, true, true);
+			blockRenderData[i].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+			blockRenderData[i].setAlpha(false);
+		}
+		chunkRender->setBlockRenderDatas(blockRenderData, 4096);
+	}
+	~testChunk()
+	{
+		delete(chunkRender);
+	}
+};
+
 class test_app :public application
 {
 private:
@@ -12,9 +52,6 @@ private:
 
 public:
 	fpc fpController = fpc(getGlobalCamera());
-
-	texture*	blockTexture;
-	scene_node* firstScene;
 
 	test_app() :application(u8"MagicCube-RenderEngineTest render test", "test-1.0.0", size_vec(880, 495)) {}
 
@@ -72,50 +109,16 @@ public:
 
 		//load chunks
 		
-		chunk_render* chunk[SIGHT * SIGHT * 4];
+		testChunk* chunks = new testChunk[SIGHT * 2 * SIGHT * 2];
 
 		double startTime = glfwGetTime();
 
 		for (int i = 0; i < SIGHT * 2; i++)
 			for (int j = 0; j < SIGHT * 2; j++)
-				for (int k = 0; k < 1; k++)
-				{
-					chunk[i + SIGHT * 2 * j] = new chunk_render(firstScene, blockTexture);
-
-					chunk[i + SIGHT * 2 * j]->setChunkLocation(i, k, j);
-
-					blockRenderData testBlockDatas[4096];
-
-					for (unsigned short i2 = 0; i2 < 16; i2++)
-					{
-						for (unsigned short j2 = 0; j2 < 16; j2++)
-						{
-							testBlockDatas[i2 + j2 * 16].setBlockRenderData(blockChunkLocationToShort(i2, 4, j2), 32);
-							testBlockDatas[i2 + j2 * 16].setNearbyBlockAlpha(true, true, false, false, false, false);
-							testBlockDatas[i2 + j2 * 16].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
-							testBlockDatas[i2 + j2 * 16].setAlpha(true);
-						}
-					}
-					for (unsigned short i2 = 0; i2 < 16; i2++)
-					{
-						for (unsigned short j2 = 0; j2 < 16; j2++)
-						{
-							testBlockDatas[i2 + j2 * 16 + 256].setBlockRenderData(blockChunkLocationToShort(i2, 0, j2), 0);
-							testBlockDatas[i2 + j2 * 16 + 256].setNearbyBlockAlpha(true, true, false, false, false, false);
-							testBlockDatas[i2 + j2 * 16 + 256].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
-						}
-					}
-
-					testBlockDatas[512].setBlockRenderData(blockChunkLocationToShort(0, 10, 0), 1);
-					testBlockDatas[512].setNearbyBlockAlpha(true, true, true, true, true, true);
-					testBlockDatas[512].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
-
-					testBlockDatas[513].setBlockRenderData(blockChunkLocationToShort(10, 10, 10), 0);
-					testBlockDatas[513].setNearbyBlockAlpha(false, false, false, false, false, false);
-
-					chunk[i + SIGHT * 2 * j]->setBlockRenderDatas(testBlockDatas, 4096);
-				}
-
+			{
+				chunks[i * SIGHT * 2 + j].buildChunk(i, j);
+				chunks[i * SIGHT * 2 + j].refreshChunkRenderData();
+			}
 		double finishTime = glfwGetTime();
 
 		std::cout << "add " << SIGHT * SIGHT * 2 << " chunks use " << finishTime - startTime << "s" << std::endl;

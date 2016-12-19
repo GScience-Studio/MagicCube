@@ -9,12 +9,12 @@
 #include "ChunkGlobalRender.h"
 #include "SceneNode.h"
 
-struct blockRenderData
+struct block_render_data
 {
 	unsigned int	blockInfo = 0;
 	unsigned int	nearbyBlockInfo = 0;
 
-	blockRenderData()
+	block_render_data()
 	{
 		setNearbyBlockAlpha(false, false, false, false, false, false);
 	}
@@ -38,11 +38,14 @@ struct blockRenderData
 
 class chunk_render
 {
+private:
 	chunk_global_render* chunkGlobalRender;
 	chunk_global_render* chunkHalfAlphaBlockRender;
 
+	scene_node* _sceneNode;
+
 public:
-	void setBlockRenderDatas(blockRenderData* block, unsigned short count);
+	void setBlockRenderDatas(block_render_data* block, unsigned short count);
 
 	void setChunkLocation(int x, int y, int z)
 	{

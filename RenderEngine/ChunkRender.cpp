@@ -11,21 +11,18 @@
 #define HIDE_FRONT			0x20
 #define HALF_ALPHA_BLOCK	0x40
 
-chunk_render::chunk_render(scene_node* sceneNode, texture* blockTexture)
+chunk_render::chunk_render(scene_node* sceneNode, texture* blockTexture) : _sceneNode(sceneNode)
 {
 	chunkGlobalRender = new chunk_global_render(CHUNK_RENDER_PRIORITY, false);
 	chunkHalfAlphaBlockRender = new chunk_global_render(CHUNK_HALF_ALPHA_BLOCK_RENDER_PRIORITY, true, chunkGlobalRender->_getBuffer());
 
 	chunkGlobalRender->bindTexture(blockTexture);
 	chunkHalfAlphaBlockRender->bindTexture(blockTexture);
-
-	sceneNode->addRenderNode(chunkGlobalRender);
-	sceneNode->addRenderNode(chunkHalfAlphaBlockRender);
 }
 
-void chunk_render::setBlockRenderDatas(blockRenderData* block, unsigned short count)
+void chunk_render::setBlockRenderDatas(block_render_data* block, unsigned short count)
 {
-	std::vector<blockRenderData> blockRenderList(count);
+	std::vector<block_render_data> blockRenderList(count);
 
 	unsigned short alphaBlockCount		= 0;
 	unsigned short noAlphaBlockCount	= 0;
@@ -37,7 +34,8 @@ void chunk_render::setBlockRenderDatas(blockRenderData* block, unsigned short co
 			(block[i].nearbyBlockInfo & HIDE_LEFT) && 
 			(block[i].nearbyBlockInfo & HIDE_RIGHT) && 
 			(block[i].nearbyBlockInfo & HIDE_BACK) && 
-			(block[i].nearbyBlockInfo & HIDE_FRONT))
+			(block[i].nearbyBlockInfo & HIDE_FRONT) ||
+			(block[i].blockInfo >> 12 == 0))
 			continue;
 
 		if (block[i].nearbyBlockInfo & HALF_ALPHA_BLOCK)
@@ -54,15 +52,22 @@ void chunk_render::setBlockRenderDatas(blockRenderData* block, unsigned short co
 		}
 	}
 	//remove empty block
-	blockRenderList.erase(blockRenderList.begin() + noAlphaBlockCount, blockRenderList.begin() + count - noAlphaBlockCount - alphaBlockCount);
+	if (alphaBlockCount + noAlphaBlockCount != count)
+		blockRenderList.erase(blockRenderList.begin() + noAlphaBlockCount, blockRenderList.begin() + count - noAlphaBlockCount - alphaBlockCount);
+	
+	if (blockRenderList.size() == 0)
+		return;
 
 	chunkGlobalRender->setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
 	chunkGlobalRender->setBufferUseInfo(0, noAlphaBlockCount);
 	chunkHalfAlphaBlockRender->setBufferUseInfo(noAlphaBlockCount, blockRenderList.size());
+
+	_sceneNode->addRenderNode(chunkGlobalRender);
+	_sceneNode->addRenderNode(chunkHalfAlphaBlockRender);
 }
 
-void blockRenderData::setAlpha(bool hasAlpha)
+void block_render_data::setAlpha(bool hasAlpha)
 {
 	if (hasAlpha)
 		nearbyBlockInfo |= HALF_ALPHA_BLOCK;
@@ -70,7 +75,7 @@ void blockRenderData::setAlpha(bool hasAlpha)
 		nearbyBlockInfo ^= HALF_ALPHA_BLOCK;
 }
 
-void blockRenderData::setNearbyBlockAlpha(bool top, bool down, bool left, bool right, bool front, bool back)
+void block_render_data::setNearbyBlockAlpha(bool top, bool down, bool left, bool right, bool front, bool back)
 {
 	nearbyBlockInfo = nearbyBlockInfo >> 6 << 6;
 

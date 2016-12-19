@@ -232,6 +232,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BuildChunkTest.cpp" />
     <ClCompile Include="RenderEngineTestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
