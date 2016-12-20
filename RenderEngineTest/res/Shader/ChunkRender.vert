@@ -1,25 +1,24 @@
 #version 330
 
-layout(location = 0) in float fblockID;
-layout(location = 1) in float fblockLocation;
+#define getChunkBlockX(location) (location << 28 >> 28)
+#define getChunkBlockY(location) (location << 24 >> 28)
+#define getChunkBlockZ(location) (location << 20 >> 28)
+
+layout(location = 0) in uint 	fblockInfo;
+layout(location = 1) in uint 	fnearbyBlockInfo;
 
 out VS_OUT
 {
-   uvec2 texturePos;
+   uint  nearbyBlockInfo;
+   uint	 blockID;
 }vs_out;
 
 void  main()
 {
-	uint blockID = uint(fblockID);
-	uint blockLocation = uint(fblockLocation);
-
-	vs_out.texturePos.y = blockID / 32u;
-	vs_out.texturePos.x = blockID - vs_out.texturePos.y * 32u;
+	uint blockLocation 	= fblockInfo << 20 >> 20;
+	vs_out.blockID 		= fblockInfo >> 12;
 	
-	uint posX = blockLocation / 10u;
-	uint posZ = blockLocation - posX * 10u;
-	uint posY = 0u;
+	vs_out.nearbyBlockInfo = fnearbyBlockInfo;
 	
-	gl_Position = uvec4(posX,posY,posZ,1.0f);
-	//gl_Position = uvec4(0.0,0.0,0.0,1.0f);
+	gl_Position = uvec4(getChunkBlockX(blockLocation),getChunkBlockY(blockLocation),getChunkBlockZ(blockLocation),1.0f);
 }

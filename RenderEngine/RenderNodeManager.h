@@ -24,14 +24,31 @@ protected:
 	}
 
 public:
-	//add an render node by user
+	/*
+	* add an render node by user
+	* and auto sort by priority from height to less
+	* made by GM2000
+	*/
 	render_node* addRenderNode(render_node* renderNode)
 	{
-		lock.lock();
+		std::lock_guard<std::mutex> lockGuard(lock);
 
-		_renderNodeList.push_front(renderNode);
-		
-		lock.unlock();
+		render_node_list::const_iterator lastRenderNode = _renderNodeList.before_begin();
+
+		for (render_node_list::const_iterator findHigherRenderNode = _renderNodeList.begin(); findHigherRenderNode != _renderNodeList.end(); findHigherRenderNode++)
+		{
+			if ((**findHigherRenderNode) > (*renderNode))
+			{
+				lastRenderNode = findHigherRenderNode;
+			}
+			else
+			{
+				_renderNodeList.emplace_after(lastRenderNode, renderNode);
+
+				return renderNode;
+			}
+		}
+		_renderNodeList.emplace_after(lastRenderNode, renderNode);
 
 		return renderNode;
 	}

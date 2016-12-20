@@ -2,6 +2,10 @@
 #include "FPC.h"
 #include "FPCExtension.h"
 
+//glm
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
 fpc* bindedFPSController = nullptr;
 
 //绑定（如果fpc为nullptr则为解绑所有第一人称控制器）
@@ -35,6 +39,7 @@ void bindFPC(fpc* fpc)
 	application::getInstance().registerInputCallback(bindedFPSController);
 }
 
+
 //监听鼠标
 void fpc::cursorListener(double lastPosX, double lastPosY, double posX, double posY)
 {
@@ -42,15 +47,15 @@ void fpc::cursorListener(double lastPosX, double lastPosY, double posX, double p
 	if (bindedFPSController != this)
 		return;
 
-	_camera->getAngle()->rotate((float)(lastPosY - posY) * 0.001f, (float)(lastPosX - posX) * 0.001f);
+	_fpcCamera.getAngle()->rotate((float)(lastPosY - posY) * 0.001f, (float)(lastPosX - posX) * 0.001f);
 
 	if (_angle.getPosX() > PI / 2.0f)
-		_camera->getAngle()->setPosX(PI / 2.0f);
+		_fpcCamera.getAngle()->setPosX(PI / 2.0f);
 	else if (_angle.getPosX() < -PI / 2.0f)
-		_camera->getAngle()->setPosX(-PI / 2.0f);
+		_fpcCamera.getAngle()->setPosX(-PI / 2.0f);
 
 	if (_angle.getPosY() > PI * 2.0f || _angle.getPosY() < -PI * 2.0f)
-		_camera->getAngle()->setPosY(0.0f);
+		_fpcCamera.getAngle()->setPosY(0.0f);
 }
 
 //监听tick
@@ -71,15 +76,17 @@ void fpc::tickListener()
 				_speed[i] += _speed[i] < 0.0f ? 0.005f : -0.005f;
 	
 	if (_isFastMode == true)
-		_camera->getLocation()->move(
+		_fpcCamera.getLocation()->move(
 			(_speed[X] * 2) * cos(_angle.getPosY()) + (_speed[Z] * 2) * sin(_angle.getPosY()),
 			_speed[Y],
 			(_speed[Z] * 2) * cos(_angle.getPosY()) - (_speed[X] * 2) * sin(_angle.getPosY()));
 	else
-		_camera->getLocation()->move(
+		_fpcCamera.getLocation()->move(
 			_speed[X] * cos(_angle.getPosY()) + _speed[Z] * sin(_angle.getPosY()),
 			_speed[Y],
 			_speed[Z] * cos(_angle.getPosY()) - _speed[X] * sin(_angle.getPosY()));
+
+	_setRenderCamera();
 }
 //监听键盘
 void fpc::keyListener(int key, int action)

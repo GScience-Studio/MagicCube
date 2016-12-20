@@ -87,6 +87,15 @@
     <ClInclude Include="InputCallback.h">
       <Filter>EventManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\ChunkUniversal.h">
+      <Filter>Extension\ChunkRender</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkGlobalRender.h">
+      <Filter>Extension\ChunkRender</Filter>
+    </ClInclude>
+    <ClInclude Include="Fusum.h">
+      <Filter>RengerEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="RengerEngine">
@@ -110,9 +119,6 @@
     <Filter Include="Extension\ModLoader">
       <UniqueIdentifier>{0bf76644-3626-499a-ad6d-ef659b62e996}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Extension\ChunkRender">
-      <UniqueIdentifier>{6fdd1cf8-9a3c-41dd-93bc-d5b4f821cbc5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Node">
       <UniqueIdentifier>{6dc52b16-6eb4-4566-b43c-00c9ec4f9e51}</UniqueIdentifier>
     </Filter>
@@ -121,6 +127,9 @@
     </Filter>
     <Filter Include="Error">
       <UniqueIdentifier>{d5ed2345-7411-4d3a-bb33-6fc00e6a093b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extension\ChunkRender">
+      <UniqueIdentifier>{6fdd1cf8-9a3c-41dd-93bc-d5b4f821cbc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +174,9 @@
     </ClCompile>
     <ClCompile Include="InputCallbackManager.cpp">
       <Filter>EventManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Fusum.cpp">
+      <Filter>RengerEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

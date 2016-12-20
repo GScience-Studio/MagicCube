@@ -68,7 +68,7 @@ class render_program
 	friend class gl_manager;
 
 protected:
-	void _setCamera(camera& globalCamera, camera& modelLocation);
+	void _setCamera(camera globalCamera, camera modelLocation);
 
 	virtual void _init() = 0;
 
@@ -78,7 +78,7 @@ protected:
 	GLuint _programID = 0;
 
 public:
-	virtual void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera& globalCamera, camera& modelLocation) = 0;
+	virtual void drawBuffer(const GLint first, const GLsizei count, buffer& buffer, camera globalCamera, camera modelLocation) = 0;
 };
 
 /*
@@ -129,6 +129,9 @@ private:
 
 	glm::mat4 _perspective;
 
+	//global vao
+	GLuint _globalVAO = 0;
+
 	//windows size change event
 	void windowsSizeChangeListener(int width, int height);
 
@@ -155,6 +158,14 @@ public:
 
 	//gen texture
 	texture* genTexture(const char* fileName[], GLuint count);
+
+	//get perspective
+	glm::mat4 getPerspective()
+	{
+		std::lock_guard<std::mutex> perspectiveLockGuard(_perspectiveLock);
+
+		return _perspective;
+	}
 
 	//treate event
 	void pollEvent() const
@@ -334,7 +345,7 @@ public:
 		return vbo;
 	}
 	//gen buffer
-	void genBuffer(buffer* inBuffer)
+	void genBufferAndVAO(buffer* inBuffer)
 	{
 #ifdef _DEBUG
 		if (std::this_thread::get_id() != threadID)
@@ -356,6 +367,33 @@ public:
 			glBindVertexArray(_enableBuffer._vbo);
 		}
 	}
+	void genBuffer(buffer* inBuffer)
+	{
+#ifdef _DEBUG
+		if (std::this_thread::get_id() != threadID)
+		{
+			message("[Warning]void useShader(const GLuint programID) can only use in main thread!", msgWarning, false);
+
+			return;
+		}
+#endif
+		if (_globalVAO == 0)
+			_globalVAO = genVAO();
+
+		inBuffer->_vao = _globalVAO;
+
+		glBindVertexArray(_globalVAO);
+		glGenBuffers(1, &inBuffer->_vbo);
+
+		//change back
+		if (_enableBuffer._vao != -1)
+		{
+			glBindVertexArray(_enableBuffer._vao);
+			glBindVertexArray(_enableBuffer._vbo);
+		}
+		else
+			glBindVertexArray(0);
+	}
 	//if return false it mean it is in use
 	bool useBuffer(buffer& bufferInfo)
 	{
@@ -369,7 +407,9 @@ public:
 #endif
 
 		if (bufferInfo.getVAO() == 0)
+		{
 			genBuffer(&bufferInfo);
+		}
 
 		if (bufferInfo._vao != _enableBuffer._vao)
 		{
@@ -386,6 +426,8 @@ public:
 			glBindBuffer(GL_ARRAY_BUFFER, bufferInfo._vbo);
 
 			_enableBuffer._vbo = bufferInfo._vbo;
+
+			return true;
 		}
 		return false;
 	}

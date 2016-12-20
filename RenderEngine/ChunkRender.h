@@ -1,30 +1,57 @@
 #pragma once
 
+#define CHUNK_RENDER_PRIORITY 0.501f
+#define CHUNK_HALF_ALPHA_BLOCK_RENDER_PRIORITY 0.5f
+
+#include "../ChunkUniversal.h"
 #include "RenderNode.h"
 #include "ChunkRenderShader.h"
+#include "ChunkGlobalRender.h"
+#include "SceneNode.h"
 
-class chunk_render :public render_node
+struct block_render_data
+{
+	unsigned int	blockInfo = 0;
+	unsigned int	nearbyBlockInfo = 0;
+
+	block_render_data()
+	{
+		setNearbyBlockAlpha(false, false, false, false, false, false);
+	}
+	void setBlockRenderData(uint16_t blockLocation, uint16_t blockID)
+	{
+#ifdef _DEBUG
+		if (blockLocation >= 4096)
+			message("[Error]Fail to create new block render date because \"blockLocation\" can't large than 4096", msgError, false);
+#endif
+		blockInfo = blockLocation;
+
+		blockInfo += (blockID << 12);
+	}
+	void setNearbyBlockLight(uint8_t blockUp, uint8_t blockDown, uint8_t blockLeft, uint8_t blockRight, uint8_t blockFront, uint8_t blockBack)
+	{
+		nearbyBlockInfo += (blockUp + (blockDown << 4) + (blockLeft << 8) + (blockRight << 12) + (blockFront << 16) + (blockBack << 20)) << 8;
+	}
+	void setAlpha(bool hasAlpha);
+	void setNearbyBlockAlpha(bool top, bool down, bool left, bool right, bool front, bool back);
+};
+
+class chunk_render
 {
 private:
-	gl_manager& _glInstance = gl_manager::getInstance();
+	chunk_global_render* chunkGlobalRender;
+	chunk_global_render* chunkHalfAlphaBlockRender;
 
-	unsigned char	_sight = 0;
+	scene_node* _sceneNode;
 
-	void _draw(camera _golbalCamera)
-	{
-		_glInstance.useTexture(*_getTexture());
-		
-		_getRenderProgram()->drawBuffer(0, 100, *_getBuffer(), _golbalCamera + _nodeCamera, _modelLocation);
-	}
 public:
-	chunk_render(unsigned char _sight);
+	void setBlockRenderDatas(block_render_data* block, unsigned short count);
 
-	/*
-	* set light pos
-	* from the input location to 0,0,0
-	*/
-	void setLight(float x, float y, float z)
+	void setChunkLocation(int x, int y, int z)
 	{
-		((chunk_render_program*)_getRenderProgram())->setLight(x, y, z);
+		chunkGlobalRender->setChunkLocation(x, y, z);
+		chunkHalfAlphaBlockRender->setChunkLocation(x, y, z);
 	}
+
+	chunk_render(scene_node* sceneNode, texture* blockTexture);
 };

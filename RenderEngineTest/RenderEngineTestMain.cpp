@@ -1,56 +1,59 @@
 
 #include "../GSRenderEngine.h"
 #include "../RenderEngine/ChunkRenderExtension.h"
-#include "../RenderEngine/NormalShaderExtension.h"
 #include "../RenderEngine/FPCExtension.h"
-#include "../RenderEngine/ModLoader.h"
-#include "../RenderEngine/CanvasExtension.h"
-#include "../RenderEngine/NormalShader.h"
 
-texture* logoTexture;
-texture* blockTexture;
+#define SIGHT 16
+
+void buildMap(int chunkX, int chunkZ, unsigned int* chunkData);
+
 scene_node* firstScene;
+texture*	blockTexture;
 
-canvas* logo;
-
-chunk_render* testRenderNode;
-
-class testListener:public input_callback
+class testChunk
 {
-	int ID;
-	unsigned int tick = 0;
-
 public:
-	testListener(int ID) :ID(ID) {}
+	unsigned int blockData[4096]{ 0 };
 
-	void tickListener()
+	chunk_render* chunkRender;
+
+	void buildChunk(int chunkX,int chunkZ)
 	{
-		tick++;
+		buildMap(chunkX, chunkZ, blockData);
 
-		testRenderNode->setLight(cos(tick / 20.0f), sin(tick / 20.0f) , 0.1f);
+		chunkRender = new chunk_render(firstScene, blockTexture);
+
+		chunkRender->setChunkLocation(chunkX, 0, chunkZ);
 	}
-	void keyListener(int key, int action)
-	{
-		if (key == GLFW_KEY_Q)
-			application::getInstance().unregisterInputCallback(this);
 
-		if (ID == 0)
-			std::cout << "[Listener: " << ID << "]" << key << std::endl;
-		else if (ID == 1)
+	void refreshChunkRenderData()
+	{
+		block_render_data blockRenderData[4096];
+
+		for (unsigned short i = 0; i < 4096; i++)
 		{
-			std::cout << "[Listener: " << ID << "]" << action << std::endl;
+			blockRenderData[i].setBlockRenderData(i, blockData[i]);
+			blockRenderData[i].setNearbyBlockAlpha(true, true, true, true, true, true);
+			blockRenderData[i].setNearbyBlockLight(15, 15, 15, 15, 15, 15);
+			blockRenderData[i].setAlpha(false);
 		}
+		chunkRender->setBlockRenderDatas(blockRenderData, 4096);
+	}
+	~testChunk()
+	{
+		delete(chunkRender);
 	}
 };
+
 class test_app :public application
 {
-public:
-	canvas* coordinateX;
-	canvas* coordinateZ;
+private:
+	unsigned int _tick;
 
+public:
 	fpc fpController = fpc(getGlobalCamera());
 
-	test_app() :application(u8"MagicCube-RenderEngineTest gs test", "test-1.0.0", size_vec(880, 495)) {}
+	test_app() :application(u8"MagicCube-RenderEngineTest render test", "test-1.0.0", size_vec(880, 495)) {}
 
 	void keyListener(int key, int action)
 	{
@@ -67,14 +70,32 @@ public:
 			}
 	}
 
+	void tickListener()
+	{
+		_tick++;
+		/*
+		if (_tick % 5 != 0)
+			return;
+
+		if (_tick % 50 == 0)
+			std::cout << "add a new chunk,now there are " << _tick / 5 << "chunks," << 2032 * _tick / 5 << " blocks," << 2032 * _tick / 5 * 6 << "cubes." << std::endl;
+		
+		blockRenderData* testBlockRenderDataList = new blockRenderData[4096];
+
+		chunk_render* testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(testBlockRenderDataList));
+
+		testRenderNode->getModelCamera()->getLocation()->moveTo(((_tick / 5u) << 20 >> 28) * 16, ((_tick / 5u) << 24 >> 24) * 16, ((_tick / 5u) << 16 >> 28) * 16);
+
+		testRenderNode->bindTexture(blockTexture);
+
+		delete[](testBlockRenderDataList);
+		*/
+	}
 	void initResources()
 	{
-		loadExtension(new normal_shader_extension());
-		loadExtension(new canvas_extension());
 		loadExtension(new chunk_render_extension());
-		
-		logoTexture = genTexture({ "Logo.png" }, 1);
-		blockTexture = genTexture({ "BlockTexture.png", "BlockTextureNormal.png" }, 2);
+
+		blockTexture = genTexture({ "BlockTexture.png"}, 1);
 
 		glClearColor(0.1f, 0.4f, 0.6f, 0.0f);
 	}
@@ -83,44 +104,26 @@ public:
 		bindFPC(&fpController);
 
 		firstScene = addScene();
-		
-		logo = (canvas*)firstScene->addRenderNode(new canvas(normal3DRenderProgram));
-
-		logo->addShapes(new canvas_shape[2]
-		{
-			canvas_shape
-			(
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, -1.0f), texture_pos(1.0f, 0.0f)),
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, 1.0f, -1.0f), texture_pos(0.0f, 0.0f)),
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, -1.0f), texture_pos(0.0f, 1.0f))
-			)
-			,
-			canvas_shape
-			(
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(-1.0f, -1.0f, -1.0f), texture_pos(0.0f, 1.0f)),
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, -1.0f, -1.0f), texture_pos(1.0f, 1.0f)),
-				canvas_point_info(color(0.0, 0.0, 0.0), location<GLfloat>(1.0f, 1.0f, -1.0f), texture_pos(1.0f, 0.0f))
-			)
-		}, 2);
-		
-		testRenderNode = (chunk_render*)firstScene->addRenderNode(new chunk_render(10));
-		testRenderNode->bindTexture(blockTexture);
-
-		logo->bindTexture(logoTexture);
 
 		showScene(firstScene);
 
-		registerInputCallback(new testListener(1));
-	}
-	unsigned int tick = 0;
+		//load chunks
+		
+		testChunk* chunks = new testChunk[SIGHT * 2 * SIGHT * 2];
 
-	void tickListener()
-	{
-		tick++;
+		double startTime = glfwGetTime();
 
-		if (tick % 50 == 0)
-			std::cout << tick / 50 << std::endl;
+		for (int i = 0; i < SIGHT * 2; i++)
+			for (int j = 0; j < SIGHT * 2; j++)
+			{
+				chunks[i * SIGHT * 2 + j].buildChunk(i, j);
+				chunks[i * SIGHT * 2 + j].refreshChunkRenderData();
+			}
+		double finishTime = glfwGetTime();
 
+		std::cout << "add " << SIGHT * SIGHT * 2 << " chunks use " << finishTime - startTime << "s" << std::endl;
+
+		fpController.getCamera()->getLocation()->moveTo(SIGHT * 16, 10, SIGHT * 16);
 	}
 };
 

@@ -9,17 +9,44 @@ class render_node
 	friend class render_node_manager;
 
 private:
+	bool operator < (const render_node& renderNode) const
+	{
+		return _priority < renderNode._priority;
+	}
+	bool operator <= (const render_node& renderNode) const
+	{
+		return _priority <= renderNode._priority;
+	}
+	bool operator > (const render_node& renderNode) const
+	{
+		return _priority > renderNode._priority;
+	}
+	bool operator >= (const render_node& renderNode) const
+	{
+		return _priority >= renderNode._priority;
+	}
+	bool operator == (const render_node& renderNode) const
+	{
+		return renderNode._priority == _priority;
+	}
+
 	gl_manager&		_glInstance = gl_manager::getInstance();
 
 	//these are the thing that about opengl
 	render_program* _renderProgram;
-	buffer*			_buffer = new buffer();
+	buffer*			_buffer;
+
 	const texture*	_texture;
+
+	bool _isBufferOwner = false;
 
 protected:
 	//node camera
-	camera			_nodeCamera;
-	camera			_modelLocation;
+	camera_synchronize		_nodeCamera;
+	camera_synchronize		_modelLocation;
+	
+	//node priority(0.0 to 1.0),0.0 is lowest and 1.0 is highest
+	float _priority = 0.0;
 
 	//is the render_node can draw
 	bool _isEnable = false;
@@ -36,10 +63,13 @@ protected:
 
 	render_node(render_program* renderProgram)
 	{
+		_isBufferOwner = true;
+		_buffer = new buffer();
 		_renderProgram = renderProgram;
 	}
 	render_node(buffer* buffer, render_program* renderProgram) :_buffer(buffer)
 	{
+		_isBufferOwner = false;
 		_renderProgram = renderProgram;
 	}
 
@@ -59,7 +89,10 @@ protected:
 	}
 	~render_node()
 	{
-		delete(_buffer);
+		if (_isBufferOwner)
+		{
+			delete(_buffer);
+		}
 	}
 public:
 	//texture
@@ -68,12 +101,12 @@ public:
 		_texture = texture;
 	}
 	//golbal Camera
-	camera* getNodeCamera()
+	camera_synchronize* getNodeCamera()
 	{
 		return &_nodeCamera;
 	}
 	//model camera
-	camera* getModelLocation()
+	camera_synchronize* getModelCamera()
 	{
 		return &_modelLocation;
 	}

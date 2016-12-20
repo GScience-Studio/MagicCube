@@ -1,5 +1,19 @@
 #version 330 core
 
+#define HIDE_TOP		0x01u
+#define HIDE_DOWM		0x02u
+#define HIDE_LEFT		0x04u
+#define HIDE_RIGHT		0x08u
+#define HIDE_BACK		0x10u
+#define HIDE_FRONT		0x20u
+
+#define GET_LIGHT_UP float(vs_out[0].nearbyBlockInfo << 20 >> 28) / 15.0f
+#define GET_LIGHT_DOWN float(vs_out[0].nearbyBlockInfo << 16 >> 28) / 15.0f
+#define GET_LIGHT_LEFT float(vs_out[0].nearbyBlockInfo << 12 >> 28) / 15.0f
+#define GET_LIGHT_RIGHT float(vs_out[0].nearbyBlockInfo << 8 >> 28) / 15.0f
+#define GET_LIGHT_FRONT float(vs_out[0].nearbyBlockInfo << 4 >> 28) / 15.0f
+#define GET_LIGHT_BACK float(vs_out[0].nearbyBlockInfo >> 28) / 15.0f
+
 uniform mat4 projection;
 
 layout(points) in ;
@@ -10,26 +24,37 @@ uniform vec3 eyesPos;
 
 in VS_OUT
 {
-   uvec2 texturePos;
+	uint  nearbyBlockInfo;
+	uint  blockID;
 }vs_out[];
 
 out GS_OUT
 {
-   vec2 texturePos;
-   vec2 textureSizeLimit[2];
-   vec3 lightPos;
-   vec3 eyesPos;
+	vec2 texturePos;
+	//vec2 textureSizeLimit[2];
+	//vec3 lightPos;
+	vec3 lightColor;
 }gs_out;
 
-void renderBlock(vec3 position,float blockTextureID)
+vec3 getLightDir(vec3 normal,vec3 tangent)
 {
-	vec3 normalizeLightPos = vec3(0.0,0.0,0.0);
+	vec3 n = normalize(normal);
+	vec3 t = normalize(tangent);
+	vec3 b = cross(n,t);
 	
-	if (lightPos != vec3(0.0,0.0,0.0))
-		normalizeLightPos = normalize(lightPos);
+	vec3 v;
 	
-	float texturePosX = float(vs_out[0].texturePos.x);
-	float texturePosY = float(vs_out[0].texturePos.y);
+	v.x = dot(lightPos, t);
+	v.y = dot(lightPos, b);
+	v.z = dot(lightPos, n);
+	
+	return normalize(v);
+}
+
+vec4 getTexturePos(uint blockTextureID)
+{
+	float texturePosY = float(blockTextureID / 32u);
+	float texturePosX = float(blockTextureID - texturePosY * 32u);
 	
 	float texturePosY2 = texturePosY + 1;
 	float texturePosX2 = texturePosX + 1;
@@ -40,200 +65,209 @@ void renderBlock(vec3 position,float blockTextureID)
 	texturePosX2 /= 32.0f;
 	texturePosY2 /= 32.0f;
 	
-	gs_out.textureSizeLimit[0] = vec2(texturePosX,texturePosY);
-	gs_out.textureSizeLimit[1] = vec2(texturePosX2,texturePosY2);
+	return vec4(texturePosX,texturePosY2,texturePosX2,texturePosY);
+}
+void drawBlockUp(vec3 position, uint blockTextureID)
+{
+	vec4 texturePos = getTexturePos(blockTextureID);
 	
-	//up
-	vec3 vertexNormal_cameraspace = normalize(vec3(0.0,1.0,0.0));
-    vec3 vertexTangent_cameraspace = normalize(vec3(1.0,0.0,0.0));
-    vec3 vertexBitangent_cameraspace = normalize(vec3(0.0,0.0,1.0));
+	gs_out.lightColor = vec3(GET_LIGHT_UP,GET_LIGHT_UP,GET_LIGHT_UP);
 
-	mat3 TBN = transpose(mat3(
-        vertexTangent_cameraspace,
-        vertexBitangent_cameraspace,
-        vertexNormal_cameraspace
-    ));
-	
-	gs_out.lightPos = normalizeLightPos * TBN;
+	//gs_out.lightPos = getLightDir(vec3(0.0,1.0,0.0),vec3(0.0,0.0,-1.0));
 
-	gs_out.eyesPos = abs((vec3(0.0f,0.0f,0.0f) + position - eyesPos)) * TBN;
-	
-	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY2);
+	gl_Position = vec4(position + vec3(0.0f,1.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
+	EmitVertex();
+
+	gl_Position = vec4(position + vec3(0.0f,1.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
 	EmitVertex();
 	
-	gs_out.eyesPos = abs((vec3(0.0f,0.0f,1.0f) + position - eyesPos)) * TBN;
-	
-	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY2);
+	gl_Position = vec4(position + vec3(1.0f,1.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
 	EmitVertex();
-	
-	gs_out.eyesPos = abs((vec3(1.0f,0.0f,0.0f) + position - eyesPos)) * TBN;
-	
-	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY);
-	EmitVertex();
-	
-	gs_out.eyesPos = abs((vec3(1.0f,0.0f,1.0f) + position - eyesPos)) * TBN;
-	
-	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY);
+		
+	gl_Position = vec4(position + vec3(1.0f,1.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
 	EmitVertex();
 	EndPrimitive();
+}
+void drawBlockDown(vec3 position, uint blockTextureID)
+{
+	vec4 texturePos = getTexturePos(blockTextureID);
+	
+	gs_out.lightColor = vec3(GET_LIGHT_DOWN,GET_LIGHT_DOWN,GET_LIGHT_DOWN) * 0.7;
+	
+	//gs_out.lightPos = getLightDir(vec3(0.0,-1.0,0.0),vec3(0.0,0.0,1.0));
+	
+	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
+	EmitVertex();
+		
+	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
+	EmitVertex();
+		
+	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
+	EmitVertex();
+		
+	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
+	EmitVertex();
+	
+	EndPrimitive();
+}
+
+void drawBlockBack(vec3 position, uint blockTextureID)
+{
+	vec4 texturePos = getTexturePos(blockTextureID);
+
+	gs_out.lightColor = vec3(GET_LIGHT_BACK,GET_LIGHT_BACK,GET_LIGHT_BACK) * 0.7;
+	
+	//gs_out.lightPos = getLightDir(vec3(1.0,0.0,0.0),vec3(0.0,0.0,1.0));
+
+	gl_Position = vec4(position + vec3(0.0f,1.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
+	EmitVertex();
+		
+	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
+	EmitVertex();
+		
+	gl_Position = vec4(position + vec3(0.0f,1.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
+	EmitVertex();
+		
+	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
+	EmitVertex();
+	EndPrimitive();
+}
+
+void drawBlockFront(vec3 position, uint blockTextureID)
+{
+	vec4 texturePos = getTexturePos(blockTextureID);
+
+	gs_out.lightColor = vec3(GET_LIGHT_FRONT,GET_LIGHT_FRONT,GET_LIGHT_FRONT) * 0.7;
+	
+	//gs_out.lightPos = getLightDir(vec3(-1.0,0.0,0.0),vec3(0.0,0.0,-1.0));
+
+	gl_Position = vec4(position + vec3(1.0f,1.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
+	EmitVertex();
+	
+	gl_Position = vec4(position + vec3(1.0f,1.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
+	EmitVertex();
+	
+	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
+	EmitVertex();
+	
+	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
+	EmitVertex();
+	
+	EndPrimitive();
+}
+void drawBlockLeft(vec3 position, uint blockTextureID)
+{
+	vec4 texturePos = getTexturePos(blockTextureID);
+
+	gs_out.lightColor = vec3(GET_LIGHT_LEFT,GET_LIGHT_LEFT,GET_LIGHT_LEFT);
+	
+	//gs_out.lightPos = getLightDir(vec3(0.0,0.0,1.0),vec3(-1.0,1.0,0.0));
+
+	gl_Position = vec4(position + vec3(0.0f,1.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
+	EmitVertex();
+	
+	gl_Position = vec4(position + vec3(1.0f,1.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
+	EmitVertex();
+	
+	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
+	EmitVertex();
+	
+	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
+	EmitVertex();
+	
+	EndPrimitive();
+}
+
+void drawBlockRight(vec3 position, uint blockTextureID)
+{
+	vec4 texturePos = getTexturePos(blockTextureID);
+
+	gs_out.lightColor = vec3(GET_LIGHT_RIGHT,GET_LIGHT_RIGHT,GET_LIGHT_RIGHT);
+	
+	//gs_out.lightPos = getLightDir(vec3(0.0,0.0,-1.0),vec3(1.0,-1.0,0.0));
+
+	gl_Position = vec4(position + vec3(0.0f,1.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[3]);
+	EmitVertex();
+	
+	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[0],texturePos[1]);
+	EmitVertex();
+	
+	gl_Position = vec4(position + vec3(1.0f,1.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[3]);
+	EmitVertex();
+	
+	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
+	gs_out.texturePos = vec2(texturePos[2],texturePos[1]);
+	EmitVertex();
+	
+	EndPrimitive();
+}
+
+void renderBlock(vec3 position,uint blockTextureID)
+{
+	//up
+	if ((vs_out[0].nearbyBlockInfo & HIDE_TOP) == 0u)
+	{
+		drawBlockUp(position, blockTextureID);
+	}
 	
 	//down
-	vertexNormal_cameraspace = normalize(vec3(0.0,-1.0,0.0));
-    vertexTangent_cameraspace = normalize(vec3(-1.0,0.0,0.0));
-    vertexBitangent_cameraspace = normalize(vec3(0.0,0.0,-1.0));
-
-	TBN = transpose(mat3(
-        vertexTangent_cameraspace,
-        vertexBitangent_cameraspace,
-        vertexNormal_cameraspace
-    ));
-	
-	gs_out.lightPos = normalizeLightPos * TBN;
-
-	gs_out.eyesPos = normalize(eyesPos - vec3(0.0f,-1.0f,0.0f) - position) * TBN;
-	
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY2);
-	EmitVertex();
-	
-	gs_out.eyesPos = normalize(eyesPos - vec3(1.0f,-1.0f,0.0f) - position) * TBN;
-	
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY);
-	EmitVertex();
-	
-	gs_out.eyesPos = normalize(eyesPos - vec3(0.0f,-1.0f,01.0f) - position) * TBN;
-	
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY2);
-	EmitVertex();
-	
-	gs_out.eyesPos = normalize(eyesPos - vec3(1.0f,-1.0f,1.0f) - position) * TBN;
-	
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY);
-	EmitVertex();
-	EndPrimitive();
+	if ((vs_out[0].nearbyBlockInfo & HIDE_DOWM) == 0u)
+	{
+		drawBlockDown(position, blockTextureID);
+	}
 
 	//back
-	vertexNormal_cameraspace = normalize(vec3(0.0,0.0,-1.0));
-    vertexTangent_cameraspace = normalize(vec3(0.0,-1.0,0.0));
-    vertexBitangent_cameraspace = normalize(vec3(-1.0,0.0,0.0));
-
-	TBN = transpose(mat3(
-        vertexTangent_cameraspace,
-        vertexBitangent_cameraspace,
-        vertexNormal_cameraspace
-    ));
+	if ((vs_out[0].nearbyBlockInfo & HIDE_BACK) == 0u)
+	{
+		drawBlockBack(position, blockTextureID);
+	}
 	
-	gs_out.lightPos = normalizeLightPos * TBN;
-
-	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY2);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY2);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY);
-	EmitVertex();
-	EndPrimitive();
-	
-	//toward
-	vertexNormal_cameraspace = normalize(vec3(0.0,0.0,1.0));
-    vertexTangent_cameraspace = normalize(vec3(0.0,1.0,0.0));
-    vertexBitangent_cameraspace = normalize(vec3(1.0,0.0,0.0));
-
-	TBN = transpose(mat3(
-        vertexTangent_cameraspace,
-        vertexBitangent_cameraspace,
-        vertexNormal_cameraspace
-    ));
-	
-	gs_out.lightPos = normalizeLightPos * TBN;
-
-	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY2);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY2);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY);
-	EmitVertex();
-	EndPrimitive();
+	//front
+	if ((vs_out[0].nearbyBlockInfo & HIDE_FRONT) == 0u)
+	{
+		drawBlockFront(position, blockTextureID);
+	}
 	
 	//left
-	vertexNormal_cameraspace = normalize(vec3(-1.0,0.0,0.0));
-    vertexTangent_cameraspace = normalize(vec3(0.0,0.0,-1.0));
-    vertexBitangent_cameraspace = normalize(vec3(0.0,-1.0,0.0));
-
-	TBN = transpose(mat3(
-        vertexTangent_cameraspace,
-        vertexBitangent_cameraspace,
-        vertexNormal_cameraspace
-    ));
-	
-	gs_out.lightPos = normalizeLightPos * TBN;
-
-	gl_Position = vec4(position + vec3(0.0f,0.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY2);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(1.0f,0.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY2);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,0.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY);
-	EmitVertex();
-	EndPrimitive();
+	if ((vs_out[0].nearbyBlockInfo & HIDE_LEFT) == 0u)
+	{
+		drawBlockLeft(position, blockTextureID);
+	}
 	
 	//right
-	vertexNormal_cameraspace = normalize(vec3(1.0,0.0,0.0));
-    vertexTangent_cameraspace = normalize(vec3(0.0,0.0,1.0));
-    vertexBitangent_cameraspace = normalize(vec3(0.0,1.0,0.0));
-
-	TBN = transpose(mat3(
-        vertexTangent_cameraspace,
-        vertexBitangent_cameraspace,
-        vertexNormal_cameraspace
-    ));
-	
-	gs_out.lightPos = normalizeLightPos * TBN;
-
-	gl_Position = vec4(position + vec3(0.0f,0.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY2);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(0.0f,-1.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX,texturePosY);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(1.0f,0.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY2);
-	EmitVertex();
-	gl_Position = vec4(position + vec3(1.0f,-1.0f,1.0f), 1.0f) * projection;
-	gs_out.texturePos = vec2(texturePosX2,texturePosY);
-	EmitVertex();
-	EndPrimitive();
-	
-	
+	if ((vs_out[0].nearbyBlockInfo & HIDE_RIGHT) == 0u)
+	{
+		drawBlockRight(position, blockTextureID);
+	}
 }
 void main()
 {
     gl_PointSize = gl_in[0].gl_PointSize;
-		
+	
 	vec3 position = vec3(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z);
-
-    renderBlock(position,3);
+	
+    renderBlock(position,vs_out[0].blockID);
 }

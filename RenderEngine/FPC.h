@@ -18,7 +18,8 @@ class fpc :public input_callback
 	};
 private:
 	//绑定的相机
-	camera* _camera;
+	camera_synchronize*	_renderCamera;
+	camera			_fpcCamera;
 
 	//是否为快速模式
 	bool _isFastMode = false;
@@ -30,16 +31,35 @@ private:
 	vec<speed_state, 3> _speedState{ SPEED_STOP ,SPEED_STOP ,SPEED_STOP };
 
 	//简化相机信息
-	location<double>&	_location	= *_camera->getLocation();
-	angle&				_angle		= *_camera->getAngle();
+	location<double>&	_location	= *_fpcCamera.getLocation();
+	angle&				_angle		= *_fpcCamera.getAngle();
+
+	//设置渲染相机
+	void _setRenderCamera()
+	{
+		_renderCamera->getLocation()->setX(_fpcCamera.getLocation()->getX());
+		_renderCamera->getLocation()->setY(_fpcCamera.getLocation()->getY());
+		_renderCamera->getLocation()->setZ(_fpcCamera.getLocation()->getZ());
+
+		_renderCamera->getAngle()->setPosX(_fpcCamera.getAngle()->getPosX());
+		_renderCamera->getAngle()->setPosY(_fpcCamera.getAngle()->getPosY());
+	}
 
 public:
-	fpc(camera* camera) :_camera(camera) {}
+	fpc(camera_synchronize* renderCamera) :_renderCamera(renderCamera)
+	{
+		_fpcCamera.getLocation()->setX(_renderCamera->getLocation()->getX());
+		_fpcCamera.getLocation()->setY(_renderCamera->getLocation()->getY());
+		_fpcCamera.getLocation()->setZ(_renderCamera->getLocation()->getZ());
+
+		_fpcCamera.getAngle()->setPosX(_renderCamera->getAngle()->getPosX());
+		_fpcCamera.getAngle()->setPosY(_renderCamera->getAngle()->getPosY());
+	}
 	
 	//获取位置
-	camera* getLocation()
+	camera* getCamera()
 	{
-		return _camera;
+		return &_fpcCamera;
 	}
 
 	//tick刷新
