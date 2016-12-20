@@ -4,8 +4,11 @@
     <ClInclude Include="..\WorldManager.h" />
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="..\ChunkUniversal.h" />
+    <ClInclude Include="Chunk.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChunkManager.cpp" />
+    <ClCompile Include="WorldManager.cpp" />
   </ItemGroup>
 </Project>

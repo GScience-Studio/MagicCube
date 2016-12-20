@@ -4,5 +4,6 @@
 
 class world_manager
 {
-
+public:
+	world testWorld;
 };

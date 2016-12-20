@@ -1,33 +1,42 @@
 #pragma once
 
-#include "../RenderEngine/ChunkRender.h"
+#include "Chunk.h"
+#include <unordered_map>
 
-class chunk_manager {
-public:
-	chunk* chunks;
-
-	chunk_manager(int visualFieldSize);
-
+class chunk_manager 
+{
 private:
-	int size;
-	int ArraySize;
-};
+	std::unordered_map<chunk_location,chunk*, chunk_location_hash, chunk_location_compare> _chunkList;
 
-class chunk {
 public:
-	int cx, cz, wx, wz;
-	block* blocks;
+	chunk* addChunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ)
+	{
+		if (_chunkList[{chunkX, chunkY, chunkZ}] != nullptr)
+			throw(std::runtime_error("1"));
 
-	chunk(int x,int z);
+		chunk* newChunk = new chunk(chunkX, chunkY, chunkZ);
 
-	void build();
-	void setChunkRender(chunk_render chunkrender);
+		_chunkList[{chunkX, chunkY, chunkZ}] = newChunk;
 
-private:
-
-};
-
-class block {
-public:
-	block() {};
+		return newChunk;
+	}
+	void clear()
+	{
+		for (auto chunk = _chunkList.begin(); chunk != _chunkList.end(); chunk++)
+		{
+			delete (*chunk).second;
+		}
+		_chunkList.clear();
+	}
+	chunk* getChunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ)
+	{
+		return _chunkList[{chunkX, chunkY, chunkZ}];
+	}
+	~chunk_manager()
+	{
+		for (auto chunk = _chunkList.begin(); chunk != _chunkList.end(); chunk++)
+		{
+			delete (*chunk).second;
+		}
+	}
 };

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="WorldManagerTestMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WorldManager\WorldManager.vcxproj">
