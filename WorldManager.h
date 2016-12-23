@@ -55,8 +55,11 @@ public:
 		_playerLocation = location;
 	}
 
-	void tickListener()
+	void refreshWorld()
 	{
+		if (_playerLocation.getWorld() == nullptr)
+			return;
+
 		//if has too much chunk try to unload them with random tick
 		if (_playerLocation.getWorld()->_chunkMap.size() > SIGHT * SIGHT * 5)
 		{

@@ -2,5 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MagicCubeInit.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameWorldManager.h" />
+    <ClInclude Include="MagicCube.h" />
+    <ClInclude Include="GameScene.h" />
   </ItemGroup>
 </Project>
