@@ -4,7 +4,7 @@
 #include "../RenderEngine/ChunkRenderExtension.h"
 #include "../GSRenderEngine.h"
 
-class game_world_manager :public world_manager, input_callback
+class game_world_manager :public world_manager
 {
 private:
 	std::vector<chunk_render*> _chunkRenderList;
