@@ -11,7 +11,7 @@ class chunk_manager
 	friend class world_manager;
 
 private:
-	std::map<chunk_location, chunk*> _chunkList;
+	std::map<chunk_location, chunk*>	_chunkMap;
 
 	world* _world;
 
@@ -26,7 +26,7 @@ public:
 	{
 		chunk* newChunk = new chunk(chunkX, chunkY, chunkZ, _world);
 
-		_chunkList[{chunkX, chunkY, chunkZ}] = newChunk;
+		_chunkMap[{chunkX, chunkY, chunkZ}] = newChunk;
 
 #ifdef _DEBUG
 		std::cout << "Load a new chunk at:" << chunkX << "," << chunkY << "," << chunkZ << std::endl;
@@ -36,9 +36,9 @@ public:
 	chunk* getChunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ)
 	{
 		//has this chunk?
-		auto getChunk = _chunkList.find({ chunkX, chunkY, chunkZ });
+		auto getChunk = _chunkMap.find({ chunkX, chunkY, chunkZ });
 
-		if (getChunk != _chunkList.end())
+		if (getChunk != _chunkMap.end())
 			return getChunk->second;
 
 		//create one
@@ -46,12 +46,15 @@ public:
 	}
 	void unloadChunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ)
 	{
-		auto getChunk = _chunkList.find({ chunkX, chunkY, chunkZ });
+		auto getChunk = _chunkMap.find({ chunkX, chunkY, chunkZ });
 
-		if (getChunk == _chunkList.end())
+		if (getChunk == _chunkMap.end())
 			return;
 
-		_chunkList.erase(getChunk);
+#ifdef _DEBUG
+		std::cout << "unoad a new chunk at:" << chunkX << "," << chunkY << "," << chunkZ << std::endl;
+#endif
+		_chunkMap.erase(getChunk);
 	}
 	void unloadChunk(chunk* chunk)
 	{
@@ -59,7 +62,7 @@ public:
 	}
 	~chunk_manager()
 	{
-		for (auto chunk = _chunkList.begin(); chunk != _chunkList.end(); chunk++)
+		for (auto chunk = _chunkMap.begin(); chunk != _chunkMap.end(); chunk++)
 		{
 			delete (*chunk).second;
 		}

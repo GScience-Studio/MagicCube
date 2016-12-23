@@ -7,6 +7,10 @@ int main()
 {
 	world_manager* testWorldManager = new world_manager();
 
+	world* world = testWorldManager->loadWorld("World 1");
+
+	testWorldManager->transport(location(world, 0, 0, 0));
+
 	std::cout << "Loading world...." << std::endl;
 
 	testWorldManager->tickListener();
@@ -19,6 +23,12 @@ int main()
 		uint32_t y;
 		uint32_t z;
 
+		std::cout << "random tick (1000 times)" << std::endl;
+
+		for (unsigned int i = 0; i < 1000; i++)
+		{
+			testWorldManager->tickListener();
+		}
 		std::cout << "Please enter the location you want to transport:" << std::endl;
 
 		std::cout << "X:" << std::endl;
@@ -32,8 +42,7 @@ int main()
 
 		std::cout << "Succese to transport!" << std::endl;
 
-		testWorldManager->transport(location(&testWorldManager->testWorld, x, y, z));
-		testWorldManager->tickListener();
+		testWorldManager->transport(location(world, x, y, z));
 	}
 	delete(testWorldManager);
 
