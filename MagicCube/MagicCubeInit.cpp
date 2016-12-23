@@ -7,7 +7,7 @@ void magiccube_application::init()
 	//init screen
 	for (unsigned int i = 0; i < SCENE_NULL; i++)
 	{
-		scenes[i] = addScene(new init_scene());
+		scenes[i] = addScene(new game_scene());
 	}
 	bindFPC(&FPC);
 
