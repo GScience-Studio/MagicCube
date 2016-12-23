@@ -24,30 +24,20 @@ struct chunk_location
 			(chunkLocation._chunkY == _chunkY) &&
 			(chunkLocation._chunkZ == _chunkZ));
 	}
-};
-
-class chunk_location_hash
-{
-public:
-	size_t operator()(const chunk_location& location) const
+	bool operator <(const chunk_location& chunkLocation) const
 	{
-		unsigned long __h = 0;
+		if (chunkLocation._chunkX < _chunkX)
+			return true;
+		else if (chunkLocation._chunkX == _chunkX)
+			if (chunkLocation._chunkY < _chunkY)
+				return true;
+			else if (chunkLocation._chunkY == _chunkY)
+				if (chunkLocation._chunkZ < _chunkZ)
+					return true;
+				else if (chunkLocation._chunkZ == _chunkZ)
+					return false;
 
-		__h = __h + location._chunkX;
-		__h = 5 * __h + location._chunkY;
-		__h = 5 * __h + location._chunkZ;
-
-		return size_t(__h);
-	}
-};
-
-
-class chunk_location_compare
-{
-public:
-	bool operator()(const chunk_location& location1, const chunk_location& location2)const
-	{
-		return location1 == location2;
+		return false;
 	}
 };
 
@@ -56,40 +46,42 @@ class chunk
 	friend class chunk_manager;
 
 private:
-	chunk_location chunkLocation;
+	chunk_location	chunkLocation;
 
 	block* _blockList;
-
 	world* _world;
 
-	chunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ) : chunkLocation(chunkX, chunkY, chunkZ)
+	chunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ, world* world) : chunkLocation(chunkX, chunkY, chunkZ)
 	{
 		_blockList = new block[4096];
+		_world = world;
 	}
 	~chunk()
 	{
 		delete[](_blockList);
 	}
 public:
-	int32_t getChunkX()
+	int32_t getChunkX() const
 	{
 		return chunkLocation._chunkX;
 	}
-	int32_t getChunkY()
+	int32_t getChunkY() const
 	{
 		return chunkLocation._chunkY;
 	}
-	int32_t getChunkZ()
+	int32_t getChunkZ() const
 	{
 		return chunkLocation._chunkZ;
 	}
+
+	world* getWorld() const
+	{
+		return _world;
+	}
+
 	//you'd better don't save the pointer it return
 	block* getBlock(uint8_t x, uint8_t y, uint8_t z)
 	{
 		return &_blockList[blockChunkLocationToShort(x, y, z)];
-	}
-	world* getWorld()
-	{
-		return _world;
 	}
 };

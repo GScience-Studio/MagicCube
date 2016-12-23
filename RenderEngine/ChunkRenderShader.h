@@ -27,7 +27,7 @@ private:
 
 	bool _setCameraAndCheckIsInSight(camera modelCamera)
 	{
-		location<double> modelLocation = *modelCamera.getLocation();
+		render_location<double> modelLocation = *modelCamera.getLocation();
 
 		if (!isCubeInFrustum(modelLocation.getX(), modelLocation.getY(), modelLocation.getZ(), modelLocation.getX() + 16.0f, modelLocation.getY() + 16.0f, modelLocation.getZ() + 16.0f))
 			return false;

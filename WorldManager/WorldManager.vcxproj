@@ -25,6 +25,7 @@
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="ChunkManager.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="Location.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WorldManager.cpp" />

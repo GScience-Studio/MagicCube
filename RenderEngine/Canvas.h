@@ -23,7 +23,7 @@ public:
 struct canvas_point_info
 {
 	//location
-	location<GLfloat>	locationData;
+	render_location<GLfloat>	locationData;
 
 	//color
 	color				colorData;
@@ -31,7 +31,7 @@ struct canvas_point_info
 	//texture pos
 	texture_pos			texturePosData;
 
-	canvas_point_info(const color& color, const location<GLfloat>& location, const texture_pos& texturePos) :colorData(color), locationData(location), texturePosData(texturePos) {}
+	canvas_point_info(const color& color, const render_location<GLfloat>& location, const texture_pos& texturePos) :colorData(color), locationData(location), texturePosData(texturePos) {}
 };
 struct canvas_shape
 {

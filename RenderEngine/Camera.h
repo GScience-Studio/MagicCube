@@ -124,19 +124,19 @@ public:
 * thread safety:can be call only in event thread
 * made by GM2000
 */
-template<class T> class location :private vec<T, 3>
+template<class T> class render_location :private vec<T, 3>
 {
 public:
-	location operator +(location loc)
+	render_location operator +(render_location loc)
 	{
-		return location<T>(get(0) + loc[0], get(1) + loc[1], get(2) + loc[2]);
+		return render_location<T>(get(0) + loc[0], get(1) + loc[1], get(2) + loc[2]);
 	}
-	location operator -(location loc)
+	render_location operator -(render_location loc)
 	{
-		return location<T>(get(0) - loc.get(0), get(1) - loc.get(1), get(2) - loc.get(2));
+		return render_location<T>(get(0) - loc.get(0), get(1) - loc.get(1), get(2) - loc.get(2));
 	}
-	location(T x, T y, T z) :vec<T, 3>({ x, y, z }) {}
-	location(const location& inLocation) :vec<T, 3>({ inLocation.get(0), inLocation.get(1), inLocation.get(2) }) {}
+	render_location(T x, T y, T z) :vec<T, 3>({ x, y, z }) {}
+	render_location(const render_location& inLocation) :vec<T, 3>({ inLocation.get(0), inLocation.get(1), inLocation.get(2) }) {}
 
 	T getX()
 	{
@@ -202,11 +202,11 @@ public:
 	location_synchronize(T x, T y, T z) :vec<T, 3>({ x, y, z }) {}
 	location_synchronize(const location_synchronize& inLocation) :vec<T, 3>({ inLocation.get(0), inLocation.get(1), inLocation.get(2) }) {}
 
-	operator location<T>()
+	operator render_location<T>()
 	{
 		std::lock_guard<std::mutex> lockGuard(_lock);
 
-		return location<T>(get(0), get(1), get(2));
+		return render_location<T>(get(0), get(1), get(2));
 	}
 	T getX()
 	{
@@ -265,11 +265,11 @@ public:
 class camera
 {
 private:
-	location<double>	_location;
+	render_location<double>	_location;
 	angle				_angle;
 
 public:
-	location<double>* getLocation()
+	render_location<double>* getLocation()
 	{
 		return &_location;
 	}
@@ -278,7 +278,7 @@ public:
 		return &_angle;
 	}
 
-	camera(location<double> location, angle angle) :_location(location), _angle(angle) {}
+	camera(render_location<double> location, angle angle) :_location(location), _angle(angle) {}
 	camera(double x, double y, double z, float posX, float posY) :_location(x, y, z), _angle(posX, posY) {}
 	camera() :camera(0.0, 0.0, 0.0, 0.0f, 0.0f) {}
 

@@ -7,6 +7,7 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="..\ChunkUniversal.h" />
     <ClInclude Include="Chunk.h" />
+    <ClInclude Include="Location.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WorldManager.cpp" />

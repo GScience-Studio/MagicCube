@@ -31,8 +31,8 @@ private:
 	vec<speed_state, 3> _speedState{ SPEED_STOP ,SPEED_STOP ,SPEED_STOP };
 
 	//简化相机信息
-	location<double>&	_location	= *_fpcCamera.getLocation();
-	angle&				_angle		= *_fpcCamera.getAngle();
+	render_location<double>&	_location	= *_fpcCamera.getLocation();
+	angle&						_angle		= *_fpcCamera.getAngle();
 
 	//设置渲染相机
 	void _setRenderCamera()
