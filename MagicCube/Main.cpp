@@ -1,7 +1,8 @@
 
 #include "../GSRenderEngine.h"
-#include "../RenderEngine/Canvas.h"
-#include "../RenderEngine/NormalShader.h"
+#include "../RenderEngine/CanvasExtension.h"
+#include "../RenderEngine/NormalShaderExtension.h"
+#include "../RenderEngine/FPCExtension.h"
 
 enum scene_name
 {
@@ -19,29 +20,33 @@ private:
 public:
 	test_app() :application(u8"Test", "1.0.0", size_vec(880,495)) {}
 
-	scene* scenes[SCENE_NULL];
+	fpc	FPC = fpc(getGlobalCamera());
 
-	texture textures[TEXTURE_NULL];
+	scene_node* scenes[SCENE_NULL];
+	texture* textures[TEXTURE_NULL];
 
+	void initResources()
+	{
+		loadExtension(new canvas_extension());
+		loadExtension(new normal_shader_extension());
+		loadExtension(new fpc_extension());
+
+		textures[TEXTURE_INIT] = genTexture({ "logo.png" }, 1);
+		textures[TEXTURE_BLOCK] = genTexture({ "BlockTexture.png" }, 1);
+	}
 	void init()
 	{
+		bindFPC(&FPC);
+
 		//init screen
 		for (unsigned int i = 0; i < SCENE_NULL; i++)
 		{
 			scenes[i] = addScene();
 		}
-		//init texture
-		char* blockTextureFileName[]{ "block.png","normal.png" };
-		char* initTextureFileName[]{ "logo.png" };
 
-		textures[TEXTURE_INIT] = genTexture(initTextureFileName, 1);
-		textures[TEXTURE_BLOCK] = genTexture(blockTextureFileName,2);
+		scene_node* initScreen = scenes[SCENE_INIT];
 
-		initNormalShadersExtension();
-
-		scene* initScreen = scenes[SCENE_INIT];
-
-		canvas* logoCanvas = (canvas*)scenes[SCENE_INIT]->addRenderNode(new canvas(normal2DShader));
+		canvas* logoCanvas = (canvas*)scenes[SCENE_INIT]->addRenderNode(new canvas(normal3DRenderProgram));
 
 		logoCanvas->addShapes(&canvas_shape
 		(

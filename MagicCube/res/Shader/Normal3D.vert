@@ -13,5 +13,6 @@ void  main()
 {
 	color 		= in_color;
 	texturePos  = in_texturePos;
+	
 	gl_Position = in_position * projection;
 }
