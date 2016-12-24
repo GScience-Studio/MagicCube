@@ -24,6 +24,22 @@ protected:
 	}
 
 public:
+	void removeRenderNode(render_node* renderNode)
+	{
+		render_node_list::const_iterator lastRenderNode = _renderNodeList.before_begin();
+
+		for (render_node_list::const_iterator findHigherRenderNode = _renderNodeList.begin(); findHigherRenderNode != _renderNodeList.end(); findHigherRenderNode++)
+		{
+			if (*findHigherRenderNode != renderNode)
+			{
+				lastRenderNode = findHigherRenderNode;
+			}
+			else
+			{
+				_renderNodeList.erase_after(lastRenderNode);
+			}
+		}
+	}
 	/*
 	* add an render node by user
 	* and auto sort by priority from height to less

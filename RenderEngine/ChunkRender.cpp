@@ -55,16 +55,32 @@ void chunk_render::setBlockRenderDatas(block_render_data* block, unsigned short 
 	if (alphaBlockCount + noAlphaBlockCount != count)
 		blockRenderList.erase(blockRenderList.begin() + noAlphaBlockCount, blockRenderList.begin() + count - noAlphaBlockCount - alphaBlockCount);
 	
+	//clear buffer and move the render node
 	if (blockRenderList.size() == 0)
+	{
+		if (_hasAddRenderNodeToScene)
+		{
+			_sceneNode->removeRenderNode(chunkGlobalRender);
+			_sceneNode->removeRenderNode(chunkHalfAlphaBlockRender);
+
+			_hasAddRenderNodeToScene = false;
+		}
+
 		return;
+	}
 
 	chunkGlobalRender->setBlockRenderDatas(&blockRenderList[0], blockRenderList.size());
 
 	chunkGlobalRender->setBufferUseInfo(0, noAlphaBlockCount);
 	chunkHalfAlphaBlockRender->setBufferUseInfo(noAlphaBlockCount, blockRenderList.size());
 
-	_sceneNode->addRenderNode(chunkGlobalRender);
-	_sceneNode->addRenderNode(chunkHalfAlphaBlockRender);
+	if (!_hasAddRenderNodeToScene)
+	{
+		_sceneNode->addRenderNode(chunkGlobalRender);
+		_sceneNode->addRenderNode(chunkHalfAlphaBlockRender);
+
+		_hasAddRenderNodeToScene = true;
+	}
 }
 
 void block_render_data::setAlpha(bool hasAlpha)

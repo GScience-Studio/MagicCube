@@ -192,7 +192,7 @@ void gl_manager::_loadWindow(const size_vec &windowSize,const char* appName)
 
 #ifndef _DEBUG
 	//set vertical retrace
-	//glfwSwapInterval(1);
+	glfwSwapInterval(1);
 #endif
 
 	//init glew

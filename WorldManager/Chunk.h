@@ -64,6 +64,8 @@ private:
 		delete[](_blockList);
 	}
 public:
+	bool _hasRender = false;
+
 	int32_t getChunkX() const
 	{
 		return chunkLocation._chunkX;

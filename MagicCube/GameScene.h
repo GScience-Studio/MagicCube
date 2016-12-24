@@ -17,8 +17,9 @@ public:
 
 		world* MainWorld = loadWorld("MainWorld");
 
-		transport(_mainWorld, 0, 0, 0);
-
+		_gamePlayer.setPlayerWorld(MainWorld);
+		_gamePlayer.getCamera()->getLocation()->moveTo(0, 100, 0);
+		
 		bindFPC(&_gamePlayer);
 	}
 	void tickListener()

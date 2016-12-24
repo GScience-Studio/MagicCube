@@ -19,4 +19,6 @@ void magiccube_application::initResources()
 	loadExtension(new fpc_extension());
 
 	textures[TEXTURE_BLOCK] = genTexture({ "BlockTexture.png" }, 1);
+
+	glClearColor(0.0, 0.3, 0.6, 0.0);
 }

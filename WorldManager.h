@@ -1,6 +1,6 @@
 #pragma once
 
-#define SIGHT 16
+#define SIGHT 3
 
 #include "WorldManager\World.h"
 #include "WorldManager\Location.h"
@@ -19,7 +19,14 @@ protected:
 	int32_t _lastChunkX;
 	int32_t _lastChunkZ;
 
+	bool _needRefreshAllRenderData = true;
 	bool _needRefreshChunk = true;
+
+	bool _isChunkInLastSight(int chunkX, int chunkZ) const
+	{
+		return abs(chunkX - _lastChunkX) < SIGHT &&
+			abs(chunkZ - _lastChunkZ) < SIGHT;
+	}
 
 	bool _isChunkInSight(int chunkX, int chunkZ) const
 	{
@@ -57,8 +64,8 @@ public:
 	{
 		_needRefreshChunk = (_lastChunkX != inLocation.getChunkX() || _lastChunkZ != inLocation.getChunkZ() || _needRefreshChunk);
 
-		_lastChunkX = inLocation.getChunkX();
-		_lastChunkZ = inLocation.getChunkZ();
+		_lastChunkX = _playerLocation.getChunkX();
+		_lastChunkZ = _playerLocation.getChunkZ();
 
 		if (inLocation.getWorld() != nullptr)
 			_playerLocation = inLocation;
@@ -72,7 +79,7 @@ public:
 			return;
 
 		//if has too much chunk try to unload them with random tick
-		if (_playerLocation.getWorld()->_chunkMap.size() > SIGHT * SIGHT * 20)
+		if (_playerLocation.getWorld()->_chunkMap.size() > (SIGHT + 5) * (SIGHT + 5) * 16)
 		{
 			chunk* randomGetChunk = _randomGetChunk(*_playerLocation.getWorld());
 
@@ -86,15 +93,16 @@ public:
 				for (unsigned int j = 0; j < SIGHT * 2 - 1; j++)
 					for (unsigned int k = 0; k < 16; k++)
 					{
-						chunk* newChunk = _playerLocation.getWorld()->addChunk((int32_t)_playerLocation.getChunkX() + SIGHT - i - 1, k, (int32_t)_playerLocation.getChunkZ() + SIGHT - j - 1);
+						chunk* newChunk = _playerLocation.getWorld()->getChunk((int32_t)_playerLocation.getChunkX() + SIGHT - i - 1, k, (int32_t)_playerLocation.getChunkZ() + SIGHT - j - 1);
 
-						if (newChunk != nullptr)
+						if (!_isChunkInLastSight(newChunk->getChunkX(), newChunk->getChunkZ()) || _needRefreshAllRenderData)
 							_newChunkList.push_back(newChunk);
 					}
 		}
 		else
 			return;
 
+		_needRefreshAllRenderData = false;
 		_needRefreshChunk = false;
 	}
 	~world_manager()

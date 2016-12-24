@@ -44,6 +44,8 @@ private:
 
 	scene_node* _sceneNode;
 
+	bool _hasAddRenderNodeToScene = false;
+
 	int _chunkX = 2147483648;
 	int _chunkY = 2147483648;
 	int _chunkZ = 2147483648;

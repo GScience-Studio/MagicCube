@@ -7,7 +7,7 @@
 class game_world_manager :public world_manager
 {
 private:
-	chunk_render*				_chunkRenderList[(SIGHT * 2 - 1) * (SIGHT * 2 - 1) * 16];
+	chunk_render*				_chunkRenderList[(SIGHT * 2) * (SIGHT * 2) * 16];
 	std::vector<chunk_render*>	_emptyChunkRenderList;
 
 	scene_node* _scene;
@@ -26,8 +26,11 @@ private:
 					getBlockRenderData->setBlockRenderData(blockChunkLocationToShort(i, j, k), getBlock->getBlockID());
 
 					if (getBlock->getBlockID() != 0)
-						getBlockRenderData->setNearbyBlockAlpha(true, true, true, true, true, true);
+						getBlockRenderData->setNearbyBlockAlpha(true, false, false, false, false, false);
 				}
+
+		chunk->_hasRender = true;
+
 		chunkRender->setChunkLocation(chunk->getChunkX(), chunk->getChunkY(), chunk->getChunkZ());
 		chunkRender->setBlockRenderDatas(blockRenderData, 4096);
 	}
@@ -38,7 +41,7 @@ public:
 	}
 	void refreshGameWorld()
 	{
-		for (unsigned int i = 0; i < ((SIGHT * 2 - 1) * (SIGHT * 2 - 1) * 16); i++)
+		for (unsigned int i = 0; i < ((SIGHT * 2) * (SIGHT * 2) * 16); i++)
 		{
 			if (!_isChunkInSight(_chunkRenderList[i]->getChunkRenderX(), _chunkRenderList[i]->getChunkRenderZ()))
 			{
@@ -60,7 +63,7 @@ public:
 	}
 	~game_world_manager()
 	{
-		for (unsigned int i = 0; i < ((SIGHT * 2 - 1) * (SIGHT * 2 - 1) * 16); i++)
+		for (unsigned int i = 0; i < ((SIGHT * 2) * (SIGHT * 2) * 16); i++)
 		{
 			delete(_chunkRenderList[i]);
 		}
@@ -69,7 +72,7 @@ public:
 	{
 		_scene = scene;
 
-		for (unsigned int i = 0; i < ((SIGHT * 2 - 1) * (SIGHT * 2 - 1) * 16); i++)
+		for (unsigned int i = 0; i < ((SIGHT * 2) * (SIGHT * 2) * 16); i++)
 		{
 			_chunkRenderList[i] = new chunk_render(scene, texture);
 			_chunkRenderList[i]->setChunkLocation(i, 0, 0);
