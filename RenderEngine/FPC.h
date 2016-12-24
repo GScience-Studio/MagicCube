@@ -43,6 +43,8 @@ private:
 
 		_renderCamera->getAngle()->setPosX(_fpcCamera.getAngle()->getPosX());
 		_renderCamera->getAngle()->setPosY(_fpcCamera.getAngle()->getPosY());
+
+		onMove(_fpcCamera.getLocation()->getX(), _fpcCamera.getLocation()->getY(), _fpcCamera.getLocation()->getZ(), _fpcCamera.getAngle()->getPosX(), _fpcCamera.getAngle()->getPosY());
 	}
 
 public:
@@ -70,4 +72,7 @@ public:
 
 	//鼠标移动
 	void cursorListener(double lastPosX, double lastPosY, double posX, double posY);
+
+	//移动时调用
+	virtual void onMove(double x, double y, double z, double posX, double posY) = 0;
 };

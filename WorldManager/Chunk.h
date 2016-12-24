@@ -55,6 +55,9 @@ private:
 	{
 		_blockList = new block[4096];
 		_world = world;
+
+		if (chunkY < 2)
+			_blockList[0].setBlockID(1);
 	}
 	~chunk()
 	{

@@ -24,6 +24,9 @@ protected:
 public:
 	chunk* addChunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ)
 	{
+		if (_chunkMap[{chunkX, chunkY, chunkZ}] != nullptr)
+			return nullptr;
+
 		chunk* newChunk = new chunk(chunkX, chunkY, chunkZ, _world);
 
 		_chunkMap[{chunkX, chunkY, chunkZ}] = newChunk;

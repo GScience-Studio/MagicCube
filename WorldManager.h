@@ -4,12 +4,15 @@
 
 #include "WorldManager\World.h"
 #include "WorldManager\Location.h"
+#include <vector>
 #include <string.h>
 
 class world_manager
 {
-private:
+protected:
 	std::map<std::string, world*> _worldMap;
+
+	std::vector<chunk*> _newChunkList;
 
 	location _playerLocation = location(nullptr, 0, 0, 0);
 
@@ -18,10 +21,15 @@ private:
 
 	bool _needRefreshChunk = true;
 
+	bool _isChunkInSight(int chunkX, int chunkZ) const
+	{
+		return abs(chunkX - _playerLocation.getChunkX()) < SIGHT &&
+			abs(chunkZ - _playerLocation.getChunkZ()) < SIGHT;
+	}
+
 	bool _isChunkInSight(const chunk& inChunk) const
 	{
-		return abs(inChunk.getChunkX() - _playerLocation.getX()) < SIGHT &&
-			abs(inChunk.getChunkZ() - _playerLocation.getZ()) < SIGHT;
+		return _isChunkInSight(inChunk.getChunkX(), inChunk.getChunkZ());
 	}
 
 	chunk* _randomGetChunk(const world& world) const
@@ -45,14 +53,17 @@ public:
 		_worldMap.erase(worldName);
 	}
 
-	void transport(const location& location)
+	void transport(const location& inLocation)
 	{
-		_needRefreshChunk = (_lastChunkX != location.getChunkX() || _lastChunkZ != location.getChunkZ());
+		_needRefreshChunk = (_lastChunkX != inLocation.getChunkX() || _lastChunkZ != inLocation.getChunkZ() || _needRefreshChunk);
 
-		_lastChunkX = location.getChunkX();
-		_lastChunkZ = location.getChunkZ();
+		_lastChunkX = inLocation.getChunkX();
+		_lastChunkZ = inLocation.getChunkZ();
 
-		_playerLocation = location;
+		if (inLocation.getWorld() != nullptr)
+			_playerLocation = inLocation;
+		else
+			_playerLocation = location(_playerLocation.getWorld(), inLocation.getX(), inLocation.getY(), inLocation.getZ());
 	}
 
 	void refreshWorld()
@@ -61,7 +72,7 @@ public:
 			return;
 
 		//if has too much chunk try to unload them with random tick
-		if (_playerLocation.getWorld()->_chunkMap.size() > SIGHT * SIGHT * 5)
+		if (_playerLocation.getWorld()->_chunkMap.size() > SIGHT * SIGHT * 20)
 		{
 			chunk* randomGetChunk = _randomGetChunk(*_playerLocation.getWorld());
 
@@ -70,10 +81,17 @@ public:
 		}
 		//check chunks
 		if (_needRefreshChunk)
+		{
 			for (unsigned int i = 0; i < SIGHT * 2 - 1; i++)
 				for (unsigned int j = 0; j < SIGHT * 2 - 1; j++)
 					for (unsigned int k = 0; k < 16; k++)
-						_playerLocation.getWorld()->getChunk(_playerLocation.getX() + SIGHT - i - 1, k, _playerLocation.getZ() + SIGHT - j - 1);
+					{
+						chunk* newChunk = _playerLocation.getWorld()->addChunk((int32_t)_playerLocation.getChunkX() + SIGHT - i - 1, k, (int32_t)_playerLocation.getChunkZ() + SIGHT - j - 1);
+
+						if (newChunk != nullptr)
+							_newChunkList.push_back(newChunk);
+					}
+		}
 		else
 			return;
 

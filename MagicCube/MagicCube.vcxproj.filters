@@ -8,5 +8,6 @@
     <ClInclude Include="GameWorldManager.h" />
     <ClInclude Include="MagicCube.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="GamePlayer.h" />
   </ItemGroup>
 </Project>

@@ -44,14 +44,34 @@ private:
 
 	scene_node* _sceneNode;
 
+	int _chunkX = 2147483648;
+	int _chunkY = 2147483648;
+	int _chunkZ = 2147483648;
+
 public:
 	void setBlockRenderDatas(block_render_data* block, unsigned short count);
 
 	void setChunkLocation(int x, int y, int z)
 	{
+		_chunkX = x;
+		_chunkY = y;
+		_chunkZ = z;
+
 		chunkGlobalRender->setChunkLocation(x, y, z);
 		chunkHalfAlphaBlockRender->setChunkLocation(x, y, z);
 	}
 
+	int getChunkRenderX()
+	{
+		return _chunkX;
+	}
+	int getChunkRenderY()
+	{
+		return _chunkY;
+	}
+	int getChunkRenderZ()
+	{
+		return _chunkZ;
+	}
 	chunk_render(scene_node* sceneNode, texture* blockTexture);
 };

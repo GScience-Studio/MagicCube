@@ -3,7 +3,7 @@
 #include "../GSRenderEngine.h"
 #include "../RenderEngine/CanvasExtension.h"
 #include "../RenderEngine/NormalShaderExtension.h"
-#include "../RenderEngine/FPCExtension.h"
+#include "GamePlayer.h"
 #include "../RenderEngine/ChunkRenderExtension.h"
 
 enum scene_name
@@ -25,8 +25,6 @@ public:
 
 	scene_node* scenes[SCENE_NULL];
 	texture* textures[TEXTURE_NULL];
-
-	fpc	FPC = fpc(getGlobalCamera());
 
 	void initResources();
 	void init();
