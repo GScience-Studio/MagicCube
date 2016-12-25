@@ -77,14 +77,14 @@ void fpc::tickListener()
 	
 	if (_isFastMode == true)
 		_fpcCamera.getLocation()->move(
-			(_speed[X] * 2) * cos(_angle.getPosY()) + (_speed[Z] * 2) * sin(_angle.getPosY()),
+			(_speed[X] * 2 * _fpcSpeed) * cos(_angle.getPosY()) + (_speed[Z] * 2 * _fpcSpeed) * sin(_angle.getPosY()),
 			_speed[Y],
-			(_speed[Z] * 2) * cos(_angle.getPosY()) - (_speed[X] * 2) * sin(_angle.getPosY()));
+			(_speed[Z] * 2 * _fpcSpeed) * cos(_angle.getPosY()) - (_speed[X] * 2 * _fpcSpeed) * sin(_angle.getPosY()));
 	else
 		_fpcCamera.getLocation()->move(
-			_speed[X] * cos(_angle.getPosY()) + _speed[Z] * sin(_angle.getPosY()),
+			_speed[X] * _fpcSpeed* cos(_angle.getPosY()) + _speed[Z] * _fpcSpeed * sin(_angle.getPosY()),
 			_speed[Y],
-			_speed[Z] * cos(_angle.getPosY()) - _speed[X] * sin(_angle.getPosY()));
+			_speed[Z] * _fpcSpeed* cos(_angle.getPosY()) - _speed[X] * _fpcSpeed * sin(_angle.getPosY()));
 
 	_setRenderCamera();
 }

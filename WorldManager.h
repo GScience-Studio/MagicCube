@@ -1,6 +1,7 @@
 #pragma once
 
 #define SIGHT 32
+#define MAX_CHUNK_TASK_IN_ONE_TICK 8
 
 #include "WorldManager\World.h"
 #include "WorldManager\Location.h"
@@ -10,6 +11,18 @@
 class world_manager
 {
 protected:
+	struct refresh_progress
+	{
+		int lastChunkX;
+		int lastChunkZ;
+
+		unsigned short x;
+		unsigned short y;
+		unsigned short z;
+
+		refresh_progress(unsigned short x, unsigned short y, unsigned short z, int lastChunkX, int lastChunkZ) :x(x), y(y), z(z), lastChunkX(lastChunkX), lastChunkZ(lastChunkZ) {}
+	};
+
 	std::map<std::string, world*> _worldMap;
 
 	std::vector<chunk*> _newChunkList;
@@ -19,13 +32,12 @@ protected:
 	int32_t _lastChunkX;
 	int32_t _lastChunkZ;
 
-	bool _needRefreshAllRenderData = true;
-	bool _needRefreshChunk = true;
+	bool _needRefreshAllChunkData = true;
 
-	bool _isChunkInLastSight(int chunkX, int chunkZ) const
+	bool _isChunkInSight(int chunkX, int chunkZ, int inChunkX, int inChunkZ) const
 	{
-		return abs(chunkX - _lastChunkX) < SIGHT &&
-			abs(chunkZ - _lastChunkZ) < SIGHT;
+		return abs(chunkX - inChunkX) < SIGHT &&
+			abs(chunkZ - inChunkZ) < SIGHT;
 	}
 
 	bool _isChunkInSight(int chunkX, int chunkZ) const
@@ -46,6 +58,7 @@ protected:
 
 		return it->second;
 	}
+	
 public:
 	world* loadWorld(std::string worldName)
 	{
@@ -62,10 +75,11 @@ public:
 
 	void transport(const location& inLocation)
 	{
-		_needRefreshChunk = (_lastChunkX != inLocation.getChunkX() || _lastChunkZ != inLocation.getChunkZ() || _needRefreshChunk);
-
-		_lastChunkX = _playerLocation.getChunkX();
-		_lastChunkZ = _playerLocation.getChunkZ();
+		if (_playerLocation.getChunkX() != inLocation.getChunkX() || _playerLocation.getChunkZ() != inLocation.getChunkZ())
+		{
+			_lastChunkX = _playerLocation.getChunkX();
+			_lastChunkZ = _playerLocation.getChunkZ();
+		}
 
 		if (inLocation.getWorld() != nullptr)
 			_playerLocation = inLocation;
@@ -73,7 +87,8 @@ public:
 			_playerLocation = location(_playerLocation.getWorld(), inLocation.getX(), inLocation.getY(), inLocation.getZ());
 	}
 
-	void refreshWorld()
+	//return the progress
+	void refreshWorld(refresh_progress* progress)
 	{
 		if (_playerLocation.getWorld() == nullptr)
 			return;
@@ -86,24 +101,59 @@ public:
 			if (!_isChunkInSight(*randomGetChunk))
 				_playerLocation.getWorld()->unloadChunk(randomGetChunk);
 		}
-		//check chunks
-		if (_needRefreshChunk)
+		unsigned int chunkTask = 0;
+		
+		//如果是新一轮循环则记录之前所在Chunk的位置
+		if (progress->x == 0 && progress->y == 0 && progress->z == 0)
 		{
-			for (unsigned int i = 0; i < SIGHT * 2 - 1; i++)
-				for (unsigned int j = 0; j < SIGHT * 2 - 1; j++)
-					for (unsigned int k = 0; k < 16; k++)
-					{
-						chunk* newChunk = _playerLocation.getWorld()->getChunk((int32_t)_playerLocation.getChunkX() + SIGHT - i - 1, k, (int32_t)_playerLocation.getChunkZ() + SIGHT - j - 1);
+			//没动的话退出
+			if (progress->lastChunkX == _lastChunkX && progress->lastChunkZ == _lastChunkZ && !_needRefreshAllChunkData)
+				return;
 
-						if (!_isChunkInLastSight(newChunk->getChunkX(), newChunk->getChunkZ()) || _needRefreshAllRenderData)
-							_newChunkList.push_back(newChunk);
-					}
+			progress->lastChunkX = _lastChunkX;
+			progress->lastChunkZ = _lastChunkZ;
 		}
-		else
-			return;
+		//check chunks
+		for (progress->x; progress->x < SIGHT; progress->x++)
+		{
+			for (progress->z; progress->z < SIGHT; progress->z++)
+			{
+				for (progress->y; progress->y < 16; progress->y++)
+				{
+					if (chunkTask > MAX_CHUNK_TASK_IN_ONE_TICK && !_needRefreshAllChunkData)
+						return;
 
-		_needRefreshAllRenderData = false;
-		_needRefreshChunk = false;
+					for (int l = -1; l < 2; l += 2)
+					{
+						for (int m = -1; m < 2; m += 2)
+						{
+							if ((progress->x == 0 && l == 1) || (progress->z == 0 && m == 1))
+								break;
+
+							chunk* getChunk = _playerLocation.getWorld()->getChunk((int32_t)_playerLocation.getChunkX() + progress->x * l, progress->y, (int32_t)_playerLocation.getChunkZ() + progress->z * m);
+
+							if (getChunk->isNewChunk())
+							{
+								getChunk->getWorld()->buildChunk(getChunk);
+
+								chunkTask++;
+							}
+
+							if (!_isChunkInSight(getChunk->getChunkX(), getChunk->getChunkZ(), progress->lastChunkX, progress->lastChunkZ) || _needRefreshAllChunkData)
+								_newChunkList.push_back(getChunk);
+						}
+					}
+				}
+				progress->y = 0;
+			}
+			progress->z = 0;
+		}
+
+		progress->x = 0;
+		progress->y = 0;
+		progress->z = 0;
+
+		_needRefreshAllChunkData = false;
 	}
 	~world_manager()
 	{

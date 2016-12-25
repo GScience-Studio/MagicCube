@@ -8,7 +8,9 @@
 class game_world_manager :public world_manager
 {
 private:
-	chunk_render*				_chunkRenderList[(SIGHT * 2) * (SIGHT * 2) * 16];
+	chunk_render*		_chunkRenderList[(SIGHT * 2) * (SIGHT * 2) * 16];
+	refresh_progress	_worldRefreshProgress = refresh_progress(0, 0, 0, 0, 0);
+
 	std::vector<chunk_render*>	_emptyChunkRenderList;
 
 	scene_node* _scene;
@@ -33,7 +35,6 @@ private:
 						getBlockRenderData->setAlpha(true);
 				}
 
-		chunk->_hasRender = true;
 
 		chunkRender->setChunkLocation(chunk->getChunkX(), chunk->getChunkY(), chunk->getChunkZ());
 		chunkRender->setBlockRenderDatas(blockRenderData, 4096);
@@ -63,7 +64,7 @@ public:
 			_newChunkList.pop_back();
 			_emptyChunkRenderList.pop_back();
 		}
-		refreshWorld();
+		refreshWorld(&_worldRefreshProgress);
 	}
 	~game_world_manager()
 	{

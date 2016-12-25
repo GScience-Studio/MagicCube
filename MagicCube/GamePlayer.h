@@ -12,9 +12,11 @@ private:
 public:
 	game_player(game_world_manager* gameWorldManager):fpc(application::getInstance().getGlobalCamera())
 	{
+		_fpcSpeed = 3;
+
 		_gameWorldManager = gameWorldManager;
 	}
-
+	
 	world* getWorld()
 	{
 		return _playerWorld;

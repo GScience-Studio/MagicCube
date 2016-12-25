@@ -3,8 +3,7 @@
 #include "../ChunkUniversal.h"
 #include "Block.h"
 #include <initializer_list>
-#include <string>
-#include <sstream>
+#include <atomic>
 
 class world;
 
@@ -44,9 +43,13 @@ struct chunk_location
 class chunk
 {
 	friend class chunk_manager;
+	friend class world;
 
 private:
 	chunk_location	chunkLocation;
+
+	//当他设置为true时不应该被除了build chunk以外的地方用到
+	std::atomic<bool>  _isNewChunk = true;
 
 	block* _blockList;
 	world* _world;
@@ -55,25 +58,16 @@ private:
 	{
 		_blockList = new block[4096];
 		_world = world;
-
-		if (chunkY == 0)
-		{
-			for (uint8_t i = 0; i < 16; i++)
-				for (uint8_t j = 0; j < 16; j++)
-					getBlock(i, 0, j)->setBlockID(1);
-
-			for (uint8_t i = 0; i < 16; i++)
-				for (uint8_t j = 0; j < 16; j++)
-					getBlock(i, 2, j)->setBlockID(32);
-		}
 	}
 	~chunk()
 	{
 		delete[](_blockList);
 	}
 public:
-	bool _hasRender = false;
-
+	bool isNewChunk()
+	{
+		return _isNewChunk.load();
+	}
 	int32_t getChunkX() const
 	{
 		return chunkLocation._chunkX;

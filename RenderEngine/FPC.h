@@ -8,6 +8,9 @@ class fpc :public input_callback
 {
 	friend void bindFPC(fpc*);
 
+protected:
+	double _fpcSpeed = 1.0;
+
 	enum speed_state
 	{
 		SPEED_UP, SPEED_STOP, SPEED_DOWN

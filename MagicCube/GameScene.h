@@ -29,6 +29,7 @@ public:
 
 		_gamePlayer.setPlayerWorld(MainWorld);
 		_gamePlayer.getCamera()->getLocation()->moveTo(0, 100, 0);
+		_gamePlayer.getCamera()->getAngle()->setPosX(-0.5f);
 	}
 	void tickListener()
 	{

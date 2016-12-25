@@ -32,7 +32,7 @@ public:
 
 	int32_t getChunkX() const
 	{
-		return _x > 0 ? (int32_t)_x / 16 : (int32_t)_x / 16 - 1;
+		return _x >= 0 ? (int32_t)_x / 16 : (int32_t)_x / 16 - 1;
 	}
 	int32_t getChunkY() const
 	{
@@ -40,7 +40,7 @@ public:
 	}
 	int32_t getChunkZ() const
 	{
-		return _z > 0 ? (int32_t)_z / 16 : (int32_t)_z / 16 - 1;
+		return _z >= 0 ? (int32_t)_z / 16 : (int32_t)_z / 16 - 1;
 	}
 	location(world* world, double x, double y, double z)
 	{
