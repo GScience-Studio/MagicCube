@@ -56,8 +56,16 @@ private:
 		_blockList = new block[4096];
 		_world = world;
 
-		if (chunkY < 2)
-			_blockList[0].setBlockID(1);
+		if (chunkY == 0)
+		{
+			for (uint8_t i = 0; i < 16; i++)
+				for (uint8_t j = 0; j < 16; j++)
+					getBlock(i, 0, j)->setBlockID(1);
+
+			for (uint8_t i = 0; i < 16; i++)
+				for (uint8_t j = 0; j < 16; j++)
+					getBlock(i, 2, j)->setBlockID(32);
+		}
 	}
 	~chunk()
 	{

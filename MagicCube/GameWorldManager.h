@@ -3,6 +3,7 @@
 #include "../WorldManager.h"
 #include "../RenderEngine/ChunkRenderExtension.h"
 #include "../GSRenderEngine.h"
+#include <future>
 
 class game_world_manager :public world_manager
 {
@@ -27,6 +28,9 @@ private:
 
 					if (getBlock->getBlockID() != 0)
 						getBlockRenderData->setNearbyBlockAlpha(true, false, false, false, false, false);
+
+					if (getBlock->getBlockID() == 32)
+						getBlockRenderData->setAlpha(true);
 				}
 
 		chunk->_hasRender = true;

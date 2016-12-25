@@ -53,17 +53,23 @@ void chunk_render::setBlockRenderDatas(block_render_data* block, unsigned short 
 	}
 	//remove empty block
 	if (alphaBlockCount + noAlphaBlockCount != count)
-		blockRenderList.erase(blockRenderList.begin() + noAlphaBlockCount, blockRenderList.begin() + count - noAlphaBlockCount - alphaBlockCount);
+		blockRenderList.erase(blockRenderList.begin() + noAlphaBlockCount, blockRenderList.end() - alphaBlockCount);
 	
 	//clear buffer and move the render node
 	if (blockRenderList.size() == 0)
 	{
-		if (_hasAddRenderNodeToScene)
+		if (_hasAddGlobalRenderNodeToScene)
 		{
 			_sceneNode->removeRenderNode(chunkGlobalRender);
+
+			_hasAddGlobalRenderNodeToScene = false;
+		}
+
+		if (_hasAddAlphaRenderNodeToScene)
+		{
 			_sceneNode->removeRenderNode(chunkHalfAlphaBlockRender);
 
-			_hasAddRenderNodeToScene = false;
+			_hasAddAlphaRenderNodeToScene = false;
 		}
 
 		return;
@@ -74,12 +80,41 @@ void chunk_render::setBlockRenderDatas(block_render_data* block, unsigned short 
 	chunkGlobalRender->setBufferUseInfo(0, noAlphaBlockCount);
 	chunkHalfAlphaBlockRender->setBufferUseInfo(noAlphaBlockCount, blockRenderList.size());
 
-	if (!_hasAddRenderNodeToScene)
+	if (noAlphaBlockCount != 0)
 	{
-		_sceneNode->addRenderNode(chunkGlobalRender);
-		_sceneNode->addRenderNode(chunkHalfAlphaBlockRender);
+		if (!_hasAddGlobalRenderNodeToScene)
+		{
+			_sceneNode->addRenderNode(chunkGlobalRender);
 
-		_hasAddRenderNodeToScene = true;
+			_hasAddGlobalRenderNodeToScene = true;
+		}
+	}
+	else
+	{
+		if (_hasAddGlobalRenderNodeToScene)
+		{
+			_sceneNode->removeRenderNode(chunkGlobalRender);
+
+			_hasAddGlobalRenderNodeToScene = false;
+		}
+	}
+	if (alphaBlockCount != 0)
+	{
+		if (!_hasAddAlphaRenderNodeToScene)
+		{
+			_sceneNode->addRenderNode(chunkHalfAlphaBlockRender);
+
+			_hasAddAlphaRenderNodeToScene = true;
+		}
+	}
+	else
+	{
+		if (_hasAddAlphaRenderNodeToScene)
+		{
+			_sceneNode->removeRenderNode(chunkHalfAlphaBlockRender);
+
+			_hasAddAlphaRenderNodeToScene = false;
+		}
 	}
 }
 

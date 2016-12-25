@@ -37,6 +37,8 @@ public:
 			else
 			{
 				_renderNodeList.erase_after(lastRenderNode);
+
+				return;
 			}
 		}
 	}

@@ -74,13 +74,6 @@ public:
 
 		return scene;
 	}
-	//add an scene with no tick function
-	scene_node* addScene()
-	{
-		_sceneList.push_back(new scene_node);
-
-		return _sceneList.back();
-	}
 	//get camera
 	camera_synchronize* getGlobalCamera()
 	{
@@ -90,6 +83,11 @@ public:
 	void showScene(scene_node* scene)
 	{
 		while (_showingScene.load());
+
+		scene->onLoad();
+
+		if (_nextScene != nullptr)
+			_nextScene->onUnload();
 
 		_nextScene = scene;
 

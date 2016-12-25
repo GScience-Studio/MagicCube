@@ -1,6 +1,6 @@
 #pragma once
 
-#define SIGHT 3
+#define SIGHT 32
 
 #include "WorldManager\World.h"
 #include "WorldManager\Location.h"

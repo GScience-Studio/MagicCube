@@ -44,7 +44,8 @@ private:
 
 	scene_node* _sceneNode;
 
-	bool _hasAddRenderNodeToScene = false;
+	bool _hasAddGlobalRenderNodeToScene = false;
+	bool _hasAddAlphaRenderNodeToScene = false;
 
 	int _chunkX = 2147483648;
 	int _chunkY = 2147483648;

@@ -34,4 +34,7 @@ private:
 			renderNode->_draw(globalCamera);
 		}
 	}
+public:
+	virtual void onUnload() = 0;
+	virtual void onLoad() = 0;
 };

@@ -11,16 +11,24 @@ private:
 	game_player _gamePlayer;
 
 public:
-	game_scene(texture* texture) :game_world_manager(this, texture), _gamePlayer(this)
+	game_scene(texture* texture) :game_world_manager(this, texture), _gamePlayer(this) {}
+
+	void onUnload()
 	{
+		bindFPC(nullptr);
+
+		application::getInstance().unregisterInputCallback(this);
+	}
+	void onLoad()
+	{
+		bindFPC(&_gamePlayer);
+
 		application::getInstance().registerInputCallback(this);
 
 		world* MainWorld = loadWorld("MainWorld");
 
 		_gamePlayer.setPlayerWorld(MainWorld);
 		_gamePlayer.getCamera()->getLocation()->moveTo(0, 100, 0);
-		
-		bindFPC(&_gamePlayer);
 	}
 	void tickListener()
 	{
