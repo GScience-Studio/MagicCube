@@ -12,7 +12,7 @@ private:
 public:
 	game_player(game_world_manager* gameWorldManager):fpc(application::getInstance().getGlobalCamera())
 	{
-		_fpcSpeed = 3;
+		_fpcSpeed = 20;
 
 		_gameWorldManager = gameWorldManager;
 	}

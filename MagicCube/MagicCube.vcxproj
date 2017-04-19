@@ -161,6 +161,9 @@
     <ProjectReference Include="..\RenderEngine\RenderEngine.vcxproj">
       <Project>{819dd47d-474a-4efc-8b48-82928c505cf4}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\WorldManager\WorldManager.vcxproj">
+      <Project>{6924b481-951a-43a9-9e05-594b74811edc}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MagicCubeInit.cpp" />

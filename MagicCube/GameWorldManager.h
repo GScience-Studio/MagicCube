@@ -38,9 +38,10 @@ private:
 					block_render_data* getBlockRenderData = &blockRenderData[blockChunkLocationToShort(i, j, k)];
 
 					getBlockRenderData->setBlockRenderData(blockChunkLocationToShort(i, j, k), getBlock->getBlockID());
+					getBlockRenderData->setNearbyBlockLight(15, 15, 15, 15, 15, 15);
 
 					if (getBlock->getBlockID() != 0)
-						getBlockRenderData->setNearbyBlockAlpha(true, false, false, false, false, false);
+						getBlockRenderData->setNearbyBlockAlpha(true, true, true, true, true, true);
 
 					if (getBlock->getBlockID() == 32)
 						getBlockRenderData->setAlpha(true);
