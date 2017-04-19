@@ -1,7 +1,7 @@
 #pragma once
 
-#define SIGHT 32
-#define MAX_CHUNK_TASK_IN_ONE_TICK 8
+#define SIGHT 16
+#define MAX_CHUNK_TASK_IN_ONE_TICK 32
 
 #include "WorldManager\World.h"
 #include "WorldManager\Location.h"
@@ -136,11 +136,10 @@ public:
 							{
 								getChunk->getWorld()->buildChunk(getChunk);
 
+								_newChunkList.push_back(getChunk);
+
 								chunkTask++;
 							}
-
-							if (!_isChunkInSight(getChunk->getChunkX(), getChunk->getChunkZ(), progress->lastChunkX, progress->lastChunkZ) || _needRefreshAllChunkData)
-								_newChunkList.push_back(getChunk);
 						}
 					}
 				}

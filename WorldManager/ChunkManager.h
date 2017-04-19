@@ -24,7 +24,7 @@ protected:
 public:
 	chunk* addChunk(int32_t chunkX, int32_t chunkY, int32_t chunkZ)
 	{
-		if (_chunkMap[{chunkX, chunkY, chunkZ}] != nullptr)
+		if (_chunkMap.find({chunkX, chunkY, chunkZ}) != _chunkMap.end())
 			return nullptr;
 
 		chunk* newChunk = new chunk(chunkX, chunkY, chunkZ, _world);
@@ -55,7 +55,7 @@ public:
 			return;
 
 #ifdef _DEBUG
-		std::cout << "unoad a new chunk at:" << chunkX << "," << chunkY << "," << chunkZ << std::endl;
+		std::cout << "unload a new chunk at:" << chunkX << "," << chunkY << "," << chunkZ << std::endl;
 #endif
 		_chunkMap.erase(getChunk);
 	}

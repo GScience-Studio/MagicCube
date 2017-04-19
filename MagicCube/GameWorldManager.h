@@ -15,8 +15,19 @@ private:
 
 	scene_node* _scene;
 
-	void _renderChunk(chunk* chunk, chunk_render* chunkRender)
+	bool _renderChunk(chunk* chunk, chunk_render* chunkRender)
 	{
+		if (chunk->isNewChunk())
+			return false;
+		
+		for (auto i : _chunkRenderList)
+		{
+			if (i->getChunkRenderX() == chunk->getChunkX() &&
+				i->getChunkRenderY() == chunk->getChunkY() &&
+				i->getChunkRenderZ() == chunk->getChunkZ())
+				return true;
+		}
+
 		block_render_data blockRenderData[4096];
 
 		for (unsigned char i = 0; i < 16; i++)
@@ -38,6 +49,8 @@ private:
 
 		chunkRender->setChunkLocation(chunk->getChunkX(), chunk->getChunkY(), chunk->getChunkZ());
 		chunkRender->setBlockRenderDatas(blockRenderData, 4096);
+
+		return true;
 	}
 public:
 	void transport(world* world, double x, double y, double z)
@@ -54,15 +67,25 @@ public:
 					_emptyChunkRenderList.push_back(_chunkRenderList[i]);
 			}
 		}
+		auto it = _newChunkList.begin();
+
 		for (unsigned int i = 0; i < _newChunkList.size(); i++)
 		{
+			if (it == _newChunkList.end())
+				break;
+
 			if (_emptyChunkRenderList.size() == 0)
 				break;
 
-			_renderChunk(_newChunkList.back(), _emptyChunkRenderList.back());
+			if (_renderChunk(*it, _emptyChunkRenderList[_emptyChunkRenderList.size() - 1]))
+			{
+				it = _newChunkList.erase(it);
+				_emptyChunkRenderList.pop_back();
 
-			_newChunkList.pop_back();
-			_emptyChunkRenderList.pop_back();
+				if (it == _newChunkList.end())
+					break;
+			}
+			++it;
 		}
 		refreshWorld(&_worldRefreshProgress);
 	}
@@ -80,7 +103,8 @@ public:
 		for (unsigned int i = 0; i < ((SIGHT * 2) * (SIGHT * 2) * 16); i++)
 		{
 			_chunkRenderList[i] = new chunk_render(scene, texture);
-			_chunkRenderList[i]->setChunkLocation(i, 0, 0);
+			_chunkRenderList[i]->setChunkLocation(2147483648, 2147483648, 2147483648);
+			_emptyChunkRenderList.push_back(_chunkRenderList[i]);
 		}
 	}
 };
